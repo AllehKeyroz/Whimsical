@@ -1,0 +1,4000 @@
+{
+ "id": "dayan-siebra",
+ "title": "Dayan Siebra",
+ "fontFamily": "Dinsical",
+ "objects": {
+  "f1fa7038-fe61-4566-9698-55c1b195031d": {
+   "id": "f1fa7038-fe61-4566-9698-55c1b195031d",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 28,
+   "rect": {
+    "x": -840,
+    "y": 1494,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Mover para\nEm Atendimento",
+   "shapeType": "rect"
+  },
+  "5aabe8db-8906-4d8d-b9c1-7dbadcc05bf2": {
+   "id": "5aabe8db-8906-4d8d-b9c1-7dbadcc05bf2",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": 144,
+    "y": 3840,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "",
+   "shapeType": "rect"
+  },
+  "f59e830b-002a-4e40-bd6a-150ff9c3d777": {
+   "id": "f59e830b-002a-4e40-bd6a-150ff9c3d777",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 5,
+   "rect": {
+    "x": 966,
+    "y": 762,
+    "w": 192,
+    "h": 176
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Leads presos ás etapas \n\nNOVO LEAD\nLEAD QUENTE\nAGENDADO\na mais de 7 dias",
+   "shapeType": "rect"
+  },
+  "90ecfd52-dde3-4828-a9a6-75070bbfb5ed": {
+   "id": "90ecfd52-dde3-4828-a9a6-75070bbfb5ed",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 41,
+   "rect": {
+    "x": -1488,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Outras Respostas",
+   "shapeType": "rect"
+  },
+  "7a18b5b3-d49e-4aac-9f6f-6eed429729bd": {
+   "id": "7a18b5b3-d49e-4aac-9f6f-6eed429729bd",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 142,
+   "rect": {
+    "x": -97,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "NUTRIÇÃO À LONGO PRAZO",
+   "shapeType": "rect"
+  },
+  "7b162608-5473-4b5c-adfa-d034e9db38ad": {
+   "id": "7b162608-5473-4b5c-adfa-d034e9db38ad",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 143,
+   "rect": {
+    "x": 626,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 3",
+   "shapeType": "rect"
+  },
+  "c5211bff-f1ed-45fb-854a-057d2578e9df": {
+   "id": "c5211bff-f1ed-45fb-854a-057d2578e9df",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": -384,
+    "y": 3528,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "NOVO LEAD / SEGMENTADO",
+   "shapeType": "rect"
+  },
+  "b6e4dafe-4562-47d5-a127-9b6884092917": {
+   "id": "b6e4dafe-4562-47d5-a127-9b6884092917",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 30,
+   "rect": {
+    "x": -1080,
+    "y": 1854,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "WIDGET CHAT",
+   "shapeType": "rect"
+  },
+  "ea89a171-8e2c-433f-b95b-965b14bcbf97": {
+   "id": "ea89a171-8e2c-433f-b95b-965b14bcbf97",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1722,
+    "y": -54,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Sexualidade",
+   "shapeType": "rect"
+  },
+  "6a155f7e-3a04-4dca-b4c1-58a57326725d": {
+   "id": "6a155f7e-3a04-4dca-b4c1-58a57326725d",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": -912,
+    "y": 3528,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "CHECKOUT",
+   "shapeType": "rect"
+  },
+  "626b191f-c522-4097-a405-1bb266d01140": {
+   "id": "626b191f-c522-4097-a405-1bb266d01140",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 123,
+   "rect": {
+    "x": 1254,
+    "y": 1698,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "ADD TASK \nCOMPARECEU?",
+   "shapeType": "rect"
+  },
+  "760bc89f-3738-4451-8ce1-6f8f96f2572d": {
+   "id": "760bc89f-3738-4451-8ce1-6f8f96f2572d",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 144,
+   "rect": {
+    "x": 867,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 4",
+   "shapeType": "rect"
+  },
+  "f5e5a267-f3f0-4d07-a0eb-82f74e0ac0c5": {
+   "id": "f5e5a267-f3f0-4d07-a0eb-82f74e0ac0c5",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 35,
+   "rect": {
+    "x": -408,
+    "y": 1566,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Folow Up",
+   "shapeType": "rect"
+  },
+  "0de05ec4-5371-42d9-9a98-bf473b35abc8": {
+   "id": "0de05ec4-5371-42d9-9a98-bf473b35abc8",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -894,
+    "y": 366,
+    "w": 192,
+    "h": 104
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "TAGS POR INTERESSE / FUNIS DE NUTRIÇÃO PERSONALIZADO",
+   "shapeType": "rect"
+  },
+  "83393d27-71ca-4103-b891-9d3edce183d3": {
+   "id": "83393d27-71ca-4103-b891-9d3edce183d3",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 39,
+   "rect": {
+    "x": -408,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Não Respondeu",
+   "shapeType": "rect"
+  },
+  "a329f063-91dd-44a0-9bd6-2ab5a4d52470": {
+   "id": "a329f063-91dd-44a0-9bd6-2ab5a4d52470",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 40,
+   "rect": {
+    "x": -1056,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Diabetes",
+   "shapeType": "rect"
+  },
+  "566532df-5e2d-4fa7-9860-b556cde52552": {
+   "id": "566532df-5e2d-4fa7-9860-b556cde52552",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 19,
+   "rect": {
+    "x": 126,
+    "y": 666,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "text": "Task Atendimento",
+   "shapeType": "rect"
+  },
+  "cb533103-7738-4169-9b51-7d7b859989a2": {
+   "id": "cb533103-7738-4169-9b51-7d7b859989a2",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 29,
+   "rect": {
+    "x": -840,
+    "y": 1338,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Tag Segmentada",
+   "shapeType": "rect"
+  },
+  "10f453ee-05b6-474a-95f1-134a04382cb3": {
+   "id": "10f453ee-05b6-474a-95f1-134a04382cb3",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 25,
+   "rect": {
+    "x": -144,
+    "y": 666,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Adcionar à NOVO AGENDAMENTO",
+   "shapeType": "rect"
+  },
+  "ad14f57d-6627-4c24-b0dd-5feb65a7fa15": {
+   "id": "ad14f57d-6627-4c24-b0dd-5feb65a7fa15",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 4,
+   "rect": {
+    "x": 966,
+    "y": 618,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Leads Obsoletos",
+   "shapeType": "rect"
+  },
+  "07364f58-7986-491f-9f02-01f2496ae4e7": {
+   "id": "07364f58-7986-491f-9f02-01f2496ae4e7",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1674,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "MONITORAMENTO DE CONTEÚDO / COMENTARIO",
+   "shapeType": "rect"
+  },
+  "e45c064a-2f5d-4ae0-9244-f21707710faf": {
+   "id": "e45c064a-2f5d-4ae0-9244-f21707710faf",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 3,
+   "rect": {
+    "x": 1230,
+    "y": 510,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "DIRECIONAMENTO ROUND ROBIN",
+   "shapeType": "rect"
+  },
+  "5daf7e1d-f9d7-4050-97d1-b692e9127c8b": {
+   "id": "5daf7e1d-f9d7-4050-97d1-b692e9127c8b",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1962,
+    "y": -54,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Diabetes",
+   "shapeType": "rect"
+  },
+  "6b827d24-1927-42ef-acea-0b7ea07340d4": {
+   "id": "6b827d24-1927-42ef-acea-0b7ea07340d4",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 93,
+   "rect": {
+    "x": -2250,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "fill"
+   },
+   "text": "SOCIAL SELLING YOUTUBE",
+   "shapeType": "rect"
+  },
+  "0f57f39e-93f0-4697-86e2-3571e732360b": {
+   "id": "0f57f39e-93f0-4697-86e2-3571e732360b",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 43,
+   "rect": {
+    "x": -367,
+    "y": 282,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Sexualidade",
+   "shapeType": "rect"
+  },
+  "5f9da90b-6c4e-49af-8fb5-4a402846dc78": {
+   "id": "5f9da90b-6c4e-49af-8fb5-4a402846dc78",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 120,
+   "rect": {
+    "x": 1254,
+    "y": 666,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Confirmação de Agendamento + lembretes",
+   "shapeType": "rect"
+  },
+  "af275a85-4f45-41bc-b24b-e19665fede50": {
+   "id": "af275a85-4f45-41bc-b24b-e19665fede50",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 154,
+   "rect": {
+    "x": -396,
+    "y": 3768,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "NOVO LEAD",
+   "shapeType": "rect"
+  },
+  "6453da54-3842-4e3f-9be5-29ffd6ead42c": {
+   "id": "6453da54-3842-4e3f-9be5-29ffd6ead42c",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 125,
+   "rect": {
+    "x": 1254,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Email/WPP de Confirmação + politica de remarcação",
+   "shapeType": "rect"
+  },
+  "1d0281c0-3138-435b-bfbe-b66af88732eb": {
+   "id": "1d0281c0-3138-435b-bfbe-b66af88732eb",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 126,
+   "rect": {
+    "x": 1254,
+    "y": 1002,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Adcionar à NOVO AGENDAMENTO",
+   "shapeType": "rect"
+  },
+  "0f013c6d-cc3c-4bd7-bc16-a94d65399daf": {
+   "id": "0f013c6d-cc3c-4bd7-bc16-a94d65399daf",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1962,
+    "y": 234,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "PLAYLIST SEGMENTADA",
+   "shapeType": "rect"
+  },
+  "82d00def-87cb-4fcc-a4c4-7c214291f93a": {
+   "id": "82d00def-87cb-4fcc-a4c4-7c214291f93a",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 122,
+   "rect": {
+    "x": 1254,
+    "y": 1338,
+    "w": 192,
+    "h": 104
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Lembrete 48 Horas antes + Politica de remarcação + Preparo Bio",
+   "shapeType": "rect"
+  },
+  "96692e29-1b24-4346-86a4-03eb46495805": {
+   "id": "96692e29-1b24-4346-86a4-03eb46495805",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 26,
+   "rect": {
+    "x": -624,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Novo Lead",
+   "shapeType": "rect"
+  },
+  "5a705889-f77b-4039-8449-e002d366a4f9": {
+   "id": "5a705889-f77b-4039-8449-e002d366a4f9",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 29,
+   "rect": {
+    "x": -600,
+    "y": 1854,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "AGENDAMENTO DE CHAMADA / PÓS VENDA DIAGNOSTICO",
+   "shapeType": "rect"
+  },
+  "7a372c54-0301-45db-b2f2-45fcf638e269": {
+   "id": "7a372c54-0301-45db-b2f2-45fcf638e269",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 16,
+   "rect": {
+    "x": 390,
+    "y": 522,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Remover de NUTRIÇÃO A LONGO PRAZO",
+   "shapeType": "rect"
+  },
+  "8afbf14b-e30f-4221-974d-8bb54e10d90d": {
+   "id": "8afbf14b-e30f-4221-974d-8bb54e10d90d",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 30,
+   "rect": {
+    "x": -840,
+    "y": 1662,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "Chatbot Pre Sell e Direcionamento",
+   "shapeType": "pill"
+  },
+  "8a5aeb56-b1a4-4dfe-b511-6b6ed9d63329": {
+   "id": "8a5aeb56-b1a4-4dfe-b511-6b6ed9d63329",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 29,
+   "rect": {
+    "x": -840,
+    "y": 1854,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "INTENÇÃO DE COMPRA",
+   "shapeType": "rect"
+  },
+  "152c9e61-3a91-4cdd-b28f-bf2763e7442e": {
+   "id": "152c9e61-3a91-4cdd-b28f-bf2763e7442e",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 13,
+   "rect": {
+    "x": 390,
+    "y": 954,
+    "w": 192,
+    "h": 104
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "Notificação em 3 dias Para acompanhamento manual",
+   "shapeType": "rect"
+  },
+  "5ef9424f-9107-4190-a4b4-e3e59e09c033": {
+   "id": "5ef9424f-9107-4190-a4b4-e3e59e09c033",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 3,
+   "rect": {
+    "x": 966,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "NÃO AGENDOU",
+   "shapeType": "rect"
+  },
+  "985b0772-7a81-495e-abf2-ded4bc72bf66": {
+   "id": "985b0772-7a81-495e-abf2-ded4bc72bf66",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 22,
+   "rect": {
+    "x": -144,
+    "y": 1302,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "ADD TASK \nCOMPARECEU?",
+   "shapeType": "rect"
+  },
+  "7ef36c35-4488-4458-8a29-2b2de2f899c9": {
+   "id": "7ef36c35-4488-4458-8a29-2b2de2f899c9",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 36,
+   "rect": {
+    "x": -408,
+    "y": 1302,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Conectar Chamada",
+   "shapeType": "rect"
+  },
+  "6f69a54d-e2f6-4bb6-b3db-75e8e4e0f350": {
+   "id": "6f69a54d-e2f6-4bb6-b3db-75e8e4e0f350",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 45,
+   "rect": {
+    "x": -367,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Diabetes",
+   "shapeType": "rect"
+  },
+  "015b3971-4fba-431b-a236-684c058336cc": {
+   "id": "015b3971-4fba-431b-a236-684c058336cc",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 42,
+   "rect": {
+    "x": -624,
+    "y": 954,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Contato Respondeu?",
+   "shapeType": "rect"
+  },
+  "da1cd8f2-11de-4e22-93b8-608e5a87e927": {
+   "id": "da1cd8f2-11de-4e22-93b8-608e5a87e927",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 37,
+   "rect": {
+    "x": -840,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Sexualidade",
+   "shapeType": "rect"
+  },
+  "c7cd8a8b-c3cc-4527-8e7c-46ce198c1654": {
+   "id": "c7cd8a8b-c3cc-4527-8e7c-46ce198c1654",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 17,
+   "rect": {
+    "x": 126,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "text": "Não Compareceu",
+   "shapeType": "rect"
+  },
+  "ba9d29a1-4e96-452f-b803-b52ca4462e20": {
+   "id": "ba9d29a1-4e96-452f-b803-b52ca4462e20",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 36,
+   "rect": {
+    "x": -408,
+    "y": 1434,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "CHAMADA MANUAL",
+   "shapeType": "rect"
+  },
+  "52e31ae7-1f1d-4d44-ad3c-a8bee8c7566e": {
+   "id": "52e31ae7-1f1d-4d44-ad3c-a8bee8c7566e",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 121,
+   "rect": {
+    "x": 1254,
+    "y": 834,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Remover Do workflow NOVO LEAD",
+   "shapeType": "rect"
+  },
+  "d26bae3a-5045-4eaa-bb21-47bd86c87b13": {
+   "id": "d26bae3a-5045-4eaa-bb21-47bd86c87b13",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 93,
+   "rect": {
+    "x": -1962,
+    "y": 522,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "VIDEOS ANTIGOS COM RECORRENCIA EM VIEWS",
+   "shapeType": "rect"
+  },
+  "86d2f69a-75dc-41d5-9839-ced3691fa2a9": {
+   "id": "86d2f69a-75dc-41d5-9839-ced3691fa2a9",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 18,
+   "rect": {
+    "x": 126,
+    "y": 522,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "text": "Mensagem não comparecimento",
+   "shapeType": "rect"
+  },
+  "917aee3e-c00e-486c-8fe8-74ac461f7a5a": {
+   "id": "917aee3e-c00e-486c-8fe8-74ac461f7a5a",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1962,
+    "y": 90,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "VIDEOS VIRAIS",
+   "shapeType": "rect"
+  },
+  "e733c1b3-ac41-480b-b8c1-8d7e2c9277f4": {
+   "id": "e733c1b3-ac41-480b-b8c1-8d7e2c9277f4",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 38,
+   "rect": {
+    "x": -624,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Emagrecimento",
+   "shapeType": "rect"
+  },
+  "aa38479d-6493-406a-94db-60733afaa12a": {
+   "id": "aa38479d-6493-406a-94db-60733afaa12a",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 7,
+   "rect": {
+    "x": 678,
+    "y": 618,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "NUTRIÇÃO À LONGO PRAZO",
+   "shapeType": "rect"
+  },
+  "43154ffd-3e5d-4d05-95c7-bf087b94a663": {
+   "id": "43154ffd-3e5d-4d05-95c7-bf087b94a663",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 2,
+   "rect": {
+    "x": -144,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Confirmação de Agendamento + lembretes",
+   "shapeType": "rect"
+  },
+  "5af9e689-4667-47ac-a986-613f409eab2d": {
+   "id": "5af9e689-4667-47ac-a986-613f409eab2d",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1962,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "VIDEOS COM INDICAÇÃO DE PRODUTO",
+   "shapeType": "rect"
+  },
+  "4c7dd01c-53fa-44ee-99c9-296204626647": {
+   "id": "4c7dd01c-53fa-44ee-99c9-296204626647",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 9,
+   "rect": {
+    "x": 678,
+    "y": 1194,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 4",
+   "shapeType": "rect"
+  },
+  "321551f6-feb0-4737-a09b-12906853966a": {
+   "id": "321551f6-feb0-4737-a09b-12906853966a",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 24,
+   "rect": {
+    "x": -144,
+    "y": 810,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Email/WPP de Confirmação + politica de remarcação",
+   "shapeType": "rect"
+  },
+  "101de631-5203-40f4-a8c4-358bf7247fd6": {
+   "id": "101de631-5203-40f4-a8c4-358bf7247fd6",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1134,
+    "y": 366,
+    "w": 192,
+    "h": 104
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "FORMULARIO DE CAPTAÇÃO \nNOME | TELEFONE | INTERESSE",
+   "shapeType": "rect"
+  },
+  "7e62038f-2d58-46bf-8639-45d7d6c973f0": {
+   "id": "7e62038f-2d58-46bf-8639-45d7d6c973f0",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 20,
+   "rect": {
+    "x": -144,
+    "y": 522,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Remover Do workflow NOVO LEAD",
+   "shapeType": "rect"
+  },
+  "f9d5cccf-b28a-494f-926c-956a94daf6f6": {
+   "id": "f9d5cccf-b28a-494f-926c-956a94daf6f6",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 3,
+   "rect": {
+    "x": 678,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "LIGAÇÃO COM IA E CLONE DE VOZ",
+   "shapeType": "rect"
+  },
+  "b759b92f-435e-420f-b378-7718295b3d50": {
+   "id": "b759b92f-435e-420f-b378-7718295b3d50",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": 144,
+    "y": 3684,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "Audio/Ligaçâo/folow up",
+   "shapeType": "rect"
+  },
+  "995c9bbc-1385-457f-ab3c-59f58fa6491a": {
+   "id": "995c9bbc-1385-457f-ab3c-59f58fa6491a",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 43,
+   "rect": {
+    "x": -624,
+    "y": 522,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Adcionar à NOVO LEAD",
+   "shapeType": "rect"
+  },
+  "a337164f-05a3-40c4-a331-3d9f66a53d6d": {
+   "id": "a337164f-05a3-40c4-a331-3d9f66a53d6d",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 42,
+   "rect": {
+    "x": -1272,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Vitaminas",
+   "shapeType": "rect"
+  },
+  "a01a1110-7cbb-4965-8248-934559122ac5": {
+   "id": "a01a1110-7cbb-4965-8248-934559122ac5",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 145,
+   "rect": {
+    "x": 385,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 2",
+   "shapeType": "rect"
+  },
+  "5bcfa929-7883-4cc0-bd1d-ada7142104b4": {
+   "id": "5bcfa929-7883-4cc0-bd1d-ada7142104b4",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 12,
+   "rect": {
+    "x": 390,
+    "y": 810,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "Enviar Email de Avaliação",
+   "shapeType": "rect"
+  },
+  "6abf0206-03e5-4eb9-9e18-b300a70d5cb3": {
+   "id": "6abf0206-03e5-4eb9-9e18-b300a70d5cb3",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 124,
+   "rect": {
+    "x": 1254,
+    "y": 1530,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Lembrete 24 Horas antes + Prepario bio",
+   "shapeType": "rect"
+  },
+  "420e5a09-9168-401f-a316-7d08177369ec": {
+   "id": "420e5a09-9168-401f-a316-7d08177369ec",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 44,
+   "rect": {
+    "x": -624,
+    "y": 666,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Adcionar à NUTRIÇÃO A LONGO PRAZO",
+   "shapeType": "rect"
+  },
+  "d1b8e602-ebb1-42de-8083-91cbc0d84530": {
+   "id": "d1b8e602-ebb1-42de-8083-91cbc0d84530",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 3,
+   "rect": {
+    "x": 966,
+    "y": 498,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "AGENDOU",
+   "shapeType": "rect"
+  },
+  "e789b212-1e1c-4134-bf57-34893ebe7b6b": {
+   "id": "e789b212-1e1c-4134-bf57-34893ebe7b6b",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 146,
+   "rect": {
+    "x": 144,
+    "y": 114,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 1",
+   "shapeType": "rect"
+  },
+  "4b1dbe3c-3334-4ed9-8c47-5ae2f896a486": {
+   "id": "4b1dbe3c-3334-4ed9-8c47-5ae2f896a486",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 6,
+   "rect": {
+    "x": 966,
+    "y": 1002,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Mudar status para ABANDONADO",
+   "shapeType": "rect"
+  },
+  "253e5726-de03-4cba-b48c-4280cb88d154": {
+   "id": "253e5726-de03-4cba-b48c-4280cb88d154",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 21,
+   "rect": {
+    "x": -144,
+    "y": 978,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Lembrete 48 Horas antes",
+   "shapeType": "rect"
+  },
+  "96207967-09f9-4b1e-bafd-471206465798": {
+   "id": "96207967-09f9-4b1e-bafd-471206465798",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 27,
+   "rect": {
+    "x": -624,
+    "y": 810,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "green",
+    "deco": "outline"
+   },
+   "text": "Enviar E-mail / WPP",
+   "shapeType": "rect"
+  },
+  "cb7d3ecf-7a1c-4cfe-990c-3a081082b968": {
+   "id": "cb7d3ecf-7a1c-4cfe-990c-3a081082b968",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": -120,
+    "y": 3528,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "NOTIFICAÇÃO INTERNA",
+   "shapeType": "rect"
+  },
+  "57c24260-d511-4faf-b1f8-85969a42d23c": {
+   "id": "57c24260-d511-4faf-b1f8-85969a42d23c",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -2202,
+    "y": -54,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "Vitaminas",
+   "shapeType": "rect"
+  },
+  "ddaa5a27-fa87-4dde-b9b6-4f7dee9500ad": {
+   "id": "ddaa5a27-fa87-4dde-b9b6-4f7dee9500ad",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 11,
+   "rect": {
+    "x": 678,
+    "y": 762,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 1",
+   "shapeType": "rect"
+  },
+  "c39bded3-efb1-4ef1-b570-c857f4836726": {
+   "id": "c39bded3-efb1-4ef1-b570-c857f4836726",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 154,
+   "rect": {
+    "x": -120,
+    "y": 3840,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "SQL",
+   "shapeType": "rect"
+  },
+  "efd9272a-a023-4c15-8d17-bc43313c4c8f": {
+   "id": "efd9272a-a023-4c15-8d17-bc43313c4c8f",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 157,
+   "rect": {
+    "x": 144,
+    "y": 3528,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "RECUPERAÇÃO DE VENDAS",
+   "shapeType": "rect"
+  },
+  "a0ec1a35-4c4c-45a4-bca4-791b3704897a": {
+   "id": "a0ec1a35-4c4c-45a4-bca4-791b3704897a",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 153,
+   "rect": {
+    "x": -120,
+    "y": 3696,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "MQL",
+   "shapeType": "rect"
+  },
+  "578de29b-07fc-422a-95df-6abae3623043": {
+   "id": "578de29b-07fc-422a-95df-6abae3623043",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 23,
+   "rect": {
+    "x": -144,
+    "y": 1146,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "orange",
+    "deco": "outline"
+   },
+   "text": "Lembrete 24 Horas antes",
+   "shapeType": "rect"
+  },
+  "53ee3176-cb85-40f2-b699-041fe3920fca": {
+   "id": "53ee3176-cb85-40f2-b699-041fe3920fca",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 15,
+   "rect": {
+    "x": 390,
+    "y": 666,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "Enviar Links de Avaliação WPP",
+   "shapeType": "rect"
+  },
+  "70506b91-0155-4603-a884-7e10f05110ce": {
+   "id": "70506b91-0155-4603-a884-7e10f05110ce",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 14,
+   "rect": {
+    "x": 390,
+    "y": 1134,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "NOVA TASK",
+   "shapeType": "rect"
+  },
+  "4f7e1ab1-622c-474f-a246-bc98703145b8": {
+   "id": "4f7e1ab1-622c-474f-a246-bc98703145b8",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 29,
+   "rect": {
+    "x": -840,
+    "y": 2010,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "NOTIFICAÇÃO INTERNA",
+   "shapeType": "rect"
+  },
+  "014afa99-1fad-461f-a991-a4e3f5f74bdb": {
+   "id": "014afa99-1fad-461f-a991-a4e3f5f74bdb",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "rect": {
+    "x": -1398,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "red",
+    "deco": "outline"
+   },
+   "text": "RESPOSTA PERSONALIZADA + INDICAÇÃO DE FORM",
+   "shapeType": "rect"
+  },
+  "0fa5c254-9315-413b-8c2b-febf015a2ecc": {
+   "id": "0fa5c254-9315-413b-8c2b-febf015a2ecc",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 8,
+   "rect": {
+    "x": 678,
+    "y": 1050,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 3",
+   "shapeType": "rect"
+  },
+  "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f": {
+   "id": "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 3,
+   "rect": {
+    "x": 390,
+    "y": 378,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "crimson",
+    "deco": "outline"
+   },
+   "text": "Nova venda",
+   "shapeType": "rect"
+  },
+  "fd4bb155-f8b5-4424-a8c7-3c1078658ec4": {
+   "id": "fd4bb155-f8b5-4424-a8c7-3c1078658ec4",
+   "objectType": "shape",
+   "parentId": null,
+   "order": 158,
+   "rect": {
+    "x": -648,
+    "y": 3528,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "indigo",
+    "deco": "outline"
+   },
+   "text": "ABANDONO DE CARRINHO",
+   "shapeType": "rect"
+  },
+  "11bc2d7e-49ad-4c56-a461-a47c3a7745b9": {
+   "id": "11bc2d7e-49ad-4c56-a461-a47c3a7745b9",
+   "objectType": "shape",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 10,
+   "rect": {
+    "x": 678,
+    "y": 906,
+    "w": 192,
+    "h": 96
+   },
+   "style": {
+    "color": "purple",
+    "deco": "outline"
+   },
+   "text": "Delay de 7 dias\nEmail/wpp Nutrição 2",
+   "shapeType": "rect"
+  },
+  "c1bbf123-70db-4dd5-bde6-8878bb3f7a52": {
+   "id": "c1bbf123-70db-4dd5-bde6-8878bb3f7a52",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 47,
+   "fromId": "96692e29-1b24-4346-86a4-03eb46495805",
+   "toId": "43154ffd-3e5d-4d05-95c7-bf087b94a663",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "4f8927bd-6679-46f1-91a3-155b4216f18a": {
+   "id": "4f8927bd-6679-46f1-91a3-155b4216f18a",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 109,
+   "fromId": "917aee3e-c00e-486c-8fe8-74ac461f7a5a",
+   "toId": "ea89a171-8e2c-433f-b95b-965b14bcbf97",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a30b866a-94a3-4816-aac6-b07ea1347a91": {
+   "id": "a30b866a-94a3-4816-aac6-b07ea1347a91",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 69,
+   "fromId": "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f",
+   "toId": "aa38479d-6493-406a-94db-60733afaa12a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "57bf3278-ee70-44b0-835a-ea03477daa16": {
+   "id": "57bf3278-ee70-44b0-835a-ea03477daa16",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 79,
+   "fromId": "578de29b-07fc-422a-95df-6abae3623043",
+   "toId": "985b0772-7a81-495e-abf2-ded4bc72bf66",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "5988581e-f025-41e6-980e-cd849dc934d2": {
+   "id": "5988581e-f025-41e6-980e-cd849dc934d2",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 159,
+   "fromId": "6a155f7e-3a04-4dca-b4c1-58a57326725d",
+   "toId": "fd4bb155-f8b5-4424-a8c7-3c1078658ec4",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "f815585b-b266-434a-976d-db0b966c86af": {
+   "id": "f815585b-b266-434a-976d-db0b966c86af",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 129,
+   "fromId": "1d0281c0-3138-435b-bfbe-b66af88732eb",
+   "toId": "6453da54-3842-4e3f-9be5-29ffd6ead42c",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "ac4b4889-42e3-4913-bf21-7a8dfe606e69": {
+   "id": "ac4b4889-42e3-4913-bf21-7a8dfe606e69",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 62,
+   "fromId": "43154ffd-3e5d-4d05-95c7-bf087b94a663",
+   "toId": "c7cd8a8b-c3cc-4527-8e7c-46ce198c1654",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "75906a97-9943-41fd-832e-a651613c16a7": {
+   "id": "75906a97-9943-41fd-832e-a651613c16a7",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 128,
+   "fromId": "52e31ae7-1f1d-4d44-ad3c-a8bee8c7566e",
+   "toId": "1d0281c0-3138-435b-bfbe-b66af88732eb",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "02880a74-1e37-463b-9a24-7ee2795f04cc": {
+   "id": "02880a74-1e37-463b-9a24-7ee2795f04cc",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 84,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "83393d27-71ca-4103-b891-9d3edce183d3",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "2eb89498-8714-4a41-a9aa-ec9c29802da3": {
+   "id": "2eb89498-8714-4a41-a9aa-ec9c29802da3",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 156,
+   "fromId": "af275a85-4f45-41bc-b24b-e19665fede50",
+   "toId": "c39bded3-efb1-4ef1-b570-c857f4836726",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "610bcc63-2877-4c3e-b834-a6a501fbda5e": {
+   "id": "610bcc63-2877-4c3e-b834-a6a501fbda5e",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 83,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "e733c1b3-ac41-480b-b8c1-8d7e2c9277f4",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "5f2f8ece-c570-4777-ac75-9867f31518a7": {
+   "id": "5f2f8ece-c570-4777-ac75-9867f31518a7",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 147,
+   "fromId": "6f69a54d-e2f6-4bb6-b3db-75e8e4e0f350",
+   "toId": "7a18b5b3-d49e-4aac-9f6f-6eed429729bd",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "41178d48-014d-47df-8e9d-2f18cf2ba166": {
+   "id": "41178d48-014d-47df-8e9d-2f18cf2ba166",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 98,
+   "fromId": "5af9e689-4667-47ac-a986-613f409eab2d",
+   "toId": "07364f58-7986-491f-9f02-01f2496ae4e7",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "49ce32d1-b85e-46c4-8e72-ddd4d946a948": {
+   "id": "49ce32d1-b85e-46c4-8e72-ddd4d946a948",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 165,
+   "fromId": "7ef36c35-4488-4458-8a29-2b2de2f899c9",
+   "toId": "ba9d29a1-4e96-452f-b803-b52ca4462e20",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "4223ca9d-3445-4b3e-a271-6b5ef889b95f": {
+   "id": "4223ca9d-3445-4b3e-a271-6b5ef889b95f",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 107,
+   "fromId": "917aee3e-c00e-486c-8fe8-74ac461f7a5a",
+   "toId": "57c24260-d511-4faf-b1f8-85969a42d23c",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "eab33238-ea27-4fb3-9cc7-fdd521cf96be": {
+   "id": "eab33238-ea27-4fb3-9cc7-fdd521cf96be",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 78,
+   "fromId": "253e5726-de03-4cba-b48c-4280cb88d154",
+   "toId": "578de29b-07fc-422a-95df-6abae3623043",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "b9b76c9b-ef3c-4811-be6d-2891390ee13f": {
+   "id": "b9b76c9b-ef3c-4811-be6d-2891390ee13f",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 91,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "90ecfd52-dde3-4828-a9a6-75070bbfb5ed",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "dc5ac11f-4181-4cf9-9dd3-7dd06db35c36": {
+   "id": "dc5ac11f-4181-4cf9-9dd3-7dd06db35c36",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 103,
+   "fromId": "0de05ec4-5371-42d9-9a98-bf473b35abc8",
+   "toId": "96692e29-1b24-4346-86a4-03eb46495805",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0,
+    "ry": 0.5
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "fd1b8d3a-9028-443e-b570-9fd0d415da42": {
+   "id": "fd1b8d3a-9028-443e-b570-9fd0d415da42",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 153,
+   "fromId": "7b162608-5473-4b5c-adfa-d034e9db38ad",
+   "toId": "760bc89f-3738-4451-8ce1-6f8f96f2572d",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "4aa1b6e0-5265-40cd-acc3-30c805132055": {
+   "id": "4aa1b6e0-5265-40cd-acc3-30c805132055",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 133,
+   "fromId": "e45c064a-2f5d-4ae0-9244-f21707710faf",
+   "toId": "5f9da90b-6c4e-49af-8fb5-4a402846dc78",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "65e3b380-2f8a-40fb-98b0-e614aa9ac3da": {
+   "id": "65e3b380-2f8a-40fb-98b0-e614aa9ac3da",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 94,
+   "fromId": "6b827d24-1927-42ef-acea-0b7ea07340d4",
+   "toId": "0f013c6d-cc3c-4bd7-bc16-a94d65399daf",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a879e058-3c31-40d7-8589-dce683875b43": {
+   "id": "a879e058-3c31-40d7-8589-dce683875b43",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 155,
+   "fromId": "af275a85-4f45-41bc-b24b-e19665fede50",
+   "toId": "a0ec1a35-4c4c-45a4-bca4-791b3704897a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "41be1a89-1167-407f-bc1a-5094005ae267": {
+   "id": "41be1a89-1167-407f-bc1a-5094005ae267",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 118,
+   "fromId": "d1b8e602-ebb1-42de-8083-91cbc0d84530",
+   "toId": "e45c064a-2f5d-4ae0-9244-f21707710faf",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "08ea918b-de1e-4191-98ce-34663a69b21f": {
+   "id": "08ea918b-de1e-4191-98ce-34663a69b21f",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 160,
+   "fromId": "fd4bb155-f8b5-4424-a8c7-3c1078658ec4",
+   "toId": "c5211bff-f1ed-45fb-854a-057d2578e9df",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "275d01e5-a155-45b9-ad61-c2a43955c174": {
+   "id": "275d01e5-a155-45b9-ad61-c2a43955c174",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 67,
+   "fromId": "53ee3176-cb85-40f2-b699-041fe3920fca",
+   "toId": "5bcfa929-7883-4cc0-bd1d-ada7142104b4",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "7f8fdf16-d839-472f-ae5e-6cce118c39d8": {
+   "id": "7f8fdf16-d839-472f-ae5e-6cce118c39d8",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 163,
+   "fromId": "efd9272a-a023-4c15-8d17-bc43313c4c8f",
+   "toId": "b759b92f-435e-420f-b378-7718295b3d50",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "0db200f1-2fef-4554-b216-6913ad6d3ee2": {
+   "id": "0db200f1-2fef-4554-b216-6913ad6d3ee2",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 60,
+   "fromId": "10f453ee-05b6-474a-95f1-134a04382cb3",
+   "toId": "321551f6-feb0-4737-a09b-12906853966a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "54c01ba7-6a99-4608-a225-084e69614959": {
+   "id": "54c01ba7-6a99-4608-a225-084e69614959",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 134,
+   "fromId": "420e5a09-9168-401f-a316-7d08177369ec",
+   "toId": "6f69a54d-e2f6-4bb6-b3db-75e8e4e0f350",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "0f92e67e-8b6b-47a7-a6ef-70311d21be45": {
+   "id": "0f92e67e-8b6b-47a7-a6ef-70311d21be45",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 66,
+   "fromId": "7a372c54-0301-45db-b2f2-45fcf638e269",
+   "toId": "53ee3176-cb85-40f2-b699-041fe3920fca",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "c57ba5a1-c1d8-4631-b232-3707764ee471": {
+   "id": "c57ba5a1-c1d8-4631-b232-3707764ee471",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 71,
+   "fromId": "ddaa5a27-fa87-4dde-b9b6-4f7dee9500ad",
+   "toId": "11bc2d7e-49ad-4c56-a461-a47c3a7745b9",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "6382b7dc-6ca1-4db9-990d-67ce2d0c14ad": {
+   "id": "6382b7dc-6ca1-4db9-990d-67ce2d0c14ad",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 70,
+   "fromId": "aa38479d-6493-406a-94db-60733afaa12a",
+   "toId": "ddaa5a27-fa87-4dde-b9b6-4f7dee9500ad",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "d89c85a0-2238-4bf1-abe9-ffc59ca470b8": {
+   "id": "d89c85a0-2238-4bf1-abe9-ffc59ca470b8",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 95,
+   "fromId": "6b827d24-1927-42ef-acea-0b7ea07340d4",
+   "toId": "5af9e689-4667-47ac-a986-613f409eab2d",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "f46a5d6e-bab4-4224-9481-a36f09186849": {
+   "id": "f46a5d6e-bab4-4224-9481-a36f09186849",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 51,
+   "fromId": "f1fa7038-fe61-4566-9698-55c1b195031d",
+   "toId": "8afbf14b-e30f-4221-974d-8bb54e10d90d",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "55674e17-dfe9-494d-a7df-377d04c3cadc": {
+   "id": "55674e17-dfe9-494d-a7df-377d04c3cadc",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 164,
+   "fromId": "b759b92f-435e-420f-b378-7718295b3d50",
+   "toId": "5aabe8db-8906-4d8d-b9c1-7dbadcc05bf2",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "6f3f7c3f-6852-43f0-afa6-2f98f04e19e1": {
+   "id": "6f3f7c3f-6852-43f0-afa6-2f98f04e19e1",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 88,
+   "fromId": "e733c1b3-ac41-480b-b8c1-8d7e2c9277f4",
+   "toId": "cb533103-7738-4169-9b51-7d7b859989a2",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a4c8d4a5-2f13-4053-93db-16a09ad76311": {
+   "id": "a4c8d4a5-2f13-4053-93db-16a09ad76311",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 85,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "a329f063-91dd-44a0-9bd6-2ab5a4d52470",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "c5848d4e-2991-4654-afda-44b78db8b5a6": {
+   "id": "c5848d4e-2991-4654-afda-44b78db8b5a6",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 127,
+   "fromId": "5f9da90b-6c4e-49af-8fb5-4a402846dc78",
+   "toId": "52e31ae7-1f1d-4d44-ad3c-a8bee8c7566e",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "df50c80c-814e-462c-b100-2784d2bb9bea": {
+   "id": "df50c80c-814e-462c-b100-2784d2bb9bea",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 135,
+   "fromId": "420e5a09-9168-401f-a316-7d08177369ec",
+   "toId": "0f57f39e-93f0-4697-86e2-3571e732360b",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "b9c71e7c-b4a8-4fc3-8a51-da256578a454": {
+   "id": "b9c71e7c-b4a8-4fc3-8a51-da256578a454",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 131,
+   "fromId": "82d00def-87cb-4fcc-a4c4-7c214291f93a",
+   "toId": "6abf0206-03e5-4eb9-9e18-b300a70d5cb3",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "75d8a92e-bbff-4fd3-ad2d-6fd763c5fe5d": {
+   "id": "75d8a92e-bbff-4fd3-ad2d-6fd763c5fe5d",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 102,
+   "fromId": "101de631-5203-40f4-a8c4-358bf7247fd6",
+   "toId": "0de05ec4-5371-42d9-9a98-bf473b35abc8",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "c6d36ecd-f29e-4703-8ccb-93c091c8e620": {
+   "id": "c6d36ecd-f29e-4703-8ccb-93c091c8e620",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 105,
+   "fromId": "a337164f-05a3-40c4-a331-3d9f66a53d6d",
+   "toId": "cb533103-7738-4169-9b51-7d7b859989a2",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "714f80f8-43a7-4d77-94f7-696fd359c202": {
+   "id": "714f80f8-43a7-4d77-94f7-696fd359c202",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 166,
+   "fromId": "ba9d29a1-4e96-452f-b803-b52ca4462e20",
+   "toId": "f5e5a267-f3f0-4d07-a0eb-82f74e0ac0c5",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "4e5e5f3e-a262-444a-a5db-338ec2a27c11": {
+   "id": "4e5e5f3e-a262-444a-a5db-338ec2a27c11",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 161,
+   "fromId": "c5211bff-f1ed-45fb-854a-057d2578e9df",
+   "toId": "cb7d3ecf-7a1c-4cfe-990c-3a081082b968",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "19035db4-8b53-4d06-ab40-4f0b3db18799": {
+   "id": "19035db4-8b53-4d06-ab40-4f0b3db18799",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 56,
+   "fromId": "995c9bbc-1385-457f-ab3c-59f58fa6491a",
+   "toId": "420e5a09-9168-401f-a316-7d08177369ec",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "98f08a59-08fe-45cf-982b-da7bfe51bf94": {
+   "id": "98f08a59-08fe-45cf-982b-da7bfe51bf94",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 57,
+   "fromId": "420e5a09-9168-401f-a316-7d08177369ec",
+   "toId": "96207967-09f9-4b1e-bafd-471206465798",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.25
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "b4d8dedd-618a-4998-a0d4-db8cdeb767c4": {
+   "id": "b4d8dedd-618a-4998-a0d4-db8cdeb767c4",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 87,
+   "fromId": "f1fa7038-fe61-4566-9698-55c1b195031d",
+   "toId": "cb533103-7738-4169-9b51-7d7b859989a2",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "c6b3ac3c-61cc-49ab-b363-789d562df2ed": {
+   "id": "c6b3ac3c-61cc-49ab-b363-789d562df2ed",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 81,
+   "fromId": "152c9e61-3a91-4cdd-b28f-bf2763e7442e",
+   "toId": "70506b91-0155-4603-a884-7e10f05110ce",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "808f1884-da37-4db2-9db9-568e371b97a4": {
+   "id": "808f1884-da37-4db2-9db9-568e371b97a4",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 100,
+   "fromId": "07364f58-7986-491f-9f02-01f2496ae4e7",
+   "toId": "014afa99-1fad-461f-a991-a4e3f5f74bdb",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "3b7e44a8-26dd-4b2a-b8d7-27206fde31f4": {
+   "id": "3b7e44a8-26dd-4b2a-b8d7-27206fde31f4",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 86,
+   "fromId": "83393d27-71ca-4103-b891-9d3edce183d3",
+   "toId": "7ef36c35-4488-4458-8a29-2b2de2f899c9",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "06a454a3-eec2-43eb-8d00-cc75caa412cd": {
+   "id": "06a454a3-eec2-43eb-8d00-cc75caa412cd",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 89,
+   "fromId": "da1cd8f2-11de-4e22-93b8-608e5a87e927",
+   "toId": "cb533103-7738-4169-9b51-7d7b859989a2",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a89dfe60-379c-4f97-acf8-f14ec8509703": {
+   "id": "a89dfe60-379c-4f97-acf8-f14ec8509703",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 110,
+   "fromId": "8afbf14b-e30f-4221-974d-8bb54e10d90d",
+   "toId": "b6e4dafe-4562-47d5-a127-9b6884092917",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "32690c64-ba11-4f99-974c-cd3e92b41043": {
+   "id": "32690c64-ba11-4f99-974c-cd3e92b41043",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 113,
+   "fromId": "8a5aeb56-b1a4-4dfe-b511-6b6ed9d63329",
+   "toId": "4f7e1ab1-622c-474f-a246-bc98703145b8",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "564c6605-dbf2-41bd-8856-6b170a106752": {
+   "id": "564c6605-dbf2-41bd-8856-6b170a106752",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 75,
+   "fromId": "ad14f57d-6627-4c24-b0dd-5feb65a7fa15",
+   "toId": "f59e830b-002a-4e40-bd6a-150ff9c3d777",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a33f7ab5-6726-456b-afe0-0977291891ca": {
+   "id": "a33f7ab5-6726-456b-afe0-0977291891ca",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 97,
+   "fromId": "0f013c6d-cc3c-4bd7-bc16-a94d65399daf",
+   "toId": "07364f58-7986-491f-9f02-01f2496ae4e7",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "fdf95184-ad36-4c39-b55b-c9e5e16033c2": {
+   "id": "fdf95184-ad36-4c39-b55b-c9e5e16033c2",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 108,
+   "fromId": "917aee3e-c00e-486c-8fe8-74ac461f7a5a",
+   "toId": "5daf7e1d-f9d7-4050-97d1-b692e9127c8b",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a96d2512-ece1-4afd-a850-b1ab06ae6aaa": {
+   "id": "a96d2512-ece1-4afd-a850-b1ab06ae6aaa",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 115,
+   "fromId": "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f",
+   "toId": "f9d5cccf-b28a-494f-926c-956a94daf6f6",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "76010ec6-478a-4004-8ab8-8207a02b2bbe": {
+   "id": "76010ec6-478a-4004-8ab8-8207a02b2bbe",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 73,
+   "fromId": "0fa5c254-9315-413b-8c2b-febf015a2ecc",
+   "toId": "4c7dd01c-53fa-44ee-99c9-296204626647",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "c458b88e-80b0-435f-918c-68933f1846bf": {
+   "id": "c458b88e-80b0-435f-918c-68933f1846bf",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 116,
+   "fromId": "f9d5cccf-b28a-494f-926c-956a94daf6f6",
+   "toId": "d1b8e602-ebb1-42de-8083-91cbc0d84530",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a4ce1a91-c59b-4e20-b9c0-1c62d440c272": {
+   "id": "a4ce1a91-c59b-4e20-b9c0-1c62d440c272",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 152,
+   "fromId": "a01a1110-7cbb-4965-8248-934559122ac5",
+   "toId": "7b162608-5473-4b5c-adfa-d034e9db38ad",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "5efb6673-c9b5-4c77-a144-9b41bb8f1863": {
+   "id": "5efb6673-c9b5-4c77-a144-9b41bb8f1863",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 150,
+   "fromId": "7a18b5b3-d49e-4aac-9f6f-6eed429729bd",
+   "toId": "e789b212-1e1c-4134-bf57-34893ebe7b6b",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "7ee45538-04ed-4438-ae55-c7dc32987dfc": {
+   "id": "7ee45538-04ed-4438-ae55-c7dc32987dfc",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 111,
+   "fromId": "8afbf14b-e30f-4221-974d-8bb54e10d90d",
+   "toId": "8a5aeb56-b1a4-4dfe-b511-6b6ed9d63329",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "59090373-93b3-4e6d-8d53-55e2c6d4910d": {
+   "id": "59090373-93b3-4e6d-8d53-55e2c6d4910d",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 132,
+   "fromId": "6abf0206-03e5-4eb9-9e18-b300a70d5cb3",
+   "toId": "626b191f-c522-4097-a405-1bb266d01140",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "b5759316-7e33-4cd4-b81e-b39aa606eb45": {
+   "id": "b5759316-7e33-4cd4-b81e-b39aa606eb45",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 130,
+   "fromId": "6453da54-3842-4e3f-9be5-29ffd6ead42c",
+   "toId": "82d00def-87cb-4fcc-a4c4-7c214291f93a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "d4f8bc7e-1239-485c-acdd-52da500d0512": {
+   "id": "d4f8bc7e-1239-485c-acdd-52da500d0512",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 74,
+   "fromId": "aa38479d-6493-406a-94db-60733afaa12a",
+   "toId": "ad14f57d-6627-4c24-b0dd-5feb65a7fa15",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "ba5fa188-f554-4b43-809d-09c4d4700337": {
+   "id": "ba5fa188-f554-4b43-809d-09c4d4700337",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 49,
+   "fromId": "96207967-09f9-4b1e-bafd-471206465798",
+   "toId": "015b3971-4fba-431b-a236-684c058336cc",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a5ac7ed0-158d-45a8-a6c8-32a52bb29aaf": {
+   "id": "a5ac7ed0-158d-45a8-a6c8-32a52bb29aaf",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 104,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "a337164f-05a3-40c4-a331-3d9f66a53d6d",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "a419e4f0-3c27-47c6-bec1-800bdb7297ee": {
+   "id": "a419e4f0-3c27-47c6-bec1-800bdb7297ee",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 72,
+   "fromId": "11bc2d7e-49ad-4c56-a461-a47c3a7745b9",
+   "toId": "0fa5c254-9315-413b-8c2b-febf015a2ecc",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "86bf625b-f7cc-45d4-9d08-37a548e38517": {
+   "id": "86bf625b-f7cc-45d4-9d08-37a548e38517",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 59,
+   "fromId": "7e62038f-2d58-46bf-8639-45d7d6c973f0",
+   "toId": "10f453ee-05b6-474a-95f1-134a04382cb3",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "f3d93a0f-b809-41f5-9c22-869a928b8253": {
+   "id": "f3d93a0f-b809-41f5-9c22-869a928b8253",
+   "objectType": "connector",
+   "parentId": null,
+   "order": 162,
+   "fromId": "cb7d3ecf-7a1c-4cfe-990c-3a081082b968",
+   "toId": "efd9272a-a023-4c15-8d17-bc43313c4c8f",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "fa589142-c6ed-459a-9eab-bf109e0fd645": {
+   "id": "fa589142-c6ed-459a-9eab-bf109e0fd645",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 80,
+   "fromId": "86d2f69a-75dc-41d5-9839-ced3691fa2a9",
+   "toId": "566532df-5e2d-4fa7-9860-b556cde52552",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "b179ed37-1b07-48f2-baab-2f0d44f8e969": {
+   "id": "b179ed37-1b07-48f2-baab-2f0d44f8e969",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 48,
+   "fromId": "96692e29-1b24-4346-86a4-03eb46495805",
+   "toId": "995c9bbc-1385-457f-ab3c-59f58fa6491a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "81518402-6a14-427b-a83f-65c98763f088": {
+   "id": "81518402-6a14-427b-a83f-65c98763f088",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 68,
+   "fromId": "5bcfa929-7883-4cc0-bd1d-ada7142104b4",
+   "toId": "152c9e61-3a91-4cdd-b28f-bf2763e7442e",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "6d10d3d7-88c0-4cff-887e-43f01183eeb3": {
+   "id": "6d10d3d7-88c0-4cff-887e-43f01183eeb3",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 63,
+   "fromId": "c7cd8a8b-c3cc-4527-8e7c-46ce198c1654",
+   "toId": "86d2f69a-75dc-41d5-9839-ced3691fa2a9",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "89b03927-3832-463f-ba30-e87056684e74": {
+   "id": "89b03927-3832-463f-ba30-e87056684e74",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 82,
+   "fromId": "015b3971-4fba-431b-a236-684c058336cc",
+   "toId": "da1cd8f2-11de-4e22-93b8-608e5a87e927",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "93f07316-3086-48fe-a348-3076162f6441": {
+   "id": "93f07316-3086-48fe-a348-3076162f6441",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 151,
+   "fromId": "e789b212-1e1c-4134-bf57-34893ebe7b6b",
+   "toId": "a01a1110-7cbb-4965-8248-934559122ac5",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "42610305-354f-4fe1-b88c-d0385212e568": {
+   "id": "42610305-354f-4fe1-b88c-d0385212e568",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 106,
+   "fromId": "0f013c6d-cc3c-4bd7-bc16-a94d65399daf",
+   "toId": "917aee3e-c00e-486c-8fe8-74ac461f7a5a",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 1
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "afaea01f-37fa-4749-be12-d99e5a8c471c": {
+   "id": "afaea01f-37fa-4749-be12-d99e5a8c471c",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 61,
+   "fromId": "321551f6-feb0-4737-a09b-12906853966a",
+   "toId": "253e5726-de03-4cba-b48c-4280cb88d154",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "8b64036e-1241-4c74-97e0-36519ab364ce": {
+   "id": "8b64036e-1241-4c74-97e0-36519ab364ce",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 64,
+   "fromId": "c7cd8a8b-c3cc-4527-8e7c-46ce198c1654",
+   "toId": "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7": {
+   "id": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "objectType": "frame",
+   "parentId": null,
+   "order": 167,
+   "rect": {
+    "x": -2388,
+    "y": -84,
+    "w": 4416,
+    "h": 2634
+   },
+   "style": {
+    "color": "smoke",
+    "deco": "outline"
+   },
+   "text": "Vitascience"
+  },
+  "71868e27-9940-44ad-b836-5f7a9e7e944c": {
+   "id": "71868e27-9940-44ad-b836-5f7a9e7e944c",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 149,
+   "fromId": "0f57f39e-93f0-4697-86e2-3571e732360b",
+   "toId": "7a18b5b3-d49e-4aac-9f6f-6eed429729bd",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.09375,
+    "ry": 0.5
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "52a5422e-fe4b-4dff-83ce-84dc058003b2": {
+   "id": "52a5422e-fe4b-4dff-83ce-84dc058003b2",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 117,
+   "fromId": "f9d5cccf-b28a-494f-926c-956a94daf6f6",
+   "toId": "5ef9424f-9107-4190-a4b4-e3e59e09c033",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "dc4e2a72-3a66-4d32-b3da-0392eb4bf683": {
+   "id": "dc4e2a72-3a66-4d32-b3da-0392eb4bf683",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 101,
+   "fromId": "014afa99-1fad-461f-a991-a4e3f5f74bdb",
+   "toId": "101de631-5203-40f4-a8c4-358bf7247fd6",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "fb2c44c8-b035-4feb-9df2-fa30889e3a81": {
+   "id": "fb2c44c8-b035-4feb-9df2-fa30889e3a81",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 76,
+   "fromId": "f59e830b-002a-4e40-bd6a-150ff9c3d777",
+   "toId": "4b1dbe3c-3334-4ed9-8c47-5ae2f896a486",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "12e64f85-0431-4caa-8070-762d9b08a3e2": {
+   "id": "12e64f85-0431-4caa-8070-762d9b08a3e2",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 96,
+   "fromId": "6b827d24-1927-42ef-acea-0b7ea07340d4",
+   "toId": "d26bae3a-5045-4eaa-bb21-47bd86c87b13",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "x"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "6bb4f735-e88a-4d75-99e6-b0e771cdedff": {
+   "id": "6bb4f735-e88a-4d75-99e6-b0e771cdedff",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 112,
+   "fromId": "8afbf14b-e30f-4221-974d-8bb54e10d90d",
+   "toId": "5a705889-f77b-4039-8449-e002d366a4f9",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "3bd43677-a9ec-4723-ab91-659ea86c1fc6": {
+   "id": "3bd43677-a9ec-4723-ab91-659ea86c1fc6",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 65,
+   "fromId": "c4e5ef3d-75a4-403d-bd12-b51a7e48cc0f",
+   "toId": "7a372c54-0301-45db-b2f2-45fcf638e269",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "8b779a37-0074-48d0-add8-58867b7ec3b1": {
+   "id": "8b779a37-0074-48d0-add8-58867b7ec3b1",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 58,
+   "fromId": "43154ffd-3e5d-4d05-95c7-bf087b94a663",
+   "toId": "7e62038f-2d58-46bf-8639-45d7d6c973f0",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": ""
+  },
+  "825db573-256d-4c46-846a-858427cad053": {
+   "id": "825db573-256d-4c46-846a-858427cad053",
+   "objectType": "connector",
+   "parentId": "f3d7631a-44a0-4eb2-9d67-7e1b4acd7df7",
+   "order": 92,
+   "fromId": "90ecfd52-dde3-4828-a9a6-75070bbfb5ed",
+   "toId": "f1fa7038-fe61-4566-9698-55c1b195031d",
+   "connectorType": "elbow",
+   "fromRel": {
+    "rx": 0.5,
+    "ry": 0.5,
+    "axis": "y"
+   },
+   "toRel": {
+    "rx": 0.5,
+    "ry": 0.5
+   },
+   "fromEndpoint": "none",
+   "toEndpoint": "arrow",
+   "fromCardinality": null,
+   "toCardinality": null,
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "label": "texto teste na linha"
+  },
+  "3128cc99-9d7b-4d98-b6e8-c6ddaa123c20": {
+   "id": "3128cc99-9d7b-4d98-b6e8-c6ddaa123c20",
+   "objectType": "text",
+   "parentId": null,
+   "order": 168,
+   "rect": {
+    "x": 912,
+    "y": -180,
+    "w": 46,
+    "h": 24
+   },
+   "style": {
+    "color": "gray",
+    "deco": "outline"
+   },
+   "text": "dayan",
+   "fontSize": 18
+  }
+ }
+}
