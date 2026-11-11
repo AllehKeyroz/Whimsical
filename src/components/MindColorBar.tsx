@@ -42,7 +42,7 @@ export function MindColorBar() {
     };
   }, [target, board.objects, camera]);
 
-  if (!board.mindMap || !target || !pos || editingId || presentation) return null;
+  if (!target || !target.mind || !pos || editingId || presentation) return null;
 
   return (
     <div

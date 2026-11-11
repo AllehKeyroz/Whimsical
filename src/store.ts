@@ -1795,6 +1795,7 @@ export const useStore = create<BoardState>((set, get) => {
         order: 0,
         mindCollapsed: false,
         mindRoot: true,
+        mindNode: true,
       });
       commit({
         ...get().board,
@@ -1874,7 +1875,7 @@ export const useStore = create<BoardState>((set, get) => {
       const o = board.objects[id];
       if (!o || !("text" in o)) return;
       commit({ ...board, objects: { ...board.objects, [id]: { ...o, text } } }, false);
-      if (board.mindMap && o.objectType === "text") get().reflowMindMap();
+      if (o.objectType === "text" && (o.mindNode || o.mindRoot)) get().reflowMindMap();
     },
 
     setBoardTitle: (title) => {

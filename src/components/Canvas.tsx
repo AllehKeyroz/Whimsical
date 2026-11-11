@@ -241,9 +241,17 @@ export function Canvas() {
     [objects],
   );
 
+  const selectedObject = selection.length === 1 ? board.objects[selection[0]] : null;
+  const selectedIsMind =
+    !!selectedObject &&
+    ((selectedObject.objectType === "text" && (!!selectedObject.mindNode || !!selectedObject.mindRoot)) ||
+      (selectedObject.objectType === "connector" && !!selectedObject.mind));
+
   const mindControls = useMemo(() => {
     if (!board.mindMap) return [];
-    const allConnectors = Object.values(board.objects).filter(isConnector);
+    const allConnectors = Object.values(board.objects).filter(
+      (o): o is Connector => isConnector(o) && !!o.mind,
+    );
     const childrenOf = new Map<string, string[]>();
     for (const c of allConnectors) {
       const list = childrenOf.get(c.fromId) ?? [];
@@ -1096,8 +1104,11 @@ export function Canvas() {
         setEditing(objectId);
       }
     } else if (connectorId) {
+      const connectorTarget = board.objects[connectorId];
       select(connectorId, false);
-      if (!board.mindMap) setEditing(connectorId);
+      if (!(connectorTarget?.objectType === "connector" && connectorTarget.mind)) {
+        setEditing(connectorId);
+      }
     } else {
       const world = toWorld(e.clientX, e.clientY);
       addText({ x: world.x, y: world.y - 12, w: 220, h: 36 });
@@ -1329,7 +1340,7 @@ export function Canvas() {
         </g>
       </svg>
 
-      {selBounds && !presentation && !editingId && !board.mindMap ? (
+      {selBounds && !presentation && !editingId && !selectedIsMind ? (
         <ResizeHandles
           bounds={selBounds}
           toScreen={toScreen}
@@ -1340,7 +1351,7 @@ export function Canvas() {
       ) : null}
 
       {singleRect && !singleRect.locked && !singleRect.hidden && !presentation && !editingId ? (
-        board.mindMap ? (
+        singleRect.objectType === "text" && (singleRect.mindNode || singleRect.mindRoot) ? (
           <button
             className="mind-add"
             title="Criar novo ramo"
@@ -1418,7 +1429,7 @@ export function Canvas() {
           toScreen={toScreen}
         />
       ) : null}
-      {editTarget && editTarget.objectType === "connector" && !board.mindMap ? (
+      {editTarget && editTarget.objectType === "connector" && !editTarget.mind ? (
         (() => {
           const route = routes.get(editTarget.id);
           return route ? (
@@ -1434,7 +1445,7 @@ export function Canvas() {
 
       {connectFrom ? <div className="connect-hint">Clique no destino para conectar — Esc para cancelar</div> : null}
 
-      {!presentation && !editingId && !board.mindMap ? <ContextBar /> : null}
+      {!presentation && !editingId && !selectedIsMind ? <ContextBar /> : null}
       {!presentation && !editingId ? <MindColorBar /> : null}
       {!presentation ? <ContextMenu /> : null}
 

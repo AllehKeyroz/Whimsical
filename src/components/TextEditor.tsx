@@ -33,7 +33,6 @@ export function TextEditor({ object, zoom, toScreen }: Props) {
   const setText = useStore((s) => s.setText);
   const setEditing = useStore((s) => s.setEditing);
   const pushHistory = useStore((s) => s.pushHistory);
-  const board = useStore((s) => s.board);
   const addMindChild = useStore((s) => s.addMindChild);
   const addMindSibling = useStore((s) => s.addMindSibling);
   const [value, setValue] = useState(object.text);
@@ -120,7 +119,7 @@ export function TextEditor({ object, zoom, toScreen }: Props) {
         if (useStore.getState().editingId === object.id) setEditing(null);
       }}
       onKeyDown={(e) => {
-        if (board.mindMap && object.objectType === "text") {
+        if (object.objectType === "text" && (object.mindNode || object.mindRoot)) {
           if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
             e.preventDefault();
             e.stopPropagation();
