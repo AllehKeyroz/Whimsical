@@ -48,6 +48,7 @@ import {
   type MermaidBuildResult,
 } from "./lib/mermaid";
 import { mergeCloudState } from "./lib/cloudMerge";
+import { buildOutlineMindMap, looksLikeOutline } from "./lib/outline";
 import {
   cloudChangePassword,
   cloudDeleteBoard,
@@ -206,6 +207,7 @@ export interface BoardState {
   moveSelection: (dx: number, dy: number, history?: boolean) => void;
   zoomToSelection: () => void;
   importMermaid: (text: string) => Promise<boolean>;
+  importMindMap: (text: string) => boolean;
   nudgeSelection: (dx: number, dy: number) => void;
   setStyle: (id: string, patch: { color?: Color; deco?: Deco; hex?: string }) => void;
   setStyleForSelection: (patch: { color?: Color; deco?: Deco; hex?: string }) => void;
@@ -1495,7 +1497,8 @@ export const useStore = create<BoardState>((set, get) => {
       if (!clean) return false;
       const kind = detectMermaidKind(clean);
       if (!kind) {
-        get().showToast("O texto colado não parece ser um diagrama Mermaid.");
+        if (looksLikeOutline(clean)) return get().importMindMap(clean);
+        get().showToast("O texto colado não parece ser um diagrama Mermaid nem um outline.");
         return false;
       }
       const el = typeof document !== "undefined" ? document.querySelector(".canvas-container") : null;
@@ -1555,6 +1558,41 @@ export const useStore = create<BoardState>((set, get) => {
       set({ selection: [id], tool: "select", editingId: null });
       get().zoomToSelection();
       get().showToast("Diagrama Mermaid importado como imagem.");
+      return true;
+    },
+
+    importMindMap: (text) => {
+      const clean = text.trim();
+      if (!clean || !looksLikeOutline(clean)) {
+        get().showToast("O texto não parece ser uma lista/outline com indentação.");
+        return false;
+      }
+      const el = typeof document !== "undefined" ? document.querySelector(".canvas-container") : null;
+      const w = el?.clientWidth || 1200;
+      const h = el?.clientHeight || 800;
+      const camera = get().camera;
+      const origin = {
+        x: (w / 2 - camera.x) / camera.zoom,
+        y: (h / 2 - camera.y) / camera.zoom,
+      };
+      const built = buildOutlineMindMap(clean, origin);
+      if (!built) {
+        get().showToast("Não consegui interpretar esse outline.");
+        return false;
+      }
+      const objects = { ...get().board.objects };
+      for (const o of built.objects) {
+        const withO = withOrder(o);
+        objects[withO.id] = withO;
+      }
+      commit({ ...get().board, objects });
+      set({
+        selection: built.ids.filter((id) => objects[id]?.objectType !== "connector"),
+        tool: "select",
+        editingId: null,
+      });
+      get().zoomToSelection();
+      get().showToast(`${built.count} tópicos importados como mapa mental.`);
       return true;
     },
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hasClipboard, INTERNAL_CLIPBOARD_PREFIX, useStore } from "../store";
 import { detectMermaidKind } from "../lib/mermaid";
+import { looksLikeOutline } from "../lib/outline";
 import type {
   BoardObject,
   Connector,
@@ -577,7 +578,7 @@ export function Canvas() {
     const onPaste = (e: ClipboardEvent) => {
       if (isEditable(e.target) || document.querySelector(".modal-backdrop")) return;
       const text = e.clipboardData?.getData("text/plain") ?? "";
-      if (detectMermaidKind(text)) {
+      if (detectMermaidKind(text) || looksLikeOutline(text)) {
         e.preventDefault();
         void useStore.getState().importMermaid(text);
         return;

@@ -421,7 +421,7 @@ export function MermaidModal() {
     <Modal
       open={open}
       title="Colar Mermaid"
-      subtitle="Cole o código. Fluxogramas viram formas editáveis; outros diagramas entram como imagem."
+      subtitle="Cole Mermaid (flowchart/ER) ou uma lista com indentação para virar mapa mental. Clique em Importar."
       onClose={() => setOpen(false)}
       wide
     >
