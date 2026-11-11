@@ -4169,3 +4169,35 @@ kbd {
 .mind-add:hover svg {
   opacity: 1;
 }
+
+/* Mind map branch color picker */
+.mind-colorbar {
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 9px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+.mind-colorbar span {
+  font-size: 9.5px;
+  color: var(--muted);
+  margin-right: 2px;
+  white-space: nowrap;
+}
+.mind-colorbar button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.mind-colorbar button.active {
+  border-color: var(--text);
+}

@@ -22,6 +22,7 @@ import { ImageNode } from "./ImageNode";
 import { IconNode } from "./IconNode";
 import { ConnectorView } from "./ConnectorView";
 import { ContextBar } from "./ContextBar";
+import { MindColorBar } from "./MindColorBar";
 import { ContextMenu } from "./ContextMenu";
 import { TextEditor } from "./TextEditor";
 import { ConnectorLabelEditor } from "./ConnectorLabelEditor";
@@ -1096,7 +1097,7 @@ export function Canvas() {
       }
     } else if (connectorId) {
       select(connectorId, false);
-      setEditing(connectorId);
+      if (!board.mindMap) setEditing(connectorId);
     } else {
       const world = toWorld(e.clientX, e.clientY);
       addText({ x: world.x, y: world.y - 12, w: 220, h: 36 });
@@ -1417,7 +1418,7 @@ export function Canvas() {
           toScreen={toScreen}
         />
       ) : null}
-      {editTarget && editTarget.objectType === "connector" ? (
+      {editTarget && editTarget.objectType === "connector" && !board.mindMap ? (
         (() => {
           const route = routes.get(editTarget.id);
           return route ? (
@@ -1434,6 +1435,7 @@ export function Canvas() {
       {connectFrom ? <div className="connect-hint">Clique no destino para conectar — Esc para cancelar</div> : null}
 
       {!presentation && !editingId && !board.mindMap ? <ContextBar /> : null}
+      {!presentation && !editingId ? <MindColorBar /> : null}
       {!presentation ? <ContextMenu /> : null}
 
       <input
