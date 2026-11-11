@@ -36,6 +36,7 @@ Cada conta tem sua própria **organização/empresa/equipe**, exibida no workspa
 
 ### Mermaid
 - **Ctrl+V no canvas** detecta código Mermaid automaticamente.
+- **Copiar como Mermaid**: botão direito no board ou menu **Mais** → exporta direção, formas, rótulos, subgraphs, estilos e conectores para colar no Whimsical, GitHub, Notion etc.
 - Fluxogramas (`flowchart`/`graph`) viram **formas e conectores editáveis**, com layout automático via dagre, direção TD/LR/BT/RL, shapes (`[]`, `()`, `{}`, `(())`, `{{}}`, `[()]`), rótulos, arestas com/sem seta, tracejadas, grossas, labels, subgraphs como frames e `classDef`/`class`/`style` de cores.
 - Tamanhos seguem o padrão do board: retângulos **192×96**, decisões **240×140**, pílulas **180×64**. O texto quebra dentro da largura padrão e o shape cresce **para baixo**; a largura não é esticada.
 - `erDiagram` também é interpretado nativamente: entidades viram cards com tabela de campos, relações viram conectores com cardinalidade (`||`, `o|`, `}|`, `}o`, `o{`).

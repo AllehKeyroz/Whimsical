@@ -36,6 +36,10 @@ interface ParsedEdge {
   thick: boolean;
   fromArrow: boolean;
   toArrow: boolean;
+  fromCircle?: boolean;
+  toCircle?: boolean;
+  fromCross?: boolean;
+  toCross?: boolean;
   fromCardinality?: Cardinality;
   toCardinality?: Cardinality;
 }
@@ -233,17 +237,30 @@ function parseFlowLine(
     .replace(/-\.\s+(.+?)\s+\.-/g, "-.-|$1|")
     .replace(/==\s+(.+?)\s+===/g, "===|$1|");
 
-  const EDGE_RE = /(<)?(--+|==+|-\.-?)(>)?(?:\|([^|]*)\|)?/g;
+  const EDGE_RE = /((?:(?<=\s)[ox])|<)?(--+|==+|-\.-?)([ox>])?(?:\|([^|]*)\|)?/g;
   const segments: string[] = [];
-  const opMatches: { fromArrow: boolean; toArrow: boolean; op: string; label: string }[] = [];
+  const opMatches: {
+    fromArrow: boolean;
+    fromCircle: boolean;
+    fromCross: boolean;
+    toArrow: boolean;
+    toCircle: boolean;
+    toCross: boolean;
+    op: string;
+    label: string;
+  }[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
   while ((match = EDGE_RE.exec(normalized))) {
     segments.push(normalized.slice(last, match.index));
     opMatches.push({
-      fromArrow: !!match[1],
+      fromArrow: match[1] === "<",
+      fromCircle: match[1] === "o",
+      fromCross: match[1] === "x",
       op: match[2] ?? "",
-      toArrow: !!match[3],
+      toArrow: match[3] === ">",
+      toCircle: match[3] === "o",
+      toCross: match[3] === "x",
       label: match[4] ?? "",
     });
     last = EDGE_RE.lastIndex;
@@ -287,6 +304,10 @@ function parseFlowLine(
           thick: op.op.includes("="),
           fromArrow: op.fromArrow,
           toArrow: op.toArrow,
+          fromCircle: op.fromCircle,
+          toCircle: op.toCircle,
+          fromCross: op.fromCross,
+          toCross: op.toCross,
         });
       }
     }
@@ -625,7 +646,7 @@ export function buildFlowchartObjects(
 ): MermaidBuildResult | null {
   const nodeList = [...parsed.nodes.values()];
   if (!nodeList.length) return null;
-  const g = new dagre.graphlib.Graph();
+  const g = new dagre.graphlib.Graph({ multigraph: true });
   g.setGraph({ rankdir: parsed.direction, nodesep: 72, ranksep: 112, marginx: 40, marginy: 40 });
   g.setDefaultEdgeLabel(() => ({}));
   const sizes = new Map<string, { w: number; h: number }>();
@@ -634,13 +655,19 @@ export function buildFlowchartObjects(
     sizes.set(node.id, size);
     g.setNode(node.id, { width: size.w, height: size.h });
   }
+  let edgeIndex = 0;
   for (const edge of parsed.edges) {
     if (!parsed.nodes.has(edge.from) || !parsed.nodes.has(edge.to)) continue;
-    g.setEdge(edge.from, edge.to, {
-      width: edge.label ? Math.max(40, measure(edge.label, 13) + 20) : 1,
-      height: edge.label ? 24 : 1,
-      labelpos: "c",
-    });
+    g.setEdge(
+      edge.from,
+      edge.to,
+      {
+        width: edge.label ? Math.max(40, measure(edge.label, 13) + 20) : 1,
+        height: edge.label ? 24 : 1,
+        labelpos: "c",
+      },
+      `e${edgeIndex++}`,
+    );
   }
   dagre.layout(g);
 
@@ -745,8 +772,14 @@ export function buildFlowchartObjects(
       connectorType: "elbow",
       fromRel,
       toRel,
-      fromEndpoint: edge.fromArrow ? "arrow" : "none",
-      toEndpoint: edge.toArrow ? "arrow" : "none",
+      fromEndpoint: edge.fromArrow
+        ? "arrow"
+        : edge.fromCircle
+          ? "circle"
+          : edge.fromCross
+            ? "diamond"
+            : "none",
+      toEndpoint: edge.toArrow ? "arrow" : edge.toCircle ? "circle" : edge.toCross ? "diamond" : "none",
       fromCardinality: edge.fromCardinality ?? null,
       toCardinality: edge.toCardinality ?? null,
       style: { color: "gray", deco: edge.dashed ? "dash" : edge.thick ? "fill" : "outline" },

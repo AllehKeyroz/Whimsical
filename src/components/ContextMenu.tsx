@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "../store";
+import { copyBoardAsMermaid } from "../lib/mermaidExport";
 import { Icon } from "./icons";
 
 export function ContextMenu() {
@@ -16,6 +17,8 @@ export function ContextMenu() {
   const addShape = useStore((s) => s.addShape);
   const addFrame = useStore((s) => s.addFrame);
   const returnToDashboard = useStore((s) => s.returnToDashboard);
+  const board = useStore((s) => s.board);
+  const showToast = useStore((s) => s.showToast);
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -55,6 +58,18 @@ export function ContextMenu() {
       <button onClick={() => run(selectAll)}>
         <Icon name="layers" /> Selecionar tudo <kbd>Ctrl+A</kbd>
       </button>
+      {Object.values(board.objects).some((o) => o.objectType === "shape") ? (
+        <button
+          onClick={() =>
+            run(async () => {
+              const ok = await copyBoardAsMermaid(board);
+              showToast(ok ? "Mermaid copiado." : "Não foi possível copiar.");
+            })
+          }
+        >
+          <Icon name="code" /> Copiar como Mermaid
+        </button>
+      ) : null}
       <div className="menu-sep" />
       <button
         onClick={() =>

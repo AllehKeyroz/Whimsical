@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
 import { download, exportBoardPng, exportBoardSvg, printBoard, slug } from "../lib/export";
+import { copyBoardAsMermaid } from "../lib/mermaidExport";
 import { Icon } from "./icons";
 
 const STAR_KEY = "kdsflux.star.board";
@@ -18,6 +19,7 @@ export function Toolbar() {
   const setSearchOpen = useStore((s) => s.setSearchOpen);
   const setHelpOpen = useStore((s) => s.setHelpOpen);
   const setIconPickerOpen = useStore((s) => s.setIconPickerOpen);
+  const showToast = useStore((s) => s.showToast);
   const setMermaidOpen = useStore((s) => s.setMermaidOpen);
   const setCommentsOpen = useStore((s) => s.setCommentsOpen);
   const startPresentation = useStore((s) => s.startPresentation);
@@ -156,6 +158,17 @@ export function Toolbar() {
               <button onClick={() => { setMenu(null); setMermaidOpen(true); }}>Colar Mermaid…</button>
               <button onClick={() => { setMenu(null); fileRef.current?.click(); }}>Importar JSON</button>
               <button onClick={exportJSON}>Exportar JSON</button>
+              <button
+                disabled={!Object.values(board.objects).some((o) => o.objectType === "shape")}
+                onClick={() => {
+                  setMenu(null);
+                  void copyBoardAsMermaid(board).then((ok) =>
+                    showToast(ok ? "Mermaid copiado." : "Não foi possível copiar."),
+                  );
+                }}
+              >
+                Copiar como Mermaid
+              </button>
               <button onClick={() => { setMenu(null); void exportBoardSvg(board); }}>Exportar SVG</button>
               <button onClick={() => { setMenu(null); void exportBoardPng(board, { scale: 2 }); }}>Exportar PNG</button>
               <button onClick={() => { setMenu(null); void printBoard(board); }}>Exportar PDF</button>

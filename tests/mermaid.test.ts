@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildFlowchartObjects, detectMermaidKind, parseMermaidEr, parseMermaidFlowchart } from "../src/lib/mermaid";
-import type { Connector, Shape } from "../src/types";
+import { boardToMermaid } from "../src/lib/mermaidExport";
+import type { Board, Connector, Shape } from "../src/types";
 
 const SAMPLE = `flowchart TD
   A([Início]) --> B[Receber lead]
@@ -156,5 +157,50 @@ describe("mermaid", () => {
     const lead = built!.objects.find((o): o is Shape => o.objectType === "shape" && o.text === "Lead");
     expect(lead?.style.hex).toBe("#ff0000");
     expect(lead?.textStyle.color).toBe("#ffffff");
+  });
+});
+
+describe("mermaid — fidelidade de ida e volta", () => {
+  it("não quebra ids colados ao operador", () => {
+    const parsed = parseMermaidFlowchart("flowchart TD\nfoo-->bar\nbar-->baz");
+    expect(parsed!.nodes.has("foo")).toBe(true);
+    expect(parsed!.nodes.has("bar")).toBe(true);
+    expect(parsed!.edges).toHaveLength(2);
+    expect(parsed!.edges[0]).toMatchObject({ from: "foo", to: "bar" });
+  });
+
+  it("interpreta marcadores o e x", () => {
+    const parsed = parseMermaidFlowchart("flowchart LR\nA o--o B\nC x--x D\nE --o F");
+    const first = parsed!.edges.find((e) => e.from === "A" && e.to === "B");
+    expect(first?.fromCircle).toBe(true);
+    expect(first?.toCircle).toBe(true);
+    const second = parsed!.edges.find((e) => e.from === "C" && e.to === "D");
+    expect(second?.fromCross).toBe(true);
+    expect(second?.toCross).toBe(true);
+    const third = parsed!.edges.find((e) => e.from === "E" && e.to === "F");
+    expect(third?.toCircle).toBe(true);
+    expect(third?.toArrow).toBe(false);
+  });
+
+  it("exporta e reimporta o mesmo fluxograma", () => {
+    const parsed = parseMermaidFlowchart(SAMPLE)!;
+    const built = buildFlowchartObjects(parsed, { x: 0, y: 0 })!;
+    const board: Board = {
+      id: "b",
+      title: "Teste",
+      fontFamily: "Dinsical",
+      objects: Object.fromEntries(built.objects.map((o) => [o.id, o])),
+      version: 2,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+    const text = boardToMermaid(board);
+    expect(text).toContain("flowchart");
+    const again = parseMermaidFlowchart(text)!;
+    expect(again.nodes.size).toBe(parsed.nodes.size);
+    expect(again.edges).toHaveLength(parsed.edges.length);
+    expect(again.nodes.get("n3")?.label).toBe("Qualificado?");
+    const sim = again.edges.find((e) => e.label === "Sim");
+    expect(sim).toMatchObject({ from: "n3", to: "n4" });
   });
 });
