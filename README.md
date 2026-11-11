@@ -22,11 +22,14 @@ Cada conta tem sua própria **organização/empresa/equipe**, exibida no workspa
 - Homepage estilo workspace: sidebar, breadcrumb, cards de ação, estado vazio com atalhos, promo de instalação e botões flutuantes.
 - **Sidebar persistente** no dashboard e no board, com Recentes, Privado, Equipes, pastas e árvore de boards (explorador de arquivos).
 - Pastas com criação, remoção e movimentação de boards entre pastas.
+- **Lista de pastas e boards** com colunas Nome, Criado, Por, Modificado e Por, além de alternância **grade/lista**.
 - Board view com **barra de ferramentas vertical flutuante** e barra inferior de undo/redo, layout, zoom e ajuda.
 - Topbar com breadcrumb, título editável, favorito, presença, compartilhar, apresentar, comentários, busca, ícones, tema e ajuda.
 
 ### Ícones
 - **2.346 ícones Lucide** com busca, categorias, cor, tamanho e carregamento sob demanda.
+- **Marcas & Cloud:** 147 logos (Simple Icons) + 316 ícones AWS + 636 Azure + 45 Google Cloud + 39 Kubernetes, carregados sob demanda e preservando as cores oficiais.
+- **Mapa mental:** `Tab` cria um nó filho conectado, `Enter` cria um nó irmão e `F2`/duplo clique edita o texto.
 - Aba de **emojis** por categoria + campo para colar qualquer emoji.
 - Ícones são objetos nativos do board: dá para mover, redimensionar, rotacionar, agrupar, conectar, comentar, colorir e exportar.
 - Exportação SVG/PNG/PDF preserva os ícones.

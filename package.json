@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "icons:packs": "node scripts/build-icon-packs.mjs",
+    "predev": "npm run icons:packs",
+    "prebuild": "npm run icons:packs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
@@ -17,6 +20,11 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^1.1.4",
+    "@squinch/pack-aws": "^0.19.0",
+    "@squinch/pack-azure": "^0.19.0",
+    "@squinch/pack-gcp": "^0.19.0",
+    "@squinch/pack-k8s": "^0.19.0",
+    "@squinch/pack-logos": "^0.19.0",
     "@supabase/supabase-js": "^2.119.0",
     "lucide": "^1.71.0",
     "mermaid": "^12.3.0",

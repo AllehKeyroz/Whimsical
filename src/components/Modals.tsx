@@ -81,7 +81,9 @@ export function HelpModal() {
           <Row keys="Ctrl + G / Shift + Ctrl + G" label="Agrupar / desagrupar" />
           <Row keys="Setas / Shift + setas" label="Mover 1px / 10px" />
           <Row keys="Delete" label="Excluir" />
-          <Row keys="Enter / duplo clique" label="Editar texto" />
+          <Row keys="Enter" label="Criar nó irmão (forma) / editar texto" />
+          <Row keys="Tab" label="Criar nó filho conectado (mapa mental)" />
+          <Row keys="F2 / duplo clique" label="Editar texto" />
           <Row keys="Ctrl + clique" label="Abrir link do objeto" />
           <Row keys="L" label="Bloquear/desbloquear" />
           <Row keys="Ctrl + S" label="Salvar agora" />

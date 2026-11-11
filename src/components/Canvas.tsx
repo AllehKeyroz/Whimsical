@@ -489,9 +489,32 @@ export function Canvas() {
         }
         return;
       }
+      if (e.key === "Tab" && s.selection.length === 1) {
+        const o = s.board.objects[s.selection[0]];
+        if (o && o.objectType === "shape") {
+          e.preventDefault();
+          const id = s.addMindChild(o.id);
+          if (id) s.setEditing(id);
+        }
+        return;
+      }
       if (e.key === "Enter" && s.selection.length === 1) {
         const o = s.board.objects[s.selection[0]];
+        if (o && o.objectType === "shape") {
+          e.preventDefault();
+          const id = s.addMindSibling(o.id);
+          if (id) s.setEditing(id);
+          return;
+        }
+        if (o && (o.objectType === "text" || o.objectType === "frame")) {
+          s.setEditing(o.id);
+        }
+        return;
+      }
+      if (e.key === "F2" && s.selection.length === 1) {
+        const o = s.board.objects[s.selection[0]];
         if (o && (o.objectType === "shape" || o.objectType === "text" || o.objectType === "frame")) {
+          e.preventDefault();
           s.setEditing(o.id);
         }
         return;

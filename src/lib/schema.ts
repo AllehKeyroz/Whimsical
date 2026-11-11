@@ -218,13 +218,16 @@ export function normalizeObject(raw: unknown, index: number): BoardObject | null
       return image;
     }
     if (type === "icon") {
+      const iconSet = raw.iconSet === "emoji" ? "emoji" : raw.iconSet === "svg" ? "svg" : "lucide";
       const icon: IconObject = {
         ...(base(raw, "icon", index) as IconObject),
         objectType: "icon",
         id: str(raw.id) || nanoid(),
         rect: normalizeRect(raw.rect),
         icon: str(raw.icon, "Star"),
-        iconSet: raw.iconSet === "emoji" ? "emoji" : "lucide",
+        iconSet,
+        svgData: iconSet === "svg" ? str(raw.svgData).slice(0, 120000) || undefined : undefined,
+        svgPlate: iconSet === "svg" ? str(raw.svgPlate).slice(0, 32) || undefined : undefined,
         style: normalizeStyle(raw.style, { color: "purple", deco: "outline" }),
         strokeWidth: Math.max(0.5, Math.min(6, num(raw.strokeWidth, 2))),
       };

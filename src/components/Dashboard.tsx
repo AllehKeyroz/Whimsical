@@ -152,6 +152,178 @@ function EmptyFolderArt() {
   );
 }
 
+function fmtDate(ts: number): string {
+  return new Date(ts).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+}
+
+function UserCell({ name }: { name: string }) {
+  return (
+    <span className="ws-user-cell">
+      <span className="ws-user-dot">{name.trim().charAt(0).toUpperCase() || "A"}</span>
+      {name}
+    </span>
+  );
+}
+
+function FolderCard({
+  folder,
+  count,
+  onOpen,
+  onDelete,
+}: {
+  folder: Folder;
+  count: number;
+  onOpen: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <article className="ws-folder-card">
+      <button className="ws-folder-open" onClick={onOpen} title={`Abrir ${folder.name}`}>
+        <Icon name="folder" size={26} />
+        <b>{folder.name}</b>
+        <small>{count} board{count === 1 ? "" : "s"}</small>
+      </button>
+      <button
+        className="ws-folder-delete"
+        title="Excluir pasta"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+      >
+        <Icon name="trash" size={14} />
+      </button>
+    </article>
+  );
+}
+
+function FolderTable({
+  folders,
+  counts,
+  owner,
+  onOpen,
+  onDelete,
+}: {
+  folders: Folder[];
+  counts: Record<string, number>;
+  owner: string;
+  onOpen: (id: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  return (
+    <div className="ws-table-wrap">
+      <table className="ws-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Criado</th>
+            <th>Por</th>
+            <th>Modificado</th>
+            <th>Por</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {folders.map((folder) => (
+            <tr key={folder.id} onClick={() => onOpen(folder.id)}>
+              <td>
+                <span className="ws-table-name">
+                  <Icon name="folder" size={17} />
+                  {folder.name}
+                  <small>{counts[folder.id] ?? 0}</small>
+                </span>
+              </td>
+              <td>{fmtDate(folder.createdAt)}</td>
+              <td>
+                <UserCell name={owner} />
+              </td>
+              <td>{fmtDate(folder.createdAt)}</td>
+              <td>
+                <UserCell name={owner} />
+              </td>
+              <td>
+                <button
+                  className="ws-row-action"
+                  title="Excluir pasta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(folder.id);
+                  }}
+                >
+                  <Icon name="trash" size={14} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function BoardTable({
+  boards,
+  owner,
+  onOpen,
+  onDelete,
+}: {
+  boards: BoardMeta[];
+  owner: string;
+  onOpen: (id: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  return (
+    <div className="ws-table-wrap">
+      <table className="ws-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Criado</th>
+            <th>Por</th>
+            <th>Modificado</th>
+            <th>Por</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {boards.map((board) => (
+            <tr key={board.id} onClick={() => onOpen(board.id)}>
+              <td>
+                <span className="ws-table-name">
+                  <Icon name="board" size={17} />
+                  {board.title}
+                  <small>{board.count} objeto{board.count === 1 ? "" : "s"}</small>
+                </span>
+              </td>
+              <td>{fmtDate(board.createdAt)}</td>
+              <td>
+                <UserCell name={owner} />
+              </td>
+              <td>{fmtDate(board.updatedAt)}</td>
+              <td>
+                <UserCell name={owner} />
+              </td>
+              <td>
+                <button
+                  className="ws-row-action"
+                  title="Excluir board"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(board.id);
+                  }}
+                >
+                  <Icon name="trash" size={14} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+
 function EmptyWorkspace({ onCreate, onSearch }: { onCreate: () => void; onSearch: () => void }) {
   return (
     <div className="ws-empty">
@@ -183,7 +355,7 @@ function ActionCard({
   label,
   onClick,
 }: {
-  variant: "board" | "doc" | "agent" | "template" | "folder";
+  variant: "board" | "doc" | "template" | "folder";
   icon: IconName;
   label: string;
   onClick: () => void;
@@ -284,18 +456,6 @@ function fallbackBoard(id: string, title: string): Board {
   return { id, title, fontFamily: "Dinsical", objects: {}, version: 2, createdAt: Date.now(), updatedAt: Date.now() };
 }
 
-function pickTemplate(prompt: string): TemplateId {
-  const p = prompt.toLowerCase();
-  if (/organograma|hierarquia|time|equipe|departamento/.test(p)) return "org";
-  if (/mapa mental|mente|brainstorm|ideia|ideias/.test(p)) return "mindmap";
-  if (/kanban|tarefa|sprint|backlog/.test(p)) return "kanban";
-  if (/retro|retrospectiva/.test(p)) return "retro";
-  if (/swot|força|forcas|ameaça|ameaca/.test(p)) return "swot";
-  if (/wireframe|tela|app|interface|ui/.test(p)) return "wireframe";
-  if (/documento|doc|brief|texto|especifica/.test(p)) return "doc";
-  return "flowchart";
-}
-
 export function Dashboard() {
   const boards = useStore((s) => s.boards);
   const settings = useStore((s) => s.settings);
@@ -317,12 +477,16 @@ export function Dashboard() {
 
   const [fullBoards, setFullBoards] = useState<Record<string, Board>>({});
   const [commandOpen, setCommandOpen] = useState(false);
-  const [agentOpen, setAgentOpen] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
-  const [agentPrompt, setAgentPrompt] = useState("");
-  const [agentBusy, setAgentBusy] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
+    try {
+      return localStorage.getItem("kdsflux.viewMode") === "list" ? "list" : "grid";
+    } catch {
+      return "grid";
+    }
+  });
   const [starred, setStarred] = useState(() => {
     try {
       return localStorage.getItem(STAR_KEY) === "1";
@@ -408,6 +572,43 @@ export function Dashboard() {
     setToast("Pasta criada");
   };
 
+  const deleteFolder = (id: string) => {
+    const folder = folders.find((f) => f.id === id);
+    if (!folder) return;
+    if (!confirm(`Excluir a pasta “${folder.name}”? Os boards dentro dela serão mantidos em “Todos”.`)) return;
+    for (const b of boards.filter((b) => b.folderId === id)) void setBoardFolder(b.id, null);
+    updateSettings({
+      folders: folders.filter((f) => f.id !== id),
+      workspaceFilter: filter === id ? "all" : filter,
+    });
+    setToast("Pasta excluída");
+  };
+
+  const toggleViewMode = () => {
+    const next = viewMode === "grid" ? "list" : "grid";
+    setViewMode(next);
+    try {
+      localStorage.setItem("kdsflux.viewMode", next);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const visibleFolders = useMemo(() => {
+    if (filter === "all" || filter === "recent") return folders;
+    if (filter === "private") return [];
+    return folders.filter((f) => f.id === filter);
+  }, [folders, filter]);
+
+  const folderCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const board of boards) {
+      if (!board.folderId) continue;
+      counts[board.folderId] = (counts[board.folderId] ?? 0) + 1;
+    }
+    return counts;
+  }, [boards]);
+
   const copyWorkspaceLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -416,20 +617,6 @@ export function Dashboard() {
       setToast(window.location.href);
     }
     setAvatarOpen(false);
-  };
-
-  const generateAgentBoard = () => {
-    const prompt = agentPrompt.trim();
-    if (!prompt) return;
-    setAgentBusy(true);
-    const template = pickTemplate(prompt);
-    const title = prompt.split("\n")[0].slice(0, 54);
-    window.setTimeout(() => {
-      void createNewBoard(template, title, targetFolder);
-      setAgentBusy(false);
-      setAgentOpen(false);
-      setAgentPrompt("");
-    }, 650);
   };
 
   const handleRename = (id: string, title: string) => {
@@ -483,9 +670,6 @@ export function Dashboard() {
           <button className="ws-icon-btn" title="Buscar comandos (Ctrl+K)" onClick={() => setCommandOpen(true)}>
             <Icon name="search" size={17} />
           </button>
-          <button className="ws-icon-btn" title="Perguntar ao agente" onClick={() => setAgentOpen(true)}>
-            <Icon name="sparkles" size={17} />
-          </button>
           <div className="ws-avatar-wrap" ref={avatarRef}>
             <button className="ws-avatar" onClick={() => setAvatarOpen((v) => !v)} title={settings.userName}>
               {(settings.userName || "A").trim().charAt(0).toUpperCase()}
@@ -527,44 +711,108 @@ export function Dashboard() {
         <div className="ws-actions">
           <ActionCard variant="board" icon="board" label="Novo board" onClick={() => newBoard("blank")} />
           <ActionCard variant="doc" icon="doc" label="Novo doc" onClick={() => newBoard("doc")} />
-          <ActionCard variant="agent" icon="sparkles" label="Perguntar ao agente" onClick={() => setAgentOpen(true)} />
           <ActionCard variant="template" icon="layout" label="Novo a partir de template" onClick={() => setTemplatesOpen(true)} />
           <ActionCard variant="folder" icon="folder" label="Nova pasta" onClick={() => setFolderOpen(true)} />
         </div>
 
-        {filtered.length === 0 ? (
+        {filtered.length === 0 && visibleFolders.length === 0 ? (
           <EmptyWorkspace onCreate={() => newBoard("blank")} onSearch={() => setCommandOpen(true)} />
         ) : (
           <section className="ws-recent">
             <div className="ws-recent-head">
               <h2>{currentLabel}</h2>
-              <span>{filtered.length} board{filtered.length === 1 ? "" : "s"}</span>
-            </div>
-            <div className="ws-board-grid">
-              {filtered.map((b) => (
-                <BoardCard
-                  key={b.id}
-                  meta={b}
-                  board={fullBoards[b.id]}
-                  folders={folders}
-                  onOpen={() => void openBoard(b.id)}
-                  onRename={(title) => handleRename(b.id, title)}
-                  onDuplicate={() => void duplicateBoard(b.id)}
-                  onDelete={() => {
-                    if (confirm(`Excluir “${b.title}”?`)) void removeBoard(b.id);
+              <span>
+                {visibleFolders.length > 0
+                  ? `${visibleFolders.length} pasta${visibleFolders.length === 1 ? "" : "s"} · `
+                  : ""}
+                {filtered.length} board{filtered.length === 1 ? "" : "s"}
+              </span>
+              <span className="spacer" />
+              <div className="ws-view-toggle" role="group" aria-label="Modo de visualização">
+                <button
+                  className={viewMode === "grid" ? "active" : ""}
+                  title="Ver em grade"
+                  onClick={() => {
+                    if (viewMode !== "grid") toggleViewMode();
                   }}
-                  onMove={(folderId) => void setBoardFolder(b.id, folderId)}
-                />
-              ))}
+                >
+                  <Icon name="grid" size={15} />
+                </button>
+                <button
+                  className={viewMode === "list" ? "active" : ""}
+                  title="Ver em lista"
+                  onClick={() => {
+                    if (viewMode !== "list") toggleViewMode();
+                  }}
+                >
+                  <Icon name="list" size={15} />
+                </button>
+              </div>
             </div>
+
+            {visibleFolders.length > 0 ? (
+              viewMode === "list" ? (
+                <FolderTable
+                  folders={visibleFolders}
+                  counts={folderCounts}
+                  owner={settings.userName}
+                  onOpen={(id) => updateSettings({ workspaceFilter: id })}
+                  onDelete={deleteFolder}
+                />
+              ) : (
+                <div className="ws-folder-grid">
+                  {visibleFolders.map((folder) => (
+                    <FolderCard
+                      key={folder.id}
+                      folder={folder}
+                      count={folderCounts[folder.id] ?? 0}
+                      onOpen={() => updateSettings({ workspaceFilter: folder.id })}
+                      onDelete={() => deleteFolder(folder.id)}
+                    />
+                  ))}
+                </div>
+              )
+            ) : null}
+
+            {filtered.length > 0 ? (
+              viewMode === "list" ? (
+                <BoardTable
+                  boards={filtered}
+                  owner={settings.userName}
+                  onOpen={(id) => void openBoard(id)}
+                  onDelete={(id) => {
+                    if (confirm(`Excluir “${boards.find((b) => b.id === id)?.title ?? "board"}”?`)) {
+                      void removeBoard(id);
+                    }
+                  }}
+                />
+              ) : (
+                <div className="ws-board-grid">
+                  {filtered.map((b) => (
+                    <BoardCard
+                      key={b.id}
+                      meta={b}
+                      board={fullBoards[b.id]}
+                      folders={folders}
+                      onOpen={() => void openBoard(b.id)}
+                      onRename={(title) => handleRename(b.id, title)}
+                      onDuplicate={() => void duplicateBoard(b.id)}
+                      onDelete={() => {
+                        if (confirm(`Excluir “${b.title}”?`)) void removeBoard(b.id);
+                      }}
+                      onMove={(folderId) => void setBoardFolder(b.id, folderId)}
+                    />
+                  ))}
+                </div>
+              )
+            ) : (
+              <p className="ws-section-empty">Nenhum board nesta pasta. Crie um novo board para começar.</p>
+            )}
           </section>
         )}
       </main>
 
       <div className="ws-floating">
-        <button className="ws-fab agent" title="Perguntar ao agente" onClick={() => setAgentOpen(true)}>
-          <Icon name="bolt" size={20} />
-        </button>
         <button className="ws-fab" title="Ajuda" onClick={() => setHelpOpen(true)}>
           <Icon name="help" size={19} />
         </button>
@@ -578,45 +826,10 @@ export function Dashboard() {
         boards={boards}
         onCreate={() => newBoard("blank")}
         onCreateDoc={() => newBoard("doc")}
-        onAgent={() => setAgentOpen(true)}
         onTemplate={() => setTemplatesOpen(true)}
         onFolder={() => setFolderOpen(true)}
         onOpenBoard={(id) => void openBoard(id)}
       />
-
-      <Modal
-        open={agentOpen}
-        title="Perguntar ao agente"
-        subtitle="Descreva o que você quer criar. O agente escolhe um template e monta a estrutura inicial."
-        onClose={() => setAgentOpen(false)}
-      >
-        <div className="agent-box">
-          <textarea
-            autoFocus
-            value={agentPrompt}
-            placeholder="Ex.: fluxo de vendas com etapas de qualificação, proposta e fechamento"
-            onChange={(e) => setAgentPrompt(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) generateAgentBoard();
-            }}
-          />
-          <div className="agent-chips">
-            {["Fluxo de vendas", "Organograma do time", "Mapa mental de ideias", "Kanban de tarefas", "Retrospectiva", "Wireframe de app"].map(
-              (chip) => (
-                <button key={chip} onClick={() => setAgentPrompt(chip)}>
-                  {chip}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="agent-actions">
-            <span>Atalho: Ctrl + Enter</span>
-            <button className="primary-btn" disabled={!agentPrompt.trim() || agentBusy} onClick={generateAgentBoard}>
-              <Icon name="sparkles" size={15} /> {agentBusy ? "Gerando…" : "Gerar board"}
-            </button>
-          </div>
-        </div>
-      </Modal>
 
       <Modal
         open={folderOpen}
@@ -655,7 +868,6 @@ function CommandPalette({
   boards,
   onCreate,
   onCreateDoc,
-  onAgent,
   onTemplate,
   onFolder,
   onOpenBoard,
@@ -665,7 +877,6 @@ function CommandPalette({
   boards: BoardMeta[];
   onCreate: () => void;
   onCreateDoc: () => void;
-  onAgent: () => void;
   onTemplate: () => void;
   onFolder: () => void;
   onOpenBoard: (id: string) => void;
@@ -686,11 +897,10 @@ function CommandPalette({
     () => [
       { id: "new", label: "Novo board", hint: "Alt Ctrl N", icon: "board" as IconName, run: onCreate },
       { id: "doc", label: "Novo doc", hint: "", icon: "doc" as IconName, run: onCreateDoc },
-      { id: "agent", label: "Perguntar ao agente", hint: "", icon: "sparkles" as IconName, run: onAgent },
       { id: "template", label: "Novo a partir de template", hint: "", icon: "layout" as IconName, run: onTemplate },
       { id: "folder", label: "Nova pasta", hint: "", icon: "folder" as IconName, run: onFolder },
     ],
-    [onCreate, onCreateDoc, onAgent, onTemplate, onFolder],
+    [onCreate, onCreateDoc, onTemplate, onFolder],
   );
 
   const results = useMemo(() => {

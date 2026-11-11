@@ -25,6 +25,7 @@ export type IconName =
   | "sun"
   | "moon"
   | "grid"
+  | "list"
   | "magnet"
   | "layout"
   | "fit"
@@ -171,6 +172,8 @@ function paths(name: IconName): ReactNode {
       );
     case "moon":
       return <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />;
+    case "list":
+      return <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />;
     case "grid":
       return (
         <>

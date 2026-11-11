@@ -224,3 +224,27 @@ describe("título do board", () => {
     expect(useStore.getState().board.title).toBe("Meu Board Novo");
   });
 });
+
+describe("mapa mental", () => {
+  it("cria filho conectado com Tab e irmão com Enter", () => {
+    reset();
+    const root = useStore.getState().addShape("rect", { x: 0, y: 0, w: 160, h: 64 });
+    useStore.getState().select(root, false);
+    const child = useStore.getState().addMindChild(root);
+    expect(child).toBeTruthy();
+    const childObj = useStore.getState().board.objects[child!];
+    expect(childObj.objectType).toBe("shape");
+    const links = Object.values(useStore.getState().board.objects).filter(
+      (o) => o.objectType === "connector" && o.fromId === root && o.toId === child,
+    );
+    expect(links).toHaveLength(1);
+
+    const sibling = useStore.getState().addMindSibling(child!);
+    expect(sibling).toBeTruthy();
+    expect(
+      Object.values(useStore.getState().board.objects).filter(
+        (o) => o.objectType === "connector" && o.fromId === child && o.toId === sibling,
+      ),
+    ).toHaveLength(1);
+  });
+});

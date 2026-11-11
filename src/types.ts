@@ -136,9 +136,13 @@ export interface ImageObject extends BaseObject {
 export interface IconObject extends BaseObject {
   objectType: "icon";
   rect: Rect;
-  /** Lucide icon name (PascalCase) or the emoji character. */
+  /** Lucide icon name (PascalCase), the emoji character, or "" for inline SVGs. */
   icon: string;
-  iconSet: "lucide" | "emoji";
+  iconSet: "lucide" | "emoji" | "svg";
+  /** Full inline SVG (cloud/brand packs) when iconSet === "svg". */
+  svgData?: string;
+  /** Optional background plate (brand color) drawn behind the SVG. */
+  svgPlate?: string;
   style: Style;
   strokeWidth?: number;
 }

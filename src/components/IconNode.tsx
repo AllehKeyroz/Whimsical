@@ -44,6 +44,20 @@ function IconNodeInner({ icon, selected }: Props) {
         >
           {icon.icon}
         </text>
+      ) : icon.iconSet === "svg" && icon.svgData ? (
+        <g style={{ pointerEvents: "none" }}>
+          {icon.svgPlate ? (
+            <rect x={x} y={y} width={w} height={h} rx={Math.min(w, h) * 0.16} fill={icon.svgPlate} />
+          ) : null}
+          <image
+            href={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(icon.svgData)}`}
+            x={icon.svgPlate ? x + size * 0.14 : x}
+            y={icon.svgPlate ? y + size * 0.14 : y}
+            width={icon.svgPlate ? size * 0.72 : w}
+            height={icon.svgPlate ? size * 0.72 : h}
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </g>
       ) : node ? (
         <g
           transform={`translate(${x + (w - size) / 2}, ${y + (h - size) / 2}) scale(${size / 24})`}

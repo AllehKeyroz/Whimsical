@@ -3836,3 +3836,279 @@ kbd {
   height: 36px;
   flex: 0 0 auto;
 }
+
+/* ---------------- Icon picker: brand & cloud packs ---------------- */
+
+.brand-packs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 0 10px;
+}
+
+.brand-packs button {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--ws-border);
+  border-radius: 999px;
+  background: var(--ws-panel-2);
+  color: var(--ws-muted);
+  font: inherit;
+  font-size: 10.5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.brand-packs button.active {
+  background: var(--purple-soft);
+  border-color: color-mix(in srgb, var(--purple) 40%, var(--ws-border));
+  color: var(--purple-strong);
+  font-weight: 600;
+}
+
+.brand-packs button small {
+  opacity: 0.6;
+  font-size: 9px;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.brand-tile {
+  height: 48px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.brand-tile:hover {
+  background: var(--ws-hover);
+  border-color: var(--ws-border);
+}
+
+.brand-plate {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.brand-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-attribution {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ws-border);
+  color: var(--ws-muted);
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+/* ---------------- Dashboard: folders list & tables ---------------- */
+
+.ws-view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--ws-border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.ws-view-toggle button {
+  width: 32px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--ws-muted);
+  cursor: pointer;
+}
+.ws-view-toggle button.active {
+  background: var(--ws-active);
+  color: var(--ws-text);
+}
+
+.ws-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.ws-folder-card {
+  position: relative;
+  border: 1px solid var(--ws-border);
+  border-radius: 10px;
+  background: var(--ws-panel);
+  transition: border-color 0.12s ease, transform 0.12s ease;
+}
+.ws-folder-card:hover {
+  border-color: color-mix(in srgb, var(--purple) 35%, var(--ws-border));
+  transform: translateY(-1px);
+}
+.ws-folder-open {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 13px;
+  border: 0;
+  background: transparent;
+  color: var(--ws-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ws-folder-open svg {
+  color: var(--purple-strong);
+  margin-bottom: 2px;
+}
+.ws-folder-open b {
+  font-size: 12px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ws-folder-open small {
+  font-size: 10px;
+  color: var(--ws-muted);
+}
+.ws-folder-delete {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ws-border);
+  border-radius: 6px;
+  background: var(--ws-panel-2);
+  color: var(--ws-muted);
+  opacity: 0;
+  cursor: pointer;
+}
+.ws-folder-card:hover .ws-folder-delete {
+  opacity: 1;
+}
+.ws-folder-delete:hover {
+  color: var(--red);
+}
+
+.ws-table-wrap {
+  border: 1px solid var(--ws-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ws-panel);
+  margin: 0 0 16px;
+}
+
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+.ws-table th {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--ws-border);
+  color: var(--ws-muted);
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ws-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--ws-border);
+  color: var(--ws-text);
+}
+.ws-table tbody tr {
+  cursor: pointer;
+}
+.ws-table tbody tr:hover {
+  background: var(--ws-hover);
+}
+.ws-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.ws-table-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+.ws-table-name svg {
+  color: var(--purple-strong);
+  flex: 0 0 auto;
+}
+.ws-table-name small {
+  color: var(--ws-muted);
+  font-weight: 400;
+}
+.ws-user-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ws-muted);
+}
+.ws-user-dot {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: var(--purple-soft);
+  color: var(--purple-strong);
+  font-size: 9px;
+  font-weight: 700;
+}
+.ws-row-action {
+  border: 0;
+  background: none;
+  color: var(--ws-muted);
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0;
+}
+.ws-table tbody tr:hover .ws-row-action {
+  opacity: 1;
+}
+.ws-row-action:hover {
+  color: var(--red);
+}
+.ws-section-empty {
+  color: var(--ws-muted);
+  font-size: 11.5px;
+  padding: 4px 2px 14px;
+}
+
+.ws-recent-head {
+  align-items: center;
+}
+.ws-recent-head .spacer {
+  flex: 1 1 auto;
+}

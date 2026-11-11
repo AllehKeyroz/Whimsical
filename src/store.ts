@@ -192,9 +192,12 @@ export interface BoardState {
   addImage: (rect: Rect, src: string, alt?: string) => string;
   addIcon: (rect: Rect, icon: string, iconSet: "lucide" | "emoji", color?: string, strokeWidth?: number) => string;
   addIconAtCenter: (icon: string, iconSet: "lucide" | "emoji", color?: string, size?: number) => string;
+  addSvgIconAtCenter: (svgData: string, svgPlate?: string, size?: number) => string;
   addConnector: (fromId: string, toId: string, type?: ConnectorType) => string | null;
   addConnectorToPoint: (fromId: string, point: Vec, type?: ConnectorType) => string | null;
   quickAdd: (shapeId: string, direction?: "right" | "left" | "up" | "down") => string | null;
+  addMindChild: (shapeId: string) => string | null;
+  addMindSibling: (shapeId: string) => string | null;
   createConnectedNode: (fromId: string, point: Vec) => string | null;
 
   updateObject: (id: string, patch: Partial<BoardObject>, history?: boolean) => void;
@@ -1211,6 +1214,38 @@ export const useStore = create<BoardState>((set, get) => {
       return get().addIcon(rect, icon, iconSet, color);
     },
 
+    addSvgIconAtCenter: (svgData, svgPlate, size = 96) => {
+      const el = typeof document !== "undefined" ? document.querySelector(".canvas-container") : null;
+      const w = el?.clientWidth || 1200;
+      const h = el?.clientHeight || 800;
+      const camera = get().camera;
+      const world = {
+        x: (w / 2 - camera.x) / camera.zoom,
+        y: (h / 2 - camera.y) / camera.zoom,
+      };
+      const count = Object.values(get().board.objects).filter((o) => o.objectType === "icon").length;
+      const offset = (count % 6) * 16;
+      const rect = { x: world.x - size / 2 + offset, y: world.y - size / 2 + offset, w: size, h: size };
+      const id = nanoid();
+      const iconObject: IconObject = withOrder({
+        id,
+        objectType: "icon",
+        parentId: frameAt(get().board, rectCenter(rect))?.id ?? null,
+        groupId: null,
+        rect,
+        icon: "svg",
+        iconSet: "svg",
+        svgData,
+        svgPlate,
+        style: { color: "purple", deco: "outline" },
+        order: 0,
+      });
+      const board = get().board;
+      commit({ ...board, objects: { ...board.objects, [id]: iconObject } });
+      set({ selection: [id], tool: "select" });
+      return id;
+    },
+
     addConnector: (fromId, toId, type) => {
       if (fromId === toId) return null;
       const board = get().board;
@@ -1345,6 +1380,10 @@ export const useStore = create<BoardState>((set, get) => {
       set({ selection: [newId] });
       return newId;
     },
+
+    addMindChild: (shapeId) => get().quickAdd(shapeId, "right"),
+
+    addMindSibling: (shapeId) => get().quickAdd(shapeId, "down"),
 
     createConnectedNode: (fromId, point) => {
       const board = get().board;
