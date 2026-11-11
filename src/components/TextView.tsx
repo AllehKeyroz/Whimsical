@@ -1,7 +1,8 @@
 import { memo } from "react";
 import type { TextObject } from "../types";
 import { wrapText } from "../lib/text";
-import { colorToken, TEXT_COLOR } from "../palette";
+import { colorToken, shapePaint } from "../palette";
+
 
 interface Props {
   text: TextObject;
@@ -9,22 +10,87 @@ interface Props {
 }
 
 function TextViewInner({ text: t, selected }: Props) {
-  const { rect, text, fontSize, style } = t;
-  const { x, y, w, h } = rect;
-  const color = style.hex ?? (style.deco === "fill" ? colorToken(style.color).onStrong : TEXT_COLOR);
-  const lines = wrapText(text, Math.max(24, w), fontSize);
-  const lineHeight = fontSize * 1.333;
+  const { rect, text, textStyle, style } = t;
+  const { x, y, w } = rect;
+  const fs = textStyle?.fontSize ?? 18;
+  const color =
+    textStyle?.color ??
+    style.hex ??
+    (style.deco === "fill"
+      ? colorToken(style.color).onStrong
+      : style.color !== "gray"
+        ? colorToken(style.color).base
+        : "var(--canvas-text)");
+  const lineHeight = fs * 1.333;
+  const align = textStyle?.align ?? "left";
+  const anchor = align === "left" ? "start" : align === "right" ? "end" : "middle";
+  const textX = align === "left" ? x : align === "right" ? x + w : x + w / 2;
+  const lines = wrapText(text, Math.max(24, w), fs, { bold: (textStyle?.fontWeight ?? 400) >= 600 });
+  const comments = t.comments?.filter((c) => !c.resolved).length ?? 0;
+  const paint = shapePaint(style);
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} fill="transparent" stroke="none" />
-      <text x={x} y={y + lineHeight * 0.8} fontFamily="Dinsical, system-ui, sans-serif" fontSize={fontSize} fill={color} style={{ userSelect: "none" }}>
+      {paint.fill !== "none" ? (
+        <rect
+          x={x}
+          y={y}
+          width={w}
+          height={rect.h}
+          rx={4}
+          fill={paint.fill}
+          stroke={paint.stroke}
+          strokeWidth={1.5}
+          strokeDasharray={paint.dashed ? "7 5" : undefined}
+        />
+      ) : (
+        <rect x={x} y={y} width={w} height={rect.h} fill="transparent" stroke="none" />
+      )}
+      <text
+        x={textX}
+        y={y + lineHeight * 0.8}
+        textAnchor={anchor}
+        fontFamily="Dinsical, system-ui, sans-serif"
+        fontSize={fs}
+        fontWeight={textStyle?.fontWeight ?? 400}
+        fontStyle={textStyle?.italic ? "italic" : "normal"}
+        textDecoration={textStyle?.underline ? "underline" : undefined}
+        fill={color}
+        style={{ userSelect: "none" }}
+      >
         {lines.map((ln, i) => (
-          <tspan key={i} x={x} y={y + lineHeight * (i + 0.8)}>
+          <tspan key={i} x={textX} y={y + lineHeight * (i + 0.8)}>
             {ln || " "}
           </tspan>
         ))}
       </text>
-      {selected ? <rect x={x - 4} y={y - 4} width={w + 8} height={h + 8} rx={4} fill="none" stroke="#8b3fd9" strokeWidth={1.5} pointerEvents="none" /> : null}
+      {selected ? (
+        <rect
+          data-export-ignore="true"
+          x={x - 4}
+          y={y - 4}
+          width={w + 8}
+          height={rect.h + 8}
+          rx={4}
+          fill="none"
+          stroke="#8b3fd9"
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+          pointerEvents="none"
+        />
+      ) : null}
+      {comments > 0 ? (
+        <g data-export-ignore="true" pointerEvents="none">
+          <circle cx={x + w + 2} cy={y - 2} r={9} fill="#8b3fd9" stroke="#fff" strokeWidth={1.5} />
+          <text x={x + w + 2} y={y + 2} textAnchor="middle" fontSize={10} fontWeight={700} fill="#fff">
+            {comments}
+          </text>
+        </g>
+      ) : null}
+      {t.link ? (
+        <text data-export-ignore="true" x={x + w + 4} y={y + 12} fontSize={12} fill="#2f7bd4" pointerEvents="none">
+          ↗
+        </text>
+      ) : null}
     </g>
   );
 }

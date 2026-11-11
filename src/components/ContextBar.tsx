@@ -1,10 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store";
-import { COLORS, colorToken, DECO_OPTIONS } from "../palette";
-import type { Cardinality, Color, Connector, Deco, EndpointMarker, Shape, ShapeType } from "../types";
-import { boundsOf, rectCenter, routeConnector } from "../geometry";
+import { COLORS, DECO_OPTIONS, colorToken } from "../palette";
+import type {
+  Cardinality,
+  Color,
+  Deco,
+  EndpointMarker,
+  Frame,
+  IconObject,
+  ImageObject,
+  Shape,
+  ShapeType,
+  TextObject,
+  TextStyle,
+} from "../types";
+import { hasText, isConnector, isFrame, isIcon, isShape } from "../types";
+import { aabbOfRect, boundsOf, routeConnector } from "../geometry";
+import { Icon, ShapeIcon } from "./icons";
 
-type Menu = "color" | "shape" | "from" | "to" | "route" | "more" | null;
+type Menu = "color" | "shape" | "text" | "from" | "to" | "route" | "align" | "more" | "comments" | "link" | null;
 
 const CARDINALITIES: { value: Exclude<Cardinality, null>; label: string }[] = [
   { value: "zero-or-one", label: "Zero ou um" },
@@ -30,14 +44,30 @@ const SHAPES: { value: ShapeType; label: string }[] = [
   { value: "cylinder", label: "Cilindro" },
   { value: "parallelogram", label: "Paralelogramo" },
   { value: "document", label: "Documento" },
+  { value: "sticky", label: "Nota adesiva" },
 ];
 
+const ALIGN_ICONS = [
+  { key: "left", label: "Alinhar à esquerda" },
+  { key: "center", label: "Centralizar horizontalmente" },
+  { key: "right", label: "Alinhar à direita" },
+  { key: "top", label: "Alinhar ao topo" },
+  { key: "middle", label: "Centralizar verticalmente" },
+  { key: "bottom", label: "Alinhar à base" },
+] as const;
+
 export function ContextBar() {
-  const targetId = useStore((s) => s.contextBarFor);
+  const selection = useStore((s) => s.selection);
   const board = useStore((s) => s.board);
   const camera = useStore((s) => s.camera);
-  const setStyle = useStore((s) => s.setStyle);
+  const editingId = useStore((s) => s.editingId);
+  const presentation = useStore((s) => s.presentation);
+  const settings = useStore((s) => s.settings);
+
+  const setStyleForSelection = useStore((s) => s.setStyleForSelection);
+  const setTextStyleForSelection = useStore((s) => s.setTextStyleForSelection);
   const updateObject = useStore((s) => s.updateObject);
+  const setEditing = useStore((s) => s.setEditing);
   const deleteSelection = useStore((s) => s.deleteSelection);
   const duplicateSelection = useStore((s) => s.duplicateSelection);
   const bringToFront = useStore((s) => s.bringToFront);
@@ -45,38 +75,77 @@ export function ContextBar() {
   const rotateSelection = useStore((s) => s.rotateSelection);
   const swapEndpoints = useStore((s) => s.swapEndpoints);
   const applyConnectorDefaults = useStore((s) => s.applyConnectorDefaults);
-  const setEditing = useStore((s) => s.setEditing);
-  const pushHistory = useStore((s) => s.pushHistory);
+  const groupSelection = useStore((s) => s.groupSelection);
+  const ungroupSelection = useStore((s) => s.ungroupSelection);
+  const toggleHidden = useStore((s) => s.toggleHidden);
+  const toggleLocked = useStore((s) => s.toggleLocked);
+  const setLink = useStore((s) => s.setLink);
+  const addComment = useStore((s) => s.addComment);
+  const resolveComment = useStore((s) => s.resolveComment);
+  const deleteComment = useStore((s) => s.deleteComment);
+  const frameToContents = useStore((s) => s.frameToContents);
+  const alignSelection = useStore((s) => s.alignSelection);
+  const distributeSelection = useStore((s) => s.distributeSelection);
 
   const [menu, setMenu] = useState<{ name: Menu; x: number } | null>(null);
   const [customColor, setCustomColor] = useState("#8b3fd9");
+  const [commentText, setCommentText] = useState("");
+  const [linkValue, setLinkValue] = useState("");
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  const key = selection.join(",");
+  useEffect(() => {
+    setMenu(null);
+    setCommentText("");
+  }, [key]);
+
+  useEffect(() => {
+    if (!menu) return;
+    const onDown = (e: PointerEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setMenu(null);
+    };
+    window.addEventListener("pointerdown", onDown);
+    return () => window.removeEventListener("pointerdown", onDown);
+  }, [menu]);
+
+  const target = selection.length ? board.objects[selection[0]] : null;
+  const shape = target && isShape(target) ? target : null;
+  const connector = target && isConnector(target) ? target : null;
+  const frame = target && isFrame(target) ? target : null;
+  const textCapable = target && hasText(target) ? target : null;
+  const textStyle = textCapable?.textStyle;
+  const styleObj = target && "style" in target ? target.style : null;
+  const multi = selection.length > 1;
 
   const screenPos = useMemo(() => {
-    const o = targetId ? board.objects[targetId] : null;
-    if (!o) return null;
-    if ("rect" in o && o.rect) {
-      const b = o.rect;
-      return { x: (b.x + b.w / 2) * camera.zoom + camera.x, y: b.y * camera.zoom + camera.y };
+    const selected = selection
+      .map((id) => board.objects[id])
+      .filter(
+        (o): o is Shape | Frame | TextObject | ImageObject | IconObject =>
+          !!o && o.objectType !== "connector" && "rect" in o,
+      );
+    if (selected.length) {
+      const b = boundsOf(selected.map((o) => aabbOfRect(o.rect, o.rotation ?? 0)));
+      return {
+        x: (b.x + b.w / 2) * camera.zoom + camera.x,
+        y: b.y * camera.zoom + camera.y,
+      };
     }
-    if (o.objectType === "connector") {
-      const fr = board.objects[o.fromId];
-      const tr = board.objects[o.toId];
-      if (fr && tr && "rect" in fr && fr.rect && "rect" in tr && tr.rect) {
-        const route = routeConnector(o, fr.rect, tr.rect);
-        return { x: route.mid.x * camera.zoom + camera.x, y: route.mid.y * camera.zoom + camera.y - 8 };
-      }
+    if (connector) {
+      const fr = board.objects[connector.fromId];
+      const tr = board.objects[connector.toId];
+      const fromRect = fr && fr.objectType !== "connector" && "rect" in fr ? aabbOfRect(fr.rect, fr.rotation ?? 0) : null;
+      const toRect = tr && tr.objectType !== "connector" && "rect" in tr ? aabbOfRect(tr.rect, tr.rotation ?? 0) : null;
+      const route = routeConnector(connector, fromRect, toRect);
+      return { x: route.mid.x * camera.zoom + camera.x, y: route.mid.y * camera.zoom + camera.y - 10 };
     }
     return null;
-  }, [targetId, board.objects, camera]);
+  }, [selection, board.objects, camera, connector]);
 
-  if (!targetId || !screenPos) return null;
-
-  const first = board.objects[targetId];
-  const shape = first && first.objectType === "shape" ? (first as Shape) : null;
-  const connector = first && first.objectType === "connector" ? (first as Connector) : null;
-  const single = true;
+  if (!selection.length || !screenPos || editingId || presentation) return null;
 
   const toggle = (name: Menu, e: React.MouseEvent) => {
+    if (name === "link") setLinkValue(target?.link ?? "");
     const x = (e.currentTarget as HTMLElement).offsetLeft;
     setMenu((m) => (m && m.name === name ? null : { name, x }));
   };
@@ -87,18 +156,21 @@ export function ContextBar() {
     active,
     onClick,
     menuName,
+    disabled,
   }: {
     icon: React.ReactNode;
     label: string;
     active?: boolean;
     onClick?: () => void;
     menuName?: Menu;
+    disabled?: boolean;
   }) => (
     <button
       type="button"
       className={`ctx-btn ${active ? "active" : ""}`}
       title={label}
       aria-label={label}
+      disabled={disabled}
       onClick={(e) => {
         if (menuName) toggle(menuName, e);
         else onClick?.();
@@ -108,80 +180,116 @@ export function ContextBar() {
     </button>
   );
 
-  const colorValue = shape ? shape.style.color : connector ? connector.style.color : "gray";
-  const decoValue = shape ? shape.style.deco : connector ? connector.style.deco : "outline";
+  const applyStyle = (patch: { color?: Color; deco?: Deco; hex?: string }) => {
+    setStyleForSelection(patch);
+  };
+
+  const applyText = (patch: Partial<TextStyle>) => {
+    setTextStyleForSelection(patch);
+  };
+
+  const comments = target?.comments ?? [];
+  const unresolved = comments.filter((c) => !c.resolved).length;
+  const canvasWidth = document.querySelector(".canvas-container")?.clientWidth ?? window.innerWidth;
+  const menuX = Math.min(Math.max(0, (menu?.x ?? 0) - 90), Math.max(0, canvasWidth - 340));
+  const popoverBelow = screenPos.y < 340;
+  const halfBar = Math.min(230, canvasWidth / 2);
+  const left = Math.min(Math.max(halfBar, screenPos.x), Math.max(halfBar, canvasWidth - halfBar));
+  const top = Math.max(72, screenPos.y);
 
   return (
-    <div className="ctxbar-wrap" style={{ left: screenPos.x, top: screenPos.y }}>
-      <div className="ctxbar" data-wc="contextbar">
-        {shape || single ? (
-          <BarButton
-            icon={<IconText />}
-            label="Texto"
-            onClick={() => setEditing(targetId)}
-          />
-        ) : null}
+    <div ref={wrapRef} className="ctxbar-wrap" style={{ left, top }} onPointerDown={(e) => e.stopPropagation()}>
+      <div className="ctxbar" role="toolbar" aria-label="Opções do objeto">
+        {textCapable ? <BarButton icon={<Icon name="text" />} label="Editar texto" onClick={() => setEditing(target!.id)} /> : null}
 
         {shape ? (
           <>
             <Sep />
-            <BarButton icon={<IconShapes />} label="Mudar forma" menuName="shape" />
+            <BarButton icon={<ShapeIcon type={shape.shapeType} />} label="Mudar forma" menuName="shape" />
+          </>
+        ) : null}
+
+        {styleObj ? (
+          <>
             <Sep />
-            <BarButton icon={<IconDot color={colorToken(shape.style.color).base} />} label="Cor" menuName="color" />
-            <Sep />
-            <Segmented
-              value={shape.style.deco}
-              onChange={(d) => setStyle(shape.id, { deco: d })}
+            <BarButton
+              icon={
+                <span className="ctx-color-dot" style={{ background: styleObj.hex ?? colorToken(styleObj.color).base }} />
+              }
+              label="Cor"
+              menuName="color"
             />
+            {target && !isIcon(target) ? (
+              <Segmented value={styleObj.deco} onChange={(d) => applyStyle({ deco: d })} connector={!!connector} />
+            ) : null}
+          </>
+        ) : null}
+
+        {textCapable ? (
+          <>
+            <Sep />
+            <BarButton icon={<Icon name="type" />} label="Tipografia" menuName="text" />
           </>
         ) : null}
 
         {connector ? (
           <>
             <Sep />
-            <BarButton icon={<IconDot color={colorToken(connector.style.color).base} />} label="Cor" menuName="color" />
-            <Sep />
-            <Segmented value={connector.style.deco} onChange={(d) => setStyle(connector.id, { deco: d })} connector />
-            <Sep />
-            <BarButton icon={<IconEndpoint side="from" />} label="Ponta inicial" menuName="from" />
-            <BarButton icon={<IconSwap />} label="Inverter pontas" onClick={() => swapEndpoints(connector.id)} />
-            <BarButton icon={<IconEndpoint side="to" />} label="Ponta final" menuName="to" />
-            <Sep />
-            <BarButton
-              icon={<IconRoute type={connector.connectorType} />}
-              label="Rota"
-              menuName="route"
-            />
-            <Sep />
-            <BarButton icon={<IconStar />} label="Aplicar aos próximos" onClick={() => applyConnectorDefaults(connector.id)} />
+            <BarButton icon={<Icon name="arrowRight" />} label="Ponta inicial" menuName="from" />
+            <BarButton icon={<Icon name="swap" />} label="Inverter pontas" onClick={() => swapEndpoints(connector.id)} />
+            <BarButton icon={<Icon name="arrowLeft" />} label="Ponta final" menuName="to" />
+            <BarButton icon={<Icon name="connector" />} label="Rota" menuName="route" />
+            <BarButton icon={<Icon name="star" />} label="Aplicar aos próximos" onClick={() => applyConnectorDefaults(connector.id)} />
           </>
         ) : null}
 
-        {shape ? (
+        {frame ? (
           <>
             <Sep />
-            <BarButton icon={<IconRotate />} label="Rotacionar" onClick={rotateSelection} />
+            <BarButton icon={<Icon name="fit" />} label="Ajustar frame ao conteúdo" onClick={() => frameToContents(frame.id)} />
+          </>
+        ) : null}
+
+        {multi ? (
+          <>
+            <Sep />
+            <BarButton icon={<Icon name="layout" />} label="Alinhar e distribuir" menuName="align" />
+            <BarButton icon={<Icon name="group" />} label="Agrupar" onClick={groupSelection} />
+            <BarButton icon={<Icon name="ungroup" />} label="Desagrupar" onClick={ungroupSelection} />
           </>
         ) : null}
 
         <Sep />
-        <BarButton icon={<IconCopy />} label="Duplicar" onClick={duplicateSelection} />
-        <BarButton icon={<IconMore />} label="Mais" menuName="more" />
+        <BarButton icon={<Icon name="rotate" />} label="Rotacionar 90°" onClick={rotateSelection} disabled={!!connector} />
+        <BarButton icon={<Icon name="copy" />} label="Duplicar (Ctrl+D)" onClick={duplicateSelection} />
+        <BarButton
+          icon={
+            <span className="ctx-comment">
+              <Icon name="comment" />
+              {unresolved > 0 ? <b>{unresolved}</b> : null}
+            </span>
+          }
+          label="Comentários"
+          menuName="comments"
+        />
+        <BarButton
+          icon={<span className="ctx-more-dots">•••</span>}
+          label="Mais opções"
+          menuName="more"
+        />
       </div>
 
       {menu?.name === "color" ? (
-        <Popover x={menu.x}>
+        <Popover x={menuX} below={popoverBelow}>
           <div className="ctx-pop-title">Cor</div>
           <div className="ctx-swatches">
             {COLORS.map((c) => (
               <button
                 key={c.name}
-                className={`ctx-swatch ${colorValue === c.name ? "active" : ""}`}
+                className={`ctx-swatch ${!styleObj?.hex && styleObj?.color === c.name ? "active" : ""}`}
                 title={c.label}
                 style={{ background: c.base }}
-                onClick={() => {
-                  setStyle(targetId, { color: c.name, hex: undefined });
-                }}
+                onClick={() => applyStyle({ color: c.name, hex: undefined })}
               />
             ))}
             <label className="ctx-swatch custom" title="Cor personalizada" style={{ background: customColor }}>
@@ -190,7 +298,7 @@ export function ContextBar() {
                 value={customColor}
                 onChange={(e) => {
                   setCustomColor(e.target.value);
-                  setStyle(targetId, { hex: e.target.value });
+                  applyStyle({ hex: e.target.value });
                 }}
               />
             </label>
@@ -199,7 +307,7 @@ export function ContextBar() {
       ) : null}
 
       {menu?.name === "shape" && shape ? (
-        <Popover x={menu.x}>
+        <Popover x={menuX} below={popoverBelow}>
           <div className="ctx-pop-title">Forma</div>
           <div className="ctx-shape-grid">
             {SHAPES.map((s) => (
@@ -207,9 +315,68 @@ export function ContextBar() {
                 key={s.value}
                 className={`ctx-shape ${shape.shapeType === s.value ? "active" : ""}`}
                 title={s.label}
-                onClick={() => updateObject(shape.id, { shapeType: s.value })}
+                onClick={() => updateObject(shape.id, { shapeType: s.value } as never)}
               >
-                <ShapeGlyph type={s.value} />
+                <ShapeIcon type={s.value} />
+              </button>
+            ))}
+          </div>
+        </Popover>
+      ) : null}
+
+      {menu?.name === "text" && textStyle ? (
+        <Popover x={menuX} below={popoverBelow}>
+          <div className="ctx-pop-title">Tipografia</div>
+          <div className="ctx-row">
+            <button
+              className="ctx-cell"
+              title="Diminuir fonte"
+              onClick={() => applyText({ fontSize: Math.max(8, textStyle.fontSize - 2) })}
+            >
+              <Icon name="minus" />
+            </button>
+            <span className="ctx-size">{textStyle.fontSize}px</span>
+            <button
+              className="ctx-cell"
+              title="Aumentar fonte"
+              onClick={() => applyText({ fontSize: Math.min(96, textStyle.fontSize + 2) })}
+            >
+              <Icon name="plus" />
+            </button>
+          </div>
+          <div className="ctx-row">
+            <button
+              className={`ctx-cell ${textStyle.fontWeight >= 600 ? "active" : ""}`}
+              title="Negrito"
+              onClick={() => applyText({ fontWeight: textStyle.fontWeight >= 600 ? 400 : 700 })}
+            >
+              <Icon name="bold" />
+            </button>
+            <button
+              className={`ctx-cell ${textStyle.italic ? "active" : ""}`}
+              title="Itálico"
+              onClick={() => applyText({ italic: !textStyle.italic })}
+            >
+              <Icon name="italic" />
+            </button>
+            <button
+              className={`ctx-cell ${textStyle.underline ? "active" : ""}`}
+              title="Sublinhado"
+              onClick={() => applyText({ underline: !textStyle.underline })}
+            >
+              <Icon name="underline" />
+            </button>
+          </div>
+          <div className="ctx-pop-label">Alinhamento</div>
+          <div className="ctx-row">
+            {(["left", "center", "right"] as const).map((a) => (
+              <button
+                key={a}
+                className={`ctx-cell ${textStyle.align === a ? "active" : ""}`}
+                title={a === "left" ? "Esquerda" : a === "center" ? "Centro" : "Direita"}
+                onClick={() => applyText({ align: a })}
+              >
+                <Icon name={a === "left" ? "alignLeft" : a === "center" ? "alignCenter" : "alignRight"} />
               </button>
             ))}
           </div>
@@ -217,7 +384,7 @@ export function ContextBar() {
       ) : null}
 
       {(menu?.name === "from" || menu?.name === "to") && connector ? (
-        <Popover x={menu.x}>
+        <Popover x={menuX} below={popoverBelow}>
           <div className="ctx-pop-title">{menu.name === "from" ? "Ponta inicial" : "Ponta final"}</div>
           <div className="ctx-pop-label">Cardinalidade</div>
           <div className="ctx-grid-4">
@@ -229,9 +396,10 @@ export function ContextBar() {
                   className={`ctx-cell ${cur === c.value ? "active" : ""}`}
                   title={c.label}
                   onClick={() =>
-                    updateObject(connector.id, {
-                      [menu.name === "from" ? "fromCardinality" : "toCardinality"]: cur === c.value ? null : c.value,
-                    } as never)
+                    updateObject(
+                      connector.id,
+                      { [menu.name === "from" ? "fromCardinality" : "toCardinality"]: cur === c.value ? null : c.value } as never,
+                    )
                   }
                 >
                   <CardinalityGlyph value={c.value} />
@@ -249,9 +417,10 @@ export function ContextBar() {
                   className={`ctx-cell ${cur === m.value ? "active" : ""}`}
                   title={m.label}
                   onClick={() =>
-                    updateObject(connector.id, {
-                      [menu.name === "from" ? "fromEndpoint" : "toEndpoint"]: cur === m.value ? "none" : m.value,
-                    } as never)
+                    updateObject(
+                      connector.id,
+                      { [menu.name === "from" ? "fromEndpoint" : "toEndpoint"]: cur === m.value ? "none" : m.value } as never,
+                    )
                   }
                 >
                   <MarkerGlyph value={m.value} />
@@ -263,14 +432,14 @@ export function ContextBar() {
       ) : null}
 
       {menu?.name === "route" && connector ? (
-        <Popover x={menu.x}>
+        <Popover x={menuX} below={popoverBelow}>
           <div className="ctx-pop-title">Rota</div>
           <div className="ctx-list">
             {(["elbow", "straight", "curved"] as const).map((t) => (
               <button
                 key={t}
                 className={`ctx-list-item ${connector.connectorType === t ? "active" : ""}`}
-                onClick={() => updateObject(connector.id, { connectorType: t })}
+                onClick={() => updateObject(connector.id, { connectorType: t } as never)}
               >
                 {t === "elbow" ? "Ortogonal" : t === "straight" ? "Reta" : "Curva"}
               </button>
@@ -279,18 +448,154 @@ export function ContextBar() {
         </Popover>
       ) : null}
 
-      {menu?.name === "more" ? (
-        <Popover x={menu.x}>
-          <div className="ctx-list">
-            {shape ? (
-              <>
-                <button className="ctx-list-item" onClick={() => { pushHistory(); bringToFront(); }}>Trazer para frente</button>
-                <button className="ctx-list-item" onClick={() => { pushHistory(); sendToBack(); }}>Enviar para trás</button>
-              </>
-            ) : null}
-            <button className="ctx-list-item danger" onClick={deleteSelection}>Excluir</button>
+      {menu?.name === "align" ? (
+        <Popover x={menuX} below={popoverBelow}>
+          <div className="ctx-pop-title">Alinhar</div>
+          <div className="ctx-row">
+            {ALIGN_ICONS.map((a) => (
+              <button key={a.key} className="ctx-cell" title={a.label} onClick={() => alignSelection(a.key)}>
+                <Icon
+                  name={
+                    a.key === "left"
+                      ? "alignLeft"
+                      : a.key === "center"
+                        ? "alignCenter"
+                        : a.key === "right"
+                          ? "alignRight"
+                          : a.key === "top"
+                            ? "chevronUp"
+                            : a.key === "middle"
+                              ? "alignCenter"
+                              : "chevronDown"
+                  }
+                />
+              </button>
+            ))}
+          </div>
+          <div className="ctx-pop-label">Distribuir</div>
+          <div className="ctx-row">
+            <button className="ctx-cell wide" onClick={() => distributeSelection("h")}>
+              Horizontal
+            </button>
+            <button className="ctx-cell wide" onClick={() => distributeSelection("v")}>
+              Vertical
+            </button>
           </div>
         </Popover>
+      ) : null}
+
+      {menu?.name === "more" ? (
+        <Popover x={menuX} below={popoverBelow}>
+          <div className="ctx-list">
+            <button className="ctx-list-item" onClick={bringToFront}>
+              Trazer para frente
+            </button>
+            <button className="ctx-list-item" onClick={sendToBack}>
+              Enviar para trás
+            </button>
+            <button className="ctx-list-item" onClick={() => toggleLocked()}>
+              {target?.locked ? "Desbloquear" : "Bloquear"}
+            </button>
+            <button className="ctx-list-item" onClick={() => toggleHidden()}>
+              {target?.hidden ? "Mostrar" : "Ocultar"}
+            </button>
+            <button className="ctx-list-item" onClick={() => setMenu({ name: "link", x: menu.x })}>
+              Adicionar link
+            </button>
+            <button className="ctx-list-item danger" onClick={deleteSelection}>
+              Excluir
+            </button>
+          </div>
+        </Popover>
+      ) : null}
+
+      {menu?.name === "link" ? (
+        <Popover x={menuX} below={popoverBelow}>
+          <div className="ctx-pop-title">Link</div>
+          <div className="ctx-link-row">
+            <input
+              value={linkValue}
+              placeholder="https://…"
+              onChange={(e) => setLinkValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setLink(target!.id, linkValue);
+                  setMenu(null);
+                }
+              }}
+            />
+            <button
+              className="ctx-cell"
+              title="Aplicar"
+              onClick={() => {
+                setLink(target!.id, linkValue);
+                setMenu(null);
+              }}
+            >
+              <Icon name="check" />
+            </button>
+          </div>
+          {target?.link ? (
+            <a className="ctx-open-link" href={target.link} target="_blank" rel="noreferrer">
+              Abrir link ↗
+            </a>
+          ) : null}
+        </Popover>
+      ) : null}
+
+      {menu?.name === "comments" && target ? (
+        <Popover x={menuX} wide below={popoverBelow}>
+          <div className="ctx-pop-title">Comentários</div>
+          <div className="comments-list">
+            {comments.length === 0 ? <div className="comments-empty">Nenhum comentário ainda.</div> : null}
+            {comments.map((c) => (
+              <div key={c.id} className={`comment-item ${c.resolved ? "resolved" : ""}`}>
+                <div className="comment-head">
+                  <b>{c.author}</b>
+                  <span>{new Date(c.createdAt).toLocaleDateString()}</span>
+                </div>
+                <p>{c.text}</p>
+                <div className="comment-actions">
+                  <button onClick={() => resolveComment(target.id, c.id)}>{c.resolved ? "Reabrir" : "Resolver"}</button>
+                  <button className="danger" onClick={() => deleteComment(target.id, c.id)}>
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="comment-input">
+            <input
+              value={commentText}
+              placeholder={`Comentar como ${settings.userName}`}
+              onChange={(e) => setCommentText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && commentText.trim()) {
+                  addComment(target.id, commentText);
+                  setCommentText("");
+                }
+              }}
+            />
+            <button
+              className="ctx-cell"
+              title="Comentar"
+              onClick={() => {
+                if (commentText.trim()) {
+                  addComment(target.id, commentText);
+                  setCommentText("");
+                }
+              }}
+            >
+              <Icon name="plus" />
+            </button>
+          </div>
+        </Popover>
+      ) : null}
+
+      {connector ? (
+        <div className="ctx-subhint">
+          {connector.label ? `“${connector.label}”` : "Duplo clique para rotular"}
+        </div>
       ) : null}
     </div>
   );
@@ -300,9 +605,19 @@ function Sep() {
   return <span className="ctx-sep" />;
 }
 
-function Popover({ x, children }: { x: number; children: React.ReactNode }) {
+function Popover({
+  x,
+  children,
+  wide,
+  below,
+}: {
+  x: number;
+  children: React.ReactNode;
+  wide?: boolean;
+  below?: boolean;
+}) {
   return (
-    <div className="ctx-popover" style={{ left: Math.max(0, x - 60) }}>
+    <div className={`ctx-popover ${wide ? "wide" : ""} ${below ? "below" : ""}`} style={{ left: x }}>
       {children}
     </div>
   );
@@ -327,92 +642,31 @@ function Segmented({ value, onChange, connector }: { value: Deco; onChange: (d: 
   );
 }
 
-/* ---------------- icons ---------------- */
-
-function svg(path: React.ReactNode) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      {path}
-    </svg>
-  );
-}
-
-function IconText() {
-  return svg(<><path d="M4 5h12" /><path d="M10 5v11" /></>);
-}
-function IconShapes() {
-  return svg(<><rect x="3" y="3" width="8" height="8" rx="1.5" /><circle cx="14" cy="14" r="4" /></>);
-}
-function IconDot({ color }: { color: string }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18">
-      <circle cx="9" cy="9" r="7" fill={color} stroke="rgba(0,0,0,.15)" />
-    </svg>
-  );
-}
-function IconRotate() {
-  return svg(<><path d="M15 7a6 6 0 1 0 1 4" /><path d="M15 3v4h-4" /></>);
-}
-function IconCopy() {
-  return svg(<><rect x="7" y="7" width="10" height="10" rx="2" /><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /></>);
-}
-function IconMore() {
-  return svg(<><circle cx="5" cy="10" r="1" fill="currentColor" /><circle cx="10" cy="10" r="1" fill="currentColor" /><circle cx="15" cy="10" r="1" fill="currentColor" /></>);
-}
-function IconStar() {
-  return svg(<path d="M10 3l2 4.5 5 .5-3.7 3.3 1 4.7L10 13.7 5.7 16l1-4.7L3 8l5-.5z" />);
-}
-function IconSwap() {
-  return svg(<><path d="M4 8h12" /><path d="M13 5l3 3-3 3" /><path d="M16 14H4" /><path d="M7 11l-3 3 3 3" /></>);
-}
-function IconEndpoint({ side }: { side: "from" | "to" }) {
-  return side === "from" ? svg(<><path d="M16 10H4" /><path d="M8 6l-4 4 4 4" /></>) : svg(<><path d="M4 10h12" /><path d="M12 6l4 4-4 4" /></>);
-}
-function IconRoute({ type }: { type: string }) {
-  return svg(type === "straight" ? <path d="M4 16L16 4" /> : <><path d="M4 6h8v8h4" /><path d="M4 6v10" /></>);
-}
-
 function DecoGlyph({ value }: { value: Deco }) {
-  const stroke = "currentColor";
-  if (value === "fill") return <svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2" fill={stroke} /></svg>;
+  if (value === "fill")
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16">
+        <rect x="2" y="2" width="12" height="12" rx="2" fill="currentColor" />
+      </svg>
+    );
   if (value === "dash")
     return (
-      <svg width="16" height="16" viewBox="0 0 16 16" stroke={stroke} strokeWidth="1.5" fill="none">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" fill="none">
         <rect x="2" y="2" width="12" height="12" rx="2" strokeDasharray="3 2" />
       </svg>
     );
   if (value === "transparent")
     return (
-      <svg width="16" height="16" viewBox="0 0 16 16" stroke={stroke} strokeWidth="1" fill="none">
+      <svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1" fill="none">
         <rect x="2" y="2" width="12" height="12" rx="2" />
         <path d="M2 8h12M8 2v12" strokeOpacity="0.4" />
       </svg>
     );
-  return <svg width="16" height="16" viewBox="0 0 16 16"><rect x="2.75" y="2.75" width="10.5" height="10.5" rx="2" fill="none" stroke={stroke} strokeWidth="1.5" /></svg>;
-}
-
-function ShapeGlyph({ type }: { type: ShapeType }) {
-  const p = { fill: "none", stroke: "currentColor", strokeWidth: 1.3, strokeLinejoin: "round" as const };
-  switch (type) {
-    case "pill":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><rect x="2" y="7" width="18" height="8" rx="4" {...p} /></svg>;
-    case "ellipse":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><ellipse cx="11" cy="11" rx="8" ry="6" {...p} /></svg>;
-    case "diamond":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,3 19,11 11,19 3,11" {...p} /></svg>;
-    case "triangle":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,3 19,18 3,18" {...p} /></svg>;
-    case "hexagon":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="6,4 16,4 20,11 16,18 6,18 2,11" {...p} /></svg>;
-    case "cylinder":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 6a8 3 0 0 1 16 0v10a8 3 0 0 1-16 0z" {...p} /><path d="M3 6a8 3 0 0 0 16 0" {...p} /></svg>;
-    case "parallelogram":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="6,5 20,5 16,17 2,17" {...p} /></svg>;
-    case "document":
-      return <svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 4h16v11c-2 1-4 0-8 1s-6 0-8 1z" {...p} /></svg>;
-    default:
-      return <svg width="22" height="22" viewBox="0 0 22 22"><rect x="3" y="5" width="16" height="12" rx="2" {...p} /></svg>;
-  }
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <rect x="2.75" y="2.75" width="10.5" height="10.5" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
 }
 
 function CardinalityGlyph({ value }: { value: Exclude<Cardinality, null> }) {
@@ -423,7 +677,12 @@ function CardinalityGlyph({ value }: { value: Exclude<Cardinality, null> }) {
     <svg width="26" height="18" viewBox="0 0 26 18">
       <path d="M3 9h20" {...s} />
       {zero ? <circle cx="20" cy="9" r="3" {...s} /> : <path d="M20 5v8" {...s} />}
-      {many ? <><path d="M4 9L9 5" {...s} /><path d="M4 9L9 13" {...s} /></> : null}
+      {many ? (
+        <>
+          <path d="M4 9L9 5" {...s} />
+          <path d="M4 9L9 13" {...s} />
+        </>
+      ) : null}
     </svg>
   );
 }
@@ -436,7 +695,13 @@ function MarkerGlyph({ value }: { value: EndpointMarker }) {
       {value === "arrow" ? <path d="M20 5l4 4-4 4z" fill="currentColor" /> : null}
       {value === "circle" ? <circle cx="20" cy="9" r="3.2" {...s} /> : null}
       {value === "diamond" ? <path d="M20 5l4 4-4 4-4-4z" fill="currentColor" /> : null}
-      {value === "fork" ? <><path d="M20 9L24 5" {...s} /><path d="M20 9L24 13" {...s} /><path d="M20 9h4" {...s} /></> : null}
+      {value === "fork" ? (
+        <>
+          <path d="M20 9L24 5" {...s} />
+          <path d="M20 9L24 13" {...s} />
+          <path d="M20 9h4" {...s} />
+        </>
+      ) : null}
     </svg>
   );
 }

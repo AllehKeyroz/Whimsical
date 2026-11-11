@@ -2,9 +2,48 @@ import type { Cardinality, Connector, EndpointMarker, Rect, Vec } from "./types"
 
 export const STUB = 22;
 export const CORNER = 8;
+export const SNAP_PX = 6;
 
 export function rectCenter(r: Rect): Vec {
   return { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+}
+
+export function degToRad(deg: number): number {
+  return (deg * Math.PI) / 180;
+}
+
+export function rotatePoint(p: Vec, center: Vec, deg: number): Vec {
+  if (!deg) return { ...p };
+  const rad = degToRad(deg);
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
+  const dx = p.x - center.x;
+  const dy = p.y - center.y;
+  return { x: center.x + dx * cos - dy * sin, y: center.y + dx * sin + dy * cos };
+}
+
+export function rectCorners(rect: Rect, rotation = 0): Vec[] {
+  const c = rectCenter(rect);
+  return [
+    { x: rect.x, y: rect.y },
+    { x: rect.x + rect.w, y: rect.y },
+    { x: rect.x + rect.w, y: rect.y + rect.h },
+    { x: rect.x, y: rect.y + rect.h },
+  ].map((p) => rotatePoint(p, c, rotation));
+}
+
+/** Axis-aligned bounding box of a possibly rotated rect. */
+export function aabbOfRect(rect: Rect, rotation = 0): Rect {
+  if (!rotation) return { ...rect };
+  const pts = rectCorners(rect, rotation);
+  return boundsOf(pts.map((p) => ({ x: p.x, y: p.y, w: 0, h: 0 })));
+}
+
+export function pointInRectRotated(p: Vec, rect: Rect, rotation = 0): boolean {
+  if (!rotation) return pointInRect(p, rect);
+  const c = rectCenter(rect);
+  const local = rotatePoint(p, c, -rotation);
+  return pointInRect(local, rect);
 }
 
 export function anchorPoint(
@@ -23,10 +62,6 @@ export function anchorPoint(
     return { x: r.x + r.w * rel.rx, y: below ? r.y + r.h : r.y };
   }
   return { x: r.x + r.w * rel.rx, y: r.y + r.h * rel.ry };
-}
-
-function isHoriz(v: Vec) {
-  return Math.abs(v.x) >= Math.abs(v.y);
 }
 
 export function exitDir(
@@ -86,11 +121,7 @@ function roundedPath(points: Vec[], radius = CORNER): string {
     const next = points[i + 1];
     const inDir = norm({ x: cur.x - prev.x, y: cur.y - prev.y });
     const outDir = norm({ x: next.x - cur.x, y: next.y - cur.y });
-    const r = Math.min(
-      radius,
-      dist(prev, cur) / 2,
-      dist(cur, next) / 2,
-    );
+    const r = Math.min(radius, dist(prev, cur) / 2, dist(cur, next) / 2);
     const a = add(cur, inDir, -r);
     const b = add(cur, outDir, r);
     d += ` L ${a.x} ${a.y} Q ${cur.x} ${cur.y} ${b.x} ${b.y}`;
@@ -124,16 +155,21 @@ export function routeConnector(
 ): RouteResult {
   const fromCenter = fromRect ? rectCenter(fromRect) : { x: 0, y: 0 };
   const toCenter = toRect ? rectCenter(toRect) : { x: 0, y: 0 };
-  const p0 = conn.fromPoint ?? anchorPoint(fromRect!, conn.fromRel, toCenter);
-  const p1 = conn.toPoint ?? anchorPoint(toRect!, conn.toRel, fromCenter);
-  const d0 = conn.fromPoint ? dominantDir(p0, p1) : exitDir(conn.fromRel, fromRect!, p1);
-  const d1 = conn.toPoint ? dominantDir(p1, p0) : exitDir(conn.toRel, toRect!, p0);
+  const p0 = conn.fromPoint ?? (fromRect ? anchorPoint(fromRect, conn.fromRel, toCenter) : fromCenter);
+  const p1 = conn.toPoint ?? (toRect ? anchorPoint(toRect, conn.toRel, fromCenter) : toCenter);
+  const d0 = conn.fromPoint || !fromRect ? dominantDir(p0, p1) : exitDir(conn.fromRel, fromRect, p1);
+  const d1 = conn.toPoint || !toRect ? dominantDir(p1, p0) : exitDir(conn.toRel, toRect, p0);
   const fr = fromRect ?? { x: p0.x, y: p0.y, w: 0, h: 0 };
   const tr = toRect ?? { x: p1.x, y: p1.y, w: 0, h: 0 };
 
   if (conn.connectorType === "straight") {
     const mid = midpoint(p0, p1);
-    return { d: `M ${p0.x} ${p0.y} L ${p1.x} ${p1.y}`, points: [p0, p1], endDir: norm({ x: p1.x - p0.x, y: p1.y - p0.y }), mid };
+    return {
+      d: `M ${p0.x} ${p0.y} L ${p1.x} ${p1.y}`,
+      points: [p0, p1],
+      endDir: norm({ x: p1.x - p0.x, y: p1.y - p0.y }),
+      mid,
+    };
   }
 
   if (conn.connectorType === "curved") {
@@ -186,7 +222,11 @@ export function routeConnector(
   let bestScore = Infinity;
   for (const cand of candidates) {
     const pts = dedupe([p0, ...cand, p1]);
-    const score = pathHits(pts, obstacles) * 1000 + reversalPenalty(pts, d0, d1) + pts.length * 4 + pathLength(pts) * 0.02;
+    const score =
+      pathHits(pts, obstacles) * 1000 +
+      reversalPenalty(pts, d0, d1) +
+      pts.length * 4 +
+      pathLength(pts) * 0.02;
     if (score < bestScore) {
       bestScore = score;
       best = pts;
@@ -248,7 +288,8 @@ function reversalPenalty(points: Vec[], d0: Vec, d1: Vec): number {
 
 function pathLength(points: Vec[]): number {
   let len = 0;
-  for (let i = 0; i < points.length - 1; i++) len += Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
+  for (let i = 0; i < points.length - 1; i++)
+    len += Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
   return len;
 }
 
@@ -259,7 +300,10 @@ function pathMidpoint(points: Vec[]): Vec {
     const seg = Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
     if (acc + seg >= total / 2) {
       const t = seg === 0 ? 0 : (total / 2 - acc) / seg;
-      return { x: points[i].x + (points[i + 1].x - points[i].x) * t, y: points[i].y + (points[i + 1].y - points[i].y) * t };
+      return {
+        x: points[i].x + (points[i + 1].x - points[i].x) * t,
+        y: points[i].y + (points[i + 1].y - points[i].y) * t,
+      };
     }
     acc += seg;
   }
@@ -273,7 +317,9 @@ function midpoint(a: Vec, b: Vec): Vec {
 function dominantDir(a: Vec, b: Vec): Vec {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
-  return Math.abs(dx) >= Math.abs(dy) ? { x: Math.sign(dx) || 1, y: 0 } : { x: 0, y: Math.sign(dy) || 1 };
+  return Math.abs(dx) >= Math.abs(dy)
+    ? { x: Math.sign(dx) || 1, y: 0 }
+    : { x: 0, y: Math.sign(dy) || 1 };
 }
 
 function pointSegDist(p: Vec, a: Vec, b: Vec): number {
@@ -288,7 +334,8 @@ function pointSegDist(p: Vec, a: Vec, b: Vec): number {
 
 function pathDistanceToPoint(points: Vec[], p: Vec): number {
   let min = Infinity;
-  for (let i = 0; i < points.length - 1; i++) min = Math.min(min, pointSegDist(p, points[i], points[i + 1]));
+  for (let i = 0; i < points.length - 1; i++)
+    min = Math.min(min, pointSegDist(p, points[i], points[i + 1]));
   return min;
 }
 
@@ -399,6 +446,10 @@ export function boundsOf(rects: Rect[]): Rect {
   return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
 }
 
+export function boundsOfPoints(points: Vec[]): Rect {
+  return boundsOf(points.map((p) => ({ x: p.x, y: p.y, w: 0, h: 0 })));
+}
+
 export function pointInRect(p: Vec, r: Rect): boolean {
   return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
 }
@@ -420,7 +471,100 @@ export function snapAnchor(rect: Rect, p: Vec): { rx: number; ry: number; axis: 
   const c = rectCenter(rect);
   const dx = p.x - c.x;
   const dy = p.y - c.y;
-  const horizontal = Math.abs(dx) / rect.w >= Math.abs(dy) / rect.h;
+  const horizontal = Math.abs(dx) / Math.max(1, rect.w) >= Math.abs(dy) / Math.max(1, rect.h);
   if (horizontal) return { rx: dx >= 0 ? 1 : 0, ry: 0.5, axis: "x" };
   return { rx: 0.5, ry: dy >= 0 ? 1 : 0, axis: "y" };
+}
+
+export interface SnapGuide {
+  orientation: "v" | "h";
+  pos: number;
+}
+
+export interface SnapResult {
+  dx: number;
+  dy: number;
+  guides: SnapGuide[];
+}
+
+/**
+ * Alignment snapping: snap the dragged bounds' edges/centers to other objects
+ * and optionally to the grid.
+ */
+export function computeSnap(
+  moved: Rect,
+  others: Rect[],
+  opts: { zoom: number; grid: boolean; snap: boolean; gridSize?: number },
+): SnapResult {
+  const guides: SnapGuide[] = [];
+  if (!opts.snap) return { dx: 0, dy: 0, guides };
+  const threshold = SNAP_PX / Math.max(0.05, opts.zoom);
+  const xs = [moved.x, moved.x + moved.w / 2, moved.x + moved.w];
+  const ys = [moved.y, moved.y + moved.h / 2, moved.y + moved.h];
+  let dx = 0;
+  let dy = 0;
+  let bestX = Infinity;
+  let bestY = Infinity;
+  let gx: number | null = null;
+  let gy: number | null = null;
+  for (const o of others) {
+    const oxs = [o.x, o.x + o.w / 2, o.x + o.w];
+    const oys = [o.y, o.y + o.h / 2, o.y + o.h];
+    for (const sx of xs) {
+      for (const tx of oxs) {
+        const d = tx - sx;
+        const ad = Math.abs(d);
+        if (ad <= threshold && ad < bestX) {
+          bestX = ad;
+          dx = d;
+          gx = tx;
+        }
+      }
+    }
+    for (const sy of ys) {
+      for (const ty of oys) {
+        const d = ty - sy;
+        const ad = Math.abs(d);
+        if (ad <= threshold && ad < bestY) {
+          bestY = ad;
+          dy = d;
+          gy = ty;
+        }
+      }
+    }
+  }
+  if (opts.grid) {
+    const g = opts.gridSize ?? 24;
+    if (gx === null) {
+      const target = Math.round(moved.x / g) * g;
+      const d = target - moved.x;
+      if (Math.abs(d) <= threshold) {
+        dx = d;
+        gx = target;
+      }
+    }
+    if (gy === null) {
+      const target = Math.round(moved.y / g) * g;
+      const d = target - moved.y;
+      if (Math.abs(d) <= threshold) {
+        dy = d;
+        gy = target;
+      }
+    }
+  }
+  if (gx !== null) guides.push({ orientation: "v", pos: gx });
+  if (gy !== null) guides.push({ orientation: "h", pos: gy });
+  return { dx, dy, guides };
+}
+
+export function expandRect(r: Rect, pad: number): Rect {
+  return { x: r.x - pad, y: r.y - pad, w: r.w + pad * 2, h: r.h + pad * 2 };
+}
+
+/** Distance from a point to a connector route, useful for hit testing. */
+export function distanceToRoute(points: Vec[], p: Vec): number {
+  let min = Infinity;
+  for (let i = 0; i < points.length - 1; i++)
+    min = Math.min(min, pointSegDist(p, points[i], points[i + 1]));
+  return min;
 }

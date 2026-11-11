@@ -3,3 +3,8 @@ dist
 vite.log
 *.local
 .DS_Store
+*.tsbuildinfo
+coverage
+.env
+.env.*
+!.env.example

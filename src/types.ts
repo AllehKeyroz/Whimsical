@@ -38,13 +38,55 @@ export interface Style {
   hex?: string;
 }
 
-export type ObjectType = "shape" | "connector" | "frame" | "text";
+export type TextAlign = "left" | "center" | "right";
+
+export interface TextStyle {
+  fontSize: number;
+  fontWeight: 400 | 500 | 600 | 700;
+  italic: boolean;
+  underline: boolean;
+  align: TextAlign;
+  /** Optional custom text color. */
+  color?: string;
+}
+
+export const DEFAULT_TEXT_STYLE: TextStyle = {
+  fontSize: 18,
+  fontWeight: 400,
+  italic: false,
+  underline: false,
+  align: "center",
+};
+
+export const LEFT_TEXT_STYLE: TextStyle = {
+  ...DEFAULT_TEXT_STYLE,
+  align: "left",
+};
+
+export type ObjectType = "shape" | "connector" | "frame" | "text" | "image" | "icon";
+
+export interface Comment {
+  id: string;
+  author: string;
+  text: string;
+  createdAt: number;
+  resolved?: boolean;
+}
 
 export interface BaseObject {
   id: string;
   objectType: ObjectType;
   parentId: string | null;
+  /** Group membership id. Objects sharing a groupId move/select together. */
+  groupId?: string | null;
   order: number;
+  /** Rotation in degrees (multiples of 90). */
+  rotation?: number;
+  hidden?: boolean;
+  locked?: boolean;
+  /** Optional external link opened from the context bar. */
+  link?: string;
+  comments?: Comment[];
 }
 
 export type ShapeType =
@@ -56,7 +98,8 @@ export type ShapeType =
   | "hexagon"
   | "cylinder"
   | "parallelogram"
-  | "document";
+  | "document"
+  | "sticky";
 
 export interface Shape extends BaseObject {
   objectType: "shape";
@@ -64,6 +107,7 @@ export interface Shape extends BaseObject {
   rect: Rect;
   style: Style;
   text: string;
+  textStyle: TextStyle;
 }
 
 export interface Frame extends BaseObject {
@@ -71,6 +115,7 @@ export interface Frame extends BaseObject {
   rect: Rect;
   style: Style;
   text: string;
+  textStyle: TextStyle;
 }
 
 export interface TextObject extends BaseObject {
@@ -78,7 +123,24 @@ export interface TextObject extends BaseObject {
   rect: Rect;
   style: Style;
   text: string;
-  fontSize: number;
+  textStyle: TextStyle;
+}
+
+export interface ImageObject extends BaseObject {
+  objectType: "image";
+  rect: Rect;
+  src: string;
+  alt?: string;
+}
+
+export interface IconObject extends BaseObject {
+  objectType: "icon";
+  rect: Rect;
+  /** Lucide icon name (PascalCase) or the emoji character. */
+  icon: string;
+  iconSet: "lucide" | "emoji";
+  style: Style;
+  strokeWidth?: number;
 }
 
 export type ConnectorType = "elbow" | "straight" | "curved";
@@ -111,18 +173,69 @@ export interface Connector extends BaseObject {
   toPoint?: Vec | null;
   /** Manual route bend, set by dragging a segment. */
   bend?: Vec | null;
-  style: { color: Color; deco: Deco };
+  style: Style;
   label: string;
+  labelStyle?: TextStyle;
 }
 
-export type BoardObject = Shape | Connector | Frame | TextObject;
+export type BoardObject = Shape | Connector | Frame | TextObject | ImageObject | IconObject;
 
 export interface Board {
   id: string;
   title: string;
   fontFamily: string;
   objects: Record<string, BoardObject>;
+  version: number;
+  createdAt: number;
+  updatedAt: number;
+  folderId?: string | null;
 }
+
+export interface BoardMeta {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  count: number;
+  folderId?: string | null;
+}
+
+export interface Folder {
+  id: string;
+  name: string;
+  createdAt: number;
+}
+
+export type Theme = "light" | "dark";
+
+export interface Settings {
+  theme: Theme;
+  grid: boolean;
+  snap: boolean;
+  language: "pt" | "en";
+  userName: string;
+  lastBoardId: string | null;
+  /** Optional websocket relay used for cross-device collaboration. */
+  relayUrl: string;
+  /** Dashboard folders (workspaces) created by the user. */
+  folders: Folder[];
+  /** Current dashboard/explorer filter: "all", "recent", "private" or a folder id. */
+  workspaceFilter: string;
+}
+
+export const DEFAULT_SETTINGS: Settings = {
+  theme: "dark",
+  grid: true,
+  snap: true,
+  language: "pt",
+  userName: "Alessandro",
+  lastBoardId: null,
+  relayUrl: "",
+  folders: [],
+  workspaceFilter: "all",
+};
+
+export const BOARD_VERSION = 2;
 
 export function isShape(o: BoardObject): o is Shape {
   return o.objectType === "shape";
@@ -136,6 +249,20 @@ export function isFrame(o: BoardObject): o is Frame {
 export function isText(o: BoardObject): o is TextObject {
   return o.objectType === "text";
 }
+export function isImage(o: BoardObject): o is ImageObject {
+  return o.objectType === "image";
+}
+export function isIcon(o: BoardObject): o is IconObject {
+  return o.objectType === "icon";
+}
+
+export function hasRect(o: BoardObject): o is Shape | Frame | TextObject | ImageObject | IconObject {
+  return "rect" in o && !!o.rect;
+}
+
+export function hasText(o: BoardObject): o is Shape | Frame | TextObject {
+  return o.objectType === "shape" || o.objectType === "frame" || o.objectType === "text";
+}
 
 export type Tool =
   | "select"
@@ -144,6 +271,13 @@ export type Tool =
   | "shape:pill"
   | "shape:ellipse"
   | "shape:diamond"
+  | "shape:triangle"
+  | "shape:hexagon"
+  | "shape:cylinder"
+  | "shape:parallelogram"
+  | "shape:document"
+  | "shape:sticky"
   | "text"
   | "frame"
-  | "connect";
+  | "connect"
+  | "image";

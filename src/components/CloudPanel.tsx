@@ -1,0 +1,244 @@
+import { useEffect, useState } from "react";
+import { useStore } from "../store";
+import { getSupabaseConfig } from "../lib/supabase";
+import { Modal } from "./Modals";
+import { Icon } from "./icons";
+
+type Mode = "signin" | "signup";
+
+export function CloudPanel() {
+  const open = useStore((s) => s.authOpen);
+  const setOpen = useStore((s) => s.setAuthOpen);
+  const cloud = useStore((s) => s.cloud);
+  const boards = useStore((s) => s.boards);
+  const saveCloudConfig = useStore((s) => s.saveCloudConfig);
+  const signInCloud = useStore((s) => s.signInCloud);
+  const signUpCloud = useStore((s) => s.signUpCloud);
+  const signOutCloud = useStore((s) => s.signOutCloud);
+  const syncCloud = useStore((s) => s.syncCloud);
+  const pushLocalToCloud = useStore((s) => s.pushLocalToCloud);
+
+  const [mode, setMode] = useState<Mode>("signin");
+  const [showConfig, setShowConfig] = useState(false);
+  const [url, setUrl] = useState("");
+  const [key, setKey] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const cfg = getSupabaseConfig();
+    setUrl(cfg.url);
+    setKey(cfg.key);
+    setShowConfig(!cloud.configured);
+    setLocalError(null);
+    setNotice(null);
+    setBusy(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const run = async (fn: () => Promise<unknown>) => {
+    setBusy(true);
+    setLocalError(null);
+    setNotice(null);
+    try {
+      await fn();
+    } catch (error) {
+      setLocalError(error instanceof Error ? error.message : "Falha inesperada.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const saveConfig = () =>
+    run(async () => {
+      await saveCloudConfig(url, key);
+      setShowConfig(false);
+      setNotice("Configuração salva.");
+    });
+
+  const login = () =>
+    run(async () => {
+      const error = await signInCloud(email, password);
+      if (error) setLocalError(error);
+    });
+
+  const signup = () =>
+    run(async () => {
+      const error = await signUpCloud(email, password, name);
+      if (error) setLocalError(error);
+    });
+
+  const statusLabel =
+    cloud.status === "online"
+      ? "Conectado"
+      : cloud.status === "connecting"
+        ? cloud.syncing
+          ? "Sincronizando…"
+          : "Conectando…"
+        : cloud.status === "error"
+          ? "Erro"
+          : "Offline";
+
+  const error = localError || cloud.error;
+
+  return (
+    <Modal
+      open={open}
+      title="Supabase / Nuvem"
+      subtitle="Sincronize boards e pastas entre dispositivos. Os dados locais continuam funcionando offline."
+      onClose={() => setOpen(false)}
+      className="cloud-modal"
+    >
+      <div className="cloud-status-row">
+        <span className={`cloud-status-dot ${cloud.status}`} />
+        <b>{statusLabel}</b>
+        <span className="cloud-status-detail">
+          {cloud.user ? cloud.user.email || cloud.user.name : cloud.configured ? "Supabase configurado" : "Supabase não configurado"}
+        </span>
+        <span className="spacer" />
+        {cloud.lastSync ? <small>Última sync: {new Date(cloud.lastSync).toLocaleString("pt-BR")}</small> : null}
+      </div>
+
+      {cloud.user ? (
+        <div className="cloud-account">
+          <div className="cloud-account-head">
+            <span className="ws-avatar big">{(cloud.user.name || cloud.user.email || "A").charAt(0).toUpperCase()}</span>
+            <div>
+              <b>{cloud.user.name}</b>
+              <small>{cloud.user.email}</small>
+            </div>
+            <span className="cloud-badge">Nuvem</span>
+          </div>
+          <div className="cloud-stats">
+            <span>{boards.length} boards locais</span>
+            <span>projeto: {getSupabaseConfig().url.replace(/^https?:\/\//, "")}</span>
+          </div>
+          <div className="inline-row cloud-actions">
+            <button className="primary-btn" disabled={cloud.syncing} onClick={() => void run(() => syncCloud())}>
+              <Icon name="refresh" size={15} /> Sincronizar agora
+            </button>
+            <button className="secondary-btn" disabled={cloud.syncing} onClick={() => void run(() => pushLocalToCloud())}>
+              <Icon name="upload" size={15} /> Enviar boards locais
+            </button>
+            <button className="secondary-btn" disabled={cloud.syncing} onClick={() => setShowConfig((v) => !v)}>
+              Credenciais
+            </button>
+            <button className="secondary-btn danger-text" disabled={cloud.syncing} onClick={() => void run(() => signOutCloud())}>
+              <Icon name="logout" size={15} /> Sair
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="cloud-auth">
+          <div className="cloud-tabs">
+            <button className={mode === "signin" ? "active" : ""} onClick={() => setMode("signin")}>
+              Entrar
+            </button>
+            <button className={mode === "signup" ? "active" : ""} onClick={() => setMode("signup")}>
+              Criar conta
+            </button>
+            <span className="spacer" />
+            <button className="cloud-link" onClick={() => setShowConfig((v) => !v)}>
+              <Icon name="settings" size={14} /> Credenciais
+            </button>
+          </div>
+          {mode === "signup" ? (
+            <label className="cloud-field">
+              <span>Nome</span>
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" autoComplete="name" />
+            </label>
+          ) : null}
+          <label className="cloud-field">
+            <span>E-mail</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="voce@empresa.com"
+              autoComplete="email"
+            />
+          </label>
+          <label className="cloud-field">
+            <span>Senha</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") void (mode === "signin" ? login() : signup());
+              }}
+            />
+          </label>
+          <div className="inline-row cloud-actions">
+            <button
+              className="primary-btn"
+              disabled={busy || !cloud.configured || !email.trim() || !password}
+              onClick={() => void (mode === "signin" ? login() : signup())}
+            >
+              <Icon name={mode === "signin" ? "login" : "cloud"} size={15} />
+              {busy ? "Aguarde…" : mode === "signin" ? "Entrar" : "Criar conta"}
+            </button>
+            {!cloud.configured ? (
+              <span className="cloud-hint">Informe a URL e a anon key para conectar.</span>
+            ) : (
+              <span className="cloud-hint">Use uma conta criada no Supabase Auth.</span>
+            )}
+          </div>
+          <p className="cloud-note">
+            Se a confirmação de e-mail estiver ativa no Supabase, confirme o link antes de entrar. A anon key é pública;
+            nunca coloque a service_role key no navegador.
+          </p>
+        </div>
+      )}
+
+      {showConfig || !cloud.configured ? (
+        <div className="cloud-config">
+          <div className="cloud-config-head">
+            <b>Credenciais do Supabase</b>
+            <span>Somente a URL e a anon/publishable key.</span>
+          </div>
+          <label className="cloud-field">
+            <span>Project URL</span>
+            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://seu-projeto.supabase.co" />
+          </label>
+          <label className="cloud-field">
+            <span>Anon / publishable key</span>
+            <textarea value={key} onChange={(e) => setKey(e.target.value)} placeholder="eyJhbGciOi..." rows={3} />
+          </label>
+          <div className="inline-row cloud-actions">
+            <button className="primary-btn" disabled={busy || !url.trim() || !key.trim()} onClick={() => void saveConfig()}>
+              <Icon name="check" size={15} /> Salvar credenciais
+            </button>
+            <button
+              className="secondary-btn"
+              disabled={busy}
+              onClick={() =>
+                void run(async () => {
+                  setUrl("");
+                  setKey("");
+                  await saveCloudConfig("", "");
+                  setNotice("Configuração removida; usando .env se existir.");
+                })
+              }
+            >
+              Restaurar .env
+            </button>
+          </div>
+          <p className="cloud-note">
+            Para mudar depois, edite <code>.env.local</code> ou use este formulário. As credenciais ficam só no seu navegador.
+          </p>
+        </div>
+      ) : null}
+
+      {error ? <div className="cloud-error">{error}</div> : null}
+      {notice ? <div className="cloud-notice">{notice}</div> : null}
+    </Modal>
+  );
+}
