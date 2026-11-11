@@ -224,6 +224,17 @@ Sem os build args o app sobe normal e pede as credenciais na tela de login (salv
 1. Crie outro App, mesmo repositório, Dockerfile `Dockerfile.relay`, porta **8787**, healthcheck `/health`.
 2. No board, abra **Compartilhar** e use `wss://relay.seudominio.com` como Relay WebSocket.
 
+### Variáveis: Build Args × Environment
+
+O app é estático (Vite), então `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` precisam estar em **Build Args** e o serviço deve ser **reimplantado**. Variáveis em **Ambiente/Environment** são de runtime e não entram no bundle já compilado. Se preferir não reconstruir, use o formulário **Credenciais** da tela de login (fica salvo no navegador).
+
+### Troubleshooting
+
+- **Bolinha amarela / sem logs:** confira em **Fonte** se o build está em **Dockerfile** (não Nixpacks/Heroku) e em **Implantação** os logs de build. O container precisa subir o nginx na porta **80**.
+- **Healthcheck:** use `/healthz` (responde `ok`). O `Dockerfile` já declara esse healthcheck.
+- **Tela de login pedindo credenciais:** os Build Args não foram aplicados no build; preencha na tela ou reimplante com os args corretos.
+- **Domínio:** aponte o domínio para a porta 80 do serviço.
+
 ### Docker Compose (alternativa)
 
 ```bash
