@@ -87,7 +87,10 @@ export function Toolbar() {
           value={board.title}
           aria-label="Título do board"
           onChange={(e) => setBoardTitle(e.target.value)}
-          onBlur={() => void persistNow()}
+          onBlur={() => {
+            if (!board.title.trim()) setBoardTitle("Board sem título");
+            void persistNow();
+          }}
         />
         <button
           className={`ws-star ${starred ? "active" : ""}`}

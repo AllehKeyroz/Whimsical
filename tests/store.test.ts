@@ -214,3 +214,13 @@ describe("cloudErrorMessage — cadastro", () => {
     expect(cloudErrorMessage("Email rate limit exceeded")).toContain("Aguarde alguns minutos");
   });
 });
+
+describe("título do board", () => {
+  it("preserva espaços enquanto o usuário digita", () => {
+    reset();
+    useStore.getState().setBoardTitle("Meu Board ");
+    expect(useStore.getState().board.title).toBe("Meu Board ");
+    useStore.getState().setBoardTitle("Meu Board Novo");
+    expect(useStore.getState().board.title).toBe("Meu Board Novo");
+  });
+});

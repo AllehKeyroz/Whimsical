@@ -1577,7 +1577,9 @@ export const useStore = create<BoardState>((set, get) => {
 
     setBoardTitle: (title) => {
       const board = get().board;
-      commit({ ...board, title: slugTitle(title) }, false);
+      // Keep the raw value while typing: trimming here would swallow spaces
+      // as soon as the user presses them. Cleanup happens on blur/rename.
+      commit({ ...board, title: title.slice(0, 120) }, false);
     },
 
     rotateSelection: () => {
