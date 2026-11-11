@@ -84,6 +84,10 @@ export interface BaseObject {
   rotation?: number;
   hidden?: boolean;
   locked?: boolean;
+  /** Mind-map branch collapsed/expanded state (text nodes). */
+  mindCollapsed?: boolean;
+  /** Hidden by a collapsed mind-map branch (not by the user). */
+  mindHidden?: boolean;
   /** Optional external link opened from the context bar. */
   link?: string;
   comments?: Comment[];
@@ -193,6 +197,8 @@ export interface Board {
   createdAt: number;
   updatedAt: number;
   folderId?: string | null;
+  /** Board rendered as a text-only mind map (curved branches, collapsible nodes). */
+  mindMap?: boolean;
 }
 
 export interface BoardMeta {

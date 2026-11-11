@@ -23,6 +23,7 @@ import type {
   Vec,
 } from "./types";
 import { DEFAULT_TEXT_STYLE, LEFT_TEXT_STYLE } from "./types";
+import { colorToken } from "./palette";
 import { aabbOfRect, boundsOf, pointInRectRotated, rectCenter, snapAnchor, type SnapGuide } from "./geometry";
 import { normalizeBoard, normalizeSettings } from "./lib/schema";
 import {
@@ -199,6 +200,7 @@ export interface BoardState {
   quickAdd: (shapeId: string, direction?: "right" | "left" | "up" | "down") => string | null;
   addMindChild: (shapeId: string) => string | null;
   addMindSibling: (shapeId: string) => string | null;
+  toggleMindCollapse: (id: string) => void;
   createConnectedNode: (fromId: string, point: Vec) => string | null;
 
   updateObject: (id: string, patch: Partial<BoardObject>, history?: boolean) => void;
@@ -1383,9 +1385,128 @@ export const useStore = create<BoardState>((set, get) => {
       return newId;
     },
 
-    addMindChild: (shapeId) => get().quickAdd(shapeId, "right"),
+    addMindChild: (shapeId) => {
+      const board = get().board;
+      const src = board.objects[shapeId];
+      if (!src || src.objectType === "connector" || !("rect" in src) || !src.rect) return null;
+      if (!board.mindMap) return get().quickAdd(shapeId, "right");
+      const color = src.objectType === "text" ? src.style.color : "blue";
+      const rect = { x: src.rect.x + src.rect.w + 110, y: src.rect.y, w: 150, h: 30 };
+      const id = nanoid();
+      const child: TextObject = withOrder({
+        id,
+        objectType: "text",
+        parentId: null,
+        groupId: null,
+        rect,
+        style: { color, deco: "transparent" },
+        text: "",
+        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "left", color: colorToken(color).base },
+        rotation: 0,
+        order: 0,
+        mindCollapsed: false,
+      });
+      const conn: Connector = withOrder({
+        id: nanoid(),
+        objectType: "connector",
+        parentId: null,
+        groupId: null,
+        fromId: shapeId,
+        toId: id,
+        connectorType: "curved",
+        fromRel: { rx: 1, ry: 0.5, axis: "x" },
+        toRel: { rx: 0, ry: 0.5, axis: "x" },
+        fromEndpoint: "none",
+        toEndpoint: "none",
+        fromCardinality: null,
+        toCardinality: null,
+        style: { color, deco: "outline" },
+        label: "",
+        order: 0,
+      });
+      commit({ ...board, objects: { ...board.objects, [id]: child, [conn.id]: conn } });
+      set({ selection: [id], tool: "select" });
+      return id;
+    },
 
-    addMindSibling: (shapeId) => get().quickAdd(shapeId, "down"),
+    addMindSibling: (shapeId) => {
+      const board = get().board;
+      const src = board.objects[shapeId];
+      if (!src || src.objectType === "connector" || !("rect" in src) || !src.rect) return null;
+      if (!board.mindMap) return get().quickAdd(shapeId, "down");
+      const parentLink = Object.values(board.objects).find(
+        (o): o is Connector => o.objectType === "connector" && o.toId === shapeId,
+      );
+      const parentId = parentLink?.fromId ?? shapeId;
+      const parent = board.objects[parentId];
+      if (!parent || parent.objectType === "connector" || !("rect" in parent) || !parent.rect) return null;
+      const color = src.objectType === "text" ? src.style.color : "blue";
+      const y =
+        Math.max(src.rect.y + src.rect.h, ...Object.values(board.objects).filter((o) => o.objectType === "text" && o.rect.y >= src.rect.y && o.rect.x === src.rect.x).map((o) => ("rect" in o ? o.rect.y + o.rect.h : 0))) + 12;
+      const rect = { x: src.rect.x, y, w: 150, h: 30 };
+      const id = nanoid();
+      const node: TextObject = withOrder({
+        id,
+        objectType: "text",
+        parentId: null,
+        groupId: null,
+        rect,
+        style: { color, deco: "transparent" },
+        text: "",
+        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "left", color: colorToken(color).base },
+        rotation: 0,
+        order: 0,
+        mindCollapsed: false,
+      });
+      const conn: Connector = withOrder({
+        id: nanoid(),
+        objectType: "connector",
+        parentId: null,
+        groupId: null,
+        fromId: parentId,
+        toId: id,
+        connectorType: "curved",
+        fromRel: { rx: 1, ry: 0.5, axis: "x" },
+        toRel: { rx: 0, ry: 0.5, axis: "x" },
+        fromEndpoint: "none",
+        toEndpoint: "none",
+        fromCardinality: null,
+        toCardinality: null,
+        style: { color, deco: "outline" },
+        label: "",
+        order: 0,
+      });
+      commit({ ...board, objects: { ...board.objects, [id]: node, [conn.id]: conn } });
+      set({ selection: [id], tool: "select" });
+      return id;
+    },
+
+    toggleMindCollapse: (id) => {
+      const board = get().board;
+      const node = board.objects[id];
+      if (!node || node.objectType === "connector") return;
+      const objects = { ...board.objects };
+      for (const o of Object.values(objects)) {
+        if (o.mindHidden) objects[o.id] = { ...o, hidden: false, mindHidden: false };
+      }
+      objects[id] = { ...objects[id], mindCollapsed: !node.mindCollapsed };
+
+      const hideBranch = (parentId: string) => {
+        for (const c of Object.values(objects)) {
+          if (c.objectType !== "connector" || c.fromId !== parentId) continue;
+          const child = objects[c.toId];
+          objects[c.id] = { ...c, hidden: true, mindHidden: true };
+          if (child) {
+            objects[child.id] = { ...child, hidden: true, mindHidden: true };
+            hideBranch(child.id);
+          }
+        }
+      };
+      for (const o of Object.values(objects)) {
+        if (o.mindCollapsed) hideBranch(o.id);
+      }
+      commit({ ...board, objects });
+    },
 
     createConnectedNode: (fromId, point) => {
       const board = get().board;
@@ -1585,7 +1706,7 @@ export const useStore = create<BoardState>((set, get) => {
         const withO = withOrder(o);
         objects[withO.id] = withO;
       }
-      commit({ ...get().board, objects });
+      commit({ ...get().board, mindMap: true, objects });
       set({
         selection: built.ids.filter((id) => objects[id]?.objectType !== "connector"),
         tool: "select",
@@ -2050,6 +2171,10 @@ export const useStore = create<BoardState>((set, get) => {
 
     mindMapLayout: () => {
       const board = get().board;
+      if (board.mindMap) {
+        get().showToast("O mapa mental já usa layout automático por ramos.");
+        return;
+      }
       const selected = get().selection.map((id) => board.objects[id]).filter(Boolean);
       const root =
         selected.find((o) => o.objectType !== "connector") ??

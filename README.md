@@ -270,3 +270,5 @@ Cada objeto tem `id`, `objectType`, `parentId` (frame), `groupId`, `order`, `rot
 Uso livre para estudo e experimentação.
 
 - **Colar outline como mapa mental:** listas com indentação (ex.: copiadas de um mapa mental) viram nós conectados automaticamente, com cores por ramo.
+
+- **Mapa mental texto puro:** nós sem forma (apenas texto), ramos curvos coloridos e **pontos de recolher/expandir** com contagem de itens ocultos.

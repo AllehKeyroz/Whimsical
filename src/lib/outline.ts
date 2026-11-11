@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
-import type { BoardObject, Color, Connector, Shape, Vec } from "../types";
+import type { BoardObject, Color, Connector, TextObject, Vec } from "../types";
 import { DEFAULT_TEXT_STYLE } from "../types";
+import { colorToken } from "../palette";
+import { measure, wrapText } from "./text";
 
 export interface OutlineEntry {
   label: string;
@@ -12,9 +14,15 @@ interface OutlineNode {
   depth: number;
   children: OutlineNode[];
   color: Color;
+  w: number;
+  h: number;
+  fs: number;
 }
 
-const BRANCH_COLORS: Color[] = ["blue", "purple", "green", "orange", "red", "indigo", "mint", "crimson", "yellow", "brown"];
+const BRANCH_COLORS: Color[] = ["purple", "blue", "orange", "green", "red", "indigo", "mint", "crimson", "yellow", "brown"];
+const GAP_X = 110;
+const GAP_Y = 12;
+const MAX_TEXT_WIDTH = 260;
 
 export function looksLikeOutline(text: string): boolean {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
@@ -70,7 +78,15 @@ export function parseOutline(text: string): OutlineEntry[] {
 
 function buildTree(entries: OutlineEntry[]): OutlineNode | null {
   if (!entries.length) return null;
-  const root: OutlineNode = { label: entries[0].label, depth: 0, children: [], color: "purple" };
+  const root: OutlineNode = {
+    label: entries[0].label,
+    depth: 0,
+    children: [],
+    color: "white",
+    w: 0,
+    h: 0,
+    fs: 18,
+  };
   const stack: OutlineNode[] = [root];
 
   for (let i = 1; i < entries.length; i++) {
@@ -80,11 +96,14 @@ function buildTree(entries: OutlineEntry[]): OutlineNode | null {
       depth: entry.depth,
       children: [],
       color: "blue",
+      w: 0,
+      h: 0,
+      fs: 15,
     };
     while (stack.length > 1 && stack[stack.length - 1].depth >= entry.depth) stack.pop();
     const parent = stack[stack.length - 1] ?? root;
     if (parent === root) {
-      node.color = BRANCH_COLORS[(root.children.length + 1) % BRANCH_COLORS.length];
+      node.color = BRANCH_COLORS[root.children.length % BRANCH_COLORS.length];
     } else {
       node.color = parent.color;
     }
@@ -94,17 +113,20 @@ function buildTree(entries: OutlineEntry[]): OutlineNode | null {
   return root;
 }
 
-const NODE_W = 190;
-const NODE_H = 56;
-const ROOT_W = 220;
-const ROOT_H = 72;
-const GAP_X = 110;
-const GAP_Y = 14;
+function measureNode(node: OutlineNode, isRoot: boolean): void {
+  const fs = isRoot ? 18 : 15;
+  node.fs = fs;
+  const textWidth = measure(node.label || " ", fs, isRoot);
+  node.w = Math.max(isRoot ? 120 : 80, Math.min(MAX_TEXT_WIDTH, textWidth + (isRoot ? 28 : 18)));
+  const lines = wrapText(node.label || " ", node.w - 8, fs, { bold: isRoot });
+  node.h = Math.max(isRoot ? 38 : 30, lines.length * fs * 1.333 + 10);
+  for (const child of node.children) measureNode(child, false);
+}
 
 function subtreeHeight(node: OutlineNode): number {
-  if (!node.children.length) return NODE_H;
+  if (!node.children.length) return node.h;
   const total = node.children.reduce((sum, child) => sum + subtreeHeight(child), 0);
-  return Math.max(NODE_H, total + GAP_Y * (node.children.length - 1));
+  return Math.max(node.h, total + GAP_Y * (node.children.length - 1));
 }
 
 export interface OutlineBuildResult {
@@ -117,60 +139,70 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
   const entries = parseOutline(text);
   const root = buildTree(entries);
   if (!root) return null;
+  measureNode(root, true);
 
-  const totalHeight = subtreeHeight(root);
   const objects: BoardObject[] = [];
   const ids: string[] = [];
   const idByNode = new Map<OutlineNode, string>();
+  const depthWidth = new Map<number, number>();
+  for (const node of walk(root)) {
+    const depth = node.depth;
+    depthWidth.set(depth, Math.max(depthWidth.get(depth) ?? 0, node.w));
+  }
+  const colX = new Map<number, number>();
+  colX.set(0, origin.x - root.w / 2);
+  const maxDepth = Math.max(...[...depthWidth.keys()]);
+  for (let d = 1; d <= maxDepth; d++) {
+    colX.set(d, (colX.get(d - 1) ?? origin.x) + (depthWidth.get(d - 1) ?? 180) + GAP_X);
+  }
 
-  const place = (node: OutlineNode, depth: number, top: number): void => {
-    const isRoot = depth === 0;
-    const width = isRoot ? ROOT_W : NODE_W;
-    const height = isRoot ? ROOT_H : NODE_H;
+  const totalHeight = subtreeHeight(root);
+  const place = (node: OutlineNode, top: number): void => {
+    const isRoot = node.depth === 0;
     const heightOwn = subtreeHeight(node);
-    const centerY = node.children.length
-      ? top + heightOwn / 2
-      : top + height / 2;
+    const centerY = top + heightOwn / 2;
     const rect = {
-      x: isRoot
-        ? origin.x - width / 2
-        : origin.x + ROOT_W / 2 + GAP_X + (depth - 1) * (NODE_W + GAP_X),
-      y: centerY - height / 2,
-      w: width,
-      h: height,
+      x: colX.get(node.depth) ?? origin.x,
+      y: centerY - node.h / 2,
+      w: node.w,
+      h: node.h,
     };
     const id = nanoid();
     idByNode.set(node, id);
-    const shape: Shape = {
+    const branchColor = colorToken(node.color).base;
+    const text: TextObject = {
       id,
-      objectType: "shape",
+      objectType: "text",
       parentId: null,
       groupId: null,
-      shapeType: isRoot ? "pill" : "rect",
       rect,
-      style: { color: node.color, deco: isRoot ? "fill" : "outline" },
+      style: isRoot
+        ? { color: "white", deco: "fill" }
+        : { color: node.color, deco: "transparent" },
       text: node.label,
       textStyle: {
         ...DEFAULT_TEXT_STYLE,
-        fontSize: isRoot ? 18 : 15,
+        fontSize: node.fs,
         fontWeight: isRoot ? 600 : 500,
-        align: "center",
+        align: "left",
+        color: isRoot ? "#293845" : branchColor,
       },
       rotation: 0,
       order: 0,
+      mindCollapsed: false,
     };
-    objects.push(shape);
+    objects.push(text);
     ids.push(id);
 
     let cursor = top;
     for (const child of node.children) {
       const childHeight = subtreeHeight(child);
-      place(child, depth + 1, cursor);
+      place(child, cursor);
       cursor += childHeight + GAP_Y;
     }
   };
 
-  place(root, 0, origin.y - totalHeight / 2);
+  place(root, origin.y - totalHeight / 2);
 
   for (const node of walk(root)) {
     const parentId = idByNode.get(node);
@@ -178,6 +210,7 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
     for (const child of node.children) {
       const childId = idByNode.get(child);
       if (!childId) continue;
+      const color = node.depth === 0 ? child.color : node.color;
       const connector: Connector = {
         id: nanoid(),
         objectType: "connector",
@@ -185,14 +218,14 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
         groupId: null,
         fromId: parentId,
         toId: childId,
-        connectorType: "elbow",
+        connectorType: "curved",
         fromRel: { rx: 1, ry: 0.5, axis: "x" },
         toRel: { rx: 0, ry: 0.5, axis: "x" },
         fromEndpoint: "none",
         toEndpoint: "none",
         fromCardinality: null,
         toCardinality: null,
-        style: { color: "gray", deco: "outline" },
+        style: { color, deco: "outline" },
         label: "",
         order: 0,
       };

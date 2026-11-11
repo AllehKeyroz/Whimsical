@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { buildOutlineMindMap } from "./outline";
 import {
   BOARD_VERSION,
   LEFT_TEXT_STYLE,
@@ -235,21 +236,27 @@ function orgChart(title: string): Board {
 }
 
 function mindMap(title: string): Board {
-  const center = shape("ellipse", { x: 0, y: 0, w: 220, h: 110 }, "Ideia central", defaultStyle("purple", "fill"), {
-    textStyle: { color: "#ffffff", fontWeight: 600, fontSize: 20 },
-  });
-  const branches = [
-    { text: "Público", color: "blue" as const, x: 380, y: -120 },
-    { text: "Problema", color: "orange" as const, x: 420, y: 90 },
-    { text: "Solução", color: "green" as const, x: -420, y: -110 },
-    { text: "Métricas", color: "indigo" as const, x: -440, y: 100 },
-    { text: "Canais", color: "mint" as const, x: 40, y: -260 },
-    { text: "Riscos", color: "red" as const, x: 40, y: 280 },
-  ];
-  const nodes = branches.map((b) =>
-    shape("pill", { x: b.x, y: b.y, w: 180, h: 64 }, b.text, defaultStyle(b.color, "outline")),
+  const built = buildOutlineMindMap(
+    [
+      "Ideia central",
+      "- Público",
+      "    - Clientes",
+      "    - Parceiros",
+      "- Problema",
+      "    - Dores",
+      "    - Oportunidades",
+      "- Solução",
+      "    - Produto",
+      "    - Serviço",
+      "- Métricas",
+      "    - Receita",
+      "    - Churn",
+    ].join("\n"),
+    { x: 0, y: 0 },
   );
-  return makeBoard(title, [center, ...nodes, ...nodes.map((n) => connect(center, n, "curved"))]);
+  const board = makeBoard(title, built?.objects ?? []);
+  board.mindMap = true;
+  return board;
 }
 
 function kanban(title: string): Board {

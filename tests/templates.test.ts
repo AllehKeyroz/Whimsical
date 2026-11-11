@@ -28,3 +28,14 @@ describe("templates", () => {
     expect(normalizeBoard(welcomeBoard())).not.toBeNull();
   });
 });
+
+  it("template de mapa mental é texto puro com ramos curvos", () => {
+    const board = createBoard("Mind", "mindmap");
+    expect(board.mindMap).toBe(true);
+    const objects = Object.values(board.objects);
+    expect(objects.filter((o) => o.objectType === "shape")).toHaveLength(0);
+    expect(objects.filter((o) => o.objectType === "text").length).toBeGreaterThan(4);
+    expect(
+      objects.filter((o) => o.objectType === "connector" && o.connectorType === "curved").length,
+    ).toBeGreaterThan(3);
+  });

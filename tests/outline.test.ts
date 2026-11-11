@@ -25,13 +25,16 @@ describe("outline -> mapa mental", () => {
     expect(entries.find((e) => e.label === "RD STATION")?.depth).toBe(4);
   });
 
-  it("cria nós e conexões para cada tópico", () => {
+  it("cria nós de texto e conexões curvas para cada tópico", () => {
     const built = buildOutlineMindMap(OUTLINE, { x: 0, y: 0 })!;
-    const shapes = built.objects.filter((o) => o.objectType === "shape");
-    const connectors = built.objects.filter((o) => o.objectType === "connector");
-    expect(shapes).toHaveLength(parseOutline(OUTLINE).length);
-    expect(connectors).toHaveLength(shapes.length - 1);
-    expect(shapes[0].text).toBe("Entrada");
-    expect(shapes.some((s) => s.text === "CRM")).toBe(true);
+    const texts = built.objects.filter((o) => o.objectType === "text");
+    const connectors = built.objects.filter(
+      (o) => o.objectType === "connector" && o.connectorType === "curved",
+    );
+    expect(built.objects.some((o) => o.objectType === "shape")).toBe(false);
+    expect(texts).toHaveLength(parseOutline(OUTLINE).length);
+    expect(connectors).toHaveLength(texts.length - 1);
+    expect(texts[0].text).toBe("Entrada");
+    expect(texts.some((t) => t.text === "CRM")).toBe(true);
   });
 });

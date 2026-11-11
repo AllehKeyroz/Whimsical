@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hasClipboard, INTERNAL_CLIPBOARD_PREFIX, useStore } from "../store";
 import { detectMermaidKind } from "../lib/mermaid";
 import { looksLikeOutline } from "../lib/outline";
+import { colorToken } from "../palette";
 import type {
   BoardObject,
   Connector,
@@ -197,6 +198,7 @@ export function Canvas() {
   const openContextMenu = useStore((s) => s.openContextMenu);
   const setConnectorEndpoint = useStore((s) => s.setConnectorEndpoint);
   const setConnectorBend = useStore((s) => s.setConnectorBend);
+  const toggleMindCollapse = useStore((s) => s.toggleMindCollapse);
 
   const [marquee, setMarquee] = useState<Rect | null>(null);
   const [preview, setPreview] = useState<Rect | null>(null);
@@ -236,6 +238,48 @@ export function Canvas() {
     () => objects.filter((o): o is Connector => isConnector(o)).sort((a, b) => a.order - b.order),
     [objects],
   );
+
+  const mindControls = useMemo(() => {
+    if (!board.mindMap) return [];
+    const allConnectors = Object.values(board.objects).filter(isConnector);
+    const childrenOf = new Map<string, string[]>();
+    for (const c of allConnectors) {
+      const list = childrenOf.get(c.fromId) ?? [];
+      list.push(c.toId);
+      childrenOf.set(c.fromId, list);
+    }
+    const countDescendants = (id: string, seen = new Set<string>()): number => {
+      if (seen.has(id)) return 0;
+      seen.add(id);
+      let total = 0;
+      for (const child of childrenOf.get(id) ?? []) {
+        total += 1 + countDescendants(child, seen);
+      }
+      return total;
+    };
+    const controls: { id: string; cx: number; cy: number; count: number; collapsed: boolean; color: string }[] = [];
+    for (const [id, kids] of childrenOf) {
+      if (!kids.length) continue;
+      const node = board.objects[id];
+      if (!node || node.hidden || !("rect" in node) || !node.rect) continue;
+      const firstChild = board.objects[kids[0]];
+      const fallback =
+        firstChild && firstChild.objectType !== "connector" && "style" in firstChild
+          ? colorToken(firstChild.style.color).base
+          : "#8b3fd9";
+      const color =
+        node.objectType === "text" ? node.textStyle.color ?? fallback : node.objectType === "shape" ? colorToken(node.style.color).base : fallback;
+      controls.push({
+        id,
+        cx: node.rect.x + node.rect.w + 8,
+        cy: node.rect.y + node.rect.h / 2,
+        count: countDescendants(id),
+        collapsed: !!node.mindCollapsed,
+        color,
+      });
+    }
+    return controls;
+  }, [board]);
 
   const rectObjects = useMemo(
     () =>
@@ -1135,6 +1179,30 @@ export function Canvas() {
               />
             );
           })}
+          {mindControls.map((control) => (
+            <g
+              key={`mind-${control.id}`}
+              className={`mind-toggle${control.collapsed ? " collapsed" : ""}`}
+              data-export-ignore="true"
+              style={{ cursor: "pointer" }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMindCollapse(control.id);
+              }}
+            >
+              <title>{`${control.count} item${control.count === 1 ? "" : "s"} — clique para ${control.collapsed ? "expandir" : "recolher"}`}</title>
+              <circle
+                cx={control.cx}
+                cy={control.cy}
+                r={control.collapsed ? 6 : 4.5}
+                fill={control.collapsed ? control.color : "var(--canvas-bg)"}
+                stroke={control.color}
+                strokeWidth={control.collapsed ? 0 : 1.5}
+              />
+              <circle cx={control.cx} cy={control.cy} r={14} fill="transparent" />
+            </g>
+          ))}
           {dropFrameId ? (
             (() => {
               const f = board.objects[dropFrameId];

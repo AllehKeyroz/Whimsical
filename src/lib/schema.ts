@@ -157,6 +157,8 @@ function base(raw: Rec, objectType: BoardObject["objectType"], index: number): O
     rotation: [0, 90, 180, 270].includes(num(raw.rotation, 0)) ? num(raw.rotation, 0) : 0,
     hidden: bool(raw.hidden, false),
     locked: bool(raw.locked, false),
+    mindCollapsed: bool(raw.mindCollapsed, false),
+    mindHidden: bool(raw.mindHidden, false),
     link: str(raw.link) || undefined,
     comments: normalizeComments(raw.comments),
   } as Omit<BoardObject, never>;
@@ -319,6 +321,7 @@ export function normalizeBoard(input: unknown): Board | null {
     createdAt: num(input.createdAt, now),
     updatedAt: num(input.updatedAt, now),
     folderId: str(input.folderId) || null,
+    mindMap: bool(input.mindMap, false),
     objects,
   };
 }

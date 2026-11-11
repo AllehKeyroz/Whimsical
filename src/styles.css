@@ -4112,3 +4112,13 @@ kbd {
 .ws-recent-head .spacer {
   flex: 1 1 auto;
 }
+
+/* Mind map collapse/expand controls */
+.mind-toggle {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.mind-toggle:hover,
+.mind-toggle.collapsed {
+  opacity: 1;
+}
