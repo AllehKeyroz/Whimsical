@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../store";
 import { getSupabaseConfig } from "../lib/supabase";
 import { Modal } from "./Modals";
@@ -11,6 +11,9 @@ export function CloudPanel() {
   const setOpen = useStore((s) => s.setAuthOpen);
   const cloud = useStore((s) => s.cloud);
   const boards = useStore((s) => s.boards);
+  const settings = useStore((s) => s.settings);
+  const updateSettings = useStore((s) => s.updateSettings);
+  const showToast = useStore((s) => s.showToast);
   const signInCloud = useStore((s) => s.signInCloud);
   const signUpCloud = useStore((s) => s.signUpCloud);
   const signOutCloud = useStore((s) => s.signOutCloud);
@@ -21,8 +24,14 @@ export function CloudPanel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [orgDraft, setOrgDraft] = useState(settings.organization);
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (open) setOrgDraft(settings.organization);
+  }, [open, settings.organization]);
 
   const run = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -44,7 +53,7 @@ export function CloudPanel() {
 
   const signup = () =>
     run(async () => {
-      const error = await signUpCloud(email, password, name);
+      const error = await signUpCloud(email, password, name, organization);
       if (error) setLocalError(error);
     });
 
@@ -93,6 +102,27 @@ export function CloudPanel() {
             <span>{boards.length} boards locais</span>
             <span>projeto: {getSupabaseConfig().url.replace(/^https?:\/\//, "")}</span>
           </div>
+          <div className="cloud-org">
+            <label className="cloud-field">
+              <span>Organização / empresa</span>
+              <input
+                value={orgDraft}
+                onChange={(e) => setOrgDraft(e.target.value)}
+                placeholder="Nome da sua organização"
+                maxLength={60}
+              />
+            </label>
+            <button
+              className="secondary-btn"
+              disabled={busy || !orgDraft.trim() || orgDraft.trim() === settings.organization}
+              onClick={() => {
+                updateSettings({ organization: orgDraft.trim() });
+                showToast("Organização atualizada.");
+              }}
+            >
+              <Icon name="check" size={15} /> Salvar
+            </button>
+          </div>
           <div className="inline-row cloud-actions">
             <button className="primary-btn" disabled={cloud.syncing} onClick={() => void run(() => syncCloud())}>
               <Icon name="refresh" size={15} /> Sincronizar agora
@@ -116,10 +146,21 @@ export function CloudPanel() {
             </button>
           </div>
           {mode === "signup" ? (
-            <label className="cloud-field">
-              <span>Nome</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" autoComplete="name" />
-            </label>
+            <>
+              <label className="cloud-field">
+                <span>Nome</span>
+                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" autoComplete="name" />
+              </label>
+              <label className="cloud-field">
+                <span>Organização / empresa</span>
+                <input
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                  placeholder="Nome da sua empresa ou equipe"
+                  maxLength={60}
+                />
+              </label>
+            </>
           ) : null}
           <label className="cloud-field">
             <span>E-mail</span>

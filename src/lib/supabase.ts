@@ -74,7 +74,7 @@ export function getSupabase(): SupabaseClient | null {
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
-        storageKey: "whim.supabase.auth",
+        storageKey: "kdsflux.supabase.auth",
       },
     });
   } catch {
@@ -111,10 +111,17 @@ export async function cloudSignIn(email: string, password: string): Promise<{ us
   return { user: data.user ?? null, error: error?.message ?? null };
 }
 
+export interface CloudProfile {
+  id: string;
+  display_name: string | null;
+  organization_name: string | null;
+}
+
 export async function cloudSignUp(
   email: string,
   password: string,
   displayName: string,
+  organization: string,
 ): Promise<{ user: User | null; needsConfirmation: boolean; error: string | null }> {
   const supabase = getSupabase();
   if (!supabase) return { user: null, needsConfirmation: false, error: "Supabase não configurado." };
@@ -122,7 +129,10 @@ export async function cloudSignUp(
     email: email.trim(),
     password,
     options: {
-      data: { display_name: displayName.trim() || email.split("@")[0] },
+      data: {
+        display_name: displayName.trim() || email.split("@")[0],
+        organization_name: organization.trim().slice(0, 60),
+      },
       emailRedirectTo: window.location.origin,
     },
   });
@@ -140,11 +150,34 @@ export async function cloudSignOut(): Promise<string | null> {
   return error?.message ?? null;
 }
 
-export async function cloudUpdateProfile(userId: string, displayName: string): Promise<string | null> {
+export async function cloudGetProfile(
+  userId: string,
+): Promise<{ profile: CloudProfile | null; error: string | null }> {
+  const supabase = getSupabase();
+  if (!supabase) return { profile: null, error: "Supabase não configurado." };
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, display_name, organization_name")
+    .eq("id", userId)
+    .maybeSingle();
+  if (error) return { profile: null, error: error.message };
+  return { profile: (data as CloudProfile | null) ?? null, error: null };
+}
+
+export async function cloudUpdateProfile(
+  userId: string,
+  displayName: string,
+  organization: string,
+): Promise<string | null> {
   const supabase = getSupabase();
   if (!supabase) return "Supabase não configurado.";
   const { error } = await supabase.from("profiles").upsert(
-    { id: userId, display_name: displayName.trim().slice(0, 80), updated_at: new Date().toISOString() },
+    {
+      id: userId,
+      display_name: displayName.trim().slice(0, 80),
+      organization_name: organization.trim().slice(0, 60),
+      updated_at: new Date().toISOString(),
+    },
     { onConflict: "id" },
   );
   return error?.message ?? null;

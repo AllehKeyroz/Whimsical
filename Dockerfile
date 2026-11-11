@@ -1,15 +1,15 @@
 # syntax=docker/dockerfile:1
 
 # ---------------------------------------------------------------------------
-# Whimsical Clone — production image
+# KDS FLUX — production image
 #
 # Build:
-#   docker build -t whimsical-clone \
+#   docker build -t kds-flux \
 #     --build-arg VITE_SUPABASE_URL=https://seu-projeto.supabase.co \
 #     --build-arg VITE_SUPABASE_ANON_KEY=sua-anon-key .
 #
 # Run:
-#   docker run -p 8080:80 whimsical-clone
+#   docker run -p 8080:80 kds-flux
 #
 # The two VITE_* values are compiled into the bundle at build time. They are
 # optional: without them the app runs fully local and the "Nuvem" panel asks

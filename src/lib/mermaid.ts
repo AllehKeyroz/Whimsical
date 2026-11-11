@@ -438,7 +438,7 @@ function nodeSize(shape: ShapeType, label: string): { w: number; h: number; line
   const fs = 18;
   const factor = textWidthFactorFor(shape);
   const w = MERMAID_WIDTHS[shape] ?? 192;
-  // Whimsical keeps the node width standard and wraps the copy inside it.
+  // Keep the node width standard and wrap the copy inside it.
   // As the wrapped text grows, only the height increases.
   const textArea = Math.max(24, (w - 20) * factor);
   const lines = wrapText(label || " ", textArea, fs);

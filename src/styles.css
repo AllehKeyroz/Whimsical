@@ -3821,3 +3821,18 @@ kbd {
   font-size: 10.5px;
   line-height: 1.6;
 }
+
+.cloud-org {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.cloud-org .cloud-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+.cloud-org .secondary-btn {
+  height: 36px;
+  flex: 0 0 auto;
+}

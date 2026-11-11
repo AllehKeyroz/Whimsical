@@ -1,6 +1,6 @@
 import type { Color, Deco } from "./types";
 
-// Whimsical's 15 board colors. Values extracted from the live color popover
+// The 15 board colors. Values extracted from the reference palette
 // (dark theme) and the serialized `gfx` payloads / OKLCH tokens (light theme).
 export interface ColorToken {
   name: Color;

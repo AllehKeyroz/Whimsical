@@ -10,7 +10,7 @@ export interface Rect {
   h: number;
 }
 
-// Whimsical's 15 board colors (light theme values).
+// The 15 board colors (light theme values).
 export type Color =
   | "white"
   | "smoke"
@@ -28,7 +28,7 @@ export type Color =
   | "orange"
   | "yellow";
 
-// Whimsical style options: Fill, Outline, Dash, Transparent.
+// Shape style options: Fill, Outline, Dash, Transparent.
 export type Deco = "fill" | "outline" | "dash" | "transparent";
 
 export interface Style {
@@ -145,7 +145,7 @@ export interface IconObject extends BaseObject {
 
 export type ConnectorType = "elbow" | "straight" | "curved";
 
-// Endpoint markers available in Whimsical's connector menu.
+// Endpoint markers available in the connector menu.
 export type EndpointMarker = "none" | "arrow" | "circle" | "diamond" | "fork";
 // UML-style cardinality notation, drawn next to the marker.
 export type Cardinality = "zero-or-one" | "one" | "zero-or-many" | "one-or-many" | null;
@@ -214,6 +214,8 @@ export interface Settings {
   snap: boolean;
   language: "pt" | "en";
   userName: string;
+  /** Organization/company/team shown in the workspace and sidebar. */
+  organization: string;
   lastBoardId: string | null;
   /** Optional websocket relay used for cross-device collaboration. */
   relayUrl: string;
@@ -229,6 +231,7 @@ export const DEFAULT_SETTINGS: Settings = {
   snap: true,
   language: "pt",
   userName: "Alessandro",
+  organization: "Minha organização",
   lastBoardId: null,
   relayUrl: "",
   folders: [],

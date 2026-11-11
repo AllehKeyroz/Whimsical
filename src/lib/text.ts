@@ -1,5 +1,5 @@
 // Approximate text measurement + word wrapping for SVG <text>/<tspan>.
-// Whimsical ships its own Unicode line-break implementation; we approximate
+// Unicode line-break rules; we approximate
 // with average glyph widths per character class, which is good enough for
 // board shapes and keeps rendering pure-SVG (exportable).
 

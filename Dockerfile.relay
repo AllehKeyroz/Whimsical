@@ -5,9 +5,9 @@
 # The app works without it; cloud sync uses Supabase instead.
 #
 # Build:
-#   docker build -f Dockerfile.relay -t whimsical-relay .
+#   docker build -f Dockerfile.relay -t kds-flux-relay .
 # Run:
-#   docker run -p 8787:8787 whimsical-relay
+#   docker run -p 8787:8787 kds-flux-relay
 # ---------------------------------------------------------------------------
 
 FROM node:22-alpine

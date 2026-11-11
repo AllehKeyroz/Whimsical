@@ -27,6 +27,7 @@ import { aabbOfRect, boundsOf, pointInRectRotated, rectCenter, snapAnchor, type 
 import { normalizeBoard, normalizeSettings } from "./lib/schema";
 import {
   deleteBoard as deleteBoardFromStore,
+  ensureStorageMigrated,
   getBoard,
   listBoards,
   loadSettings,
@@ -52,6 +53,7 @@ import {
   cloudListBoards,
   cloudListFolders,
   cloudReplaceFolders,
+  cloudGetProfile,
   cloudSignIn,
   cloudSignOut,
   cloudSignUp,
@@ -168,7 +170,7 @@ export interface BoardState {
 
   initCloud: () => Promise<void>;
   signInCloud: (email: string, password: string) => Promise<string | null>;
-  signUpCloud: (email: string, password: string, name: string) => Promise<string | null>;
+  signUpCloud: (email: string, password: string, name: string, organization: string) => Promise<string | null>;
   signOutCloud: () => Promise<void>;
   syncCloud: () => Promise<void>;
   pushLocalToCloud: () => Promise<void>;
@@ -280,7 +282,7 @@ let cloudAuthUnsub: (() => void) | null = null;
 let cloudSyncingPromise: Promise<void> | null = null;
 let cloudSaveTimer: number | undefined;
 
-export const INTERNAL_CLIPBOARD_PREFIX = "Whimsical — ";
+export const INTERNAL_CLIPBOARD_PREFIX = "KDS FLUX — ";
 
 export function hasClipboard(): boolean {
   return clipboard.length > 0;
@@ -440,7 +442,7 @@ function slugTitle(title: string) {
 
 const empty: Board = createBoard("Board sem título", "blank");
 
-const SCOPED_STORAGE_KEY = "whim.storage.scoped";
+const SCOPED_STORAGE_KEY = "kdsflux.storage.scoped";
 
 export const useStore = create<BoardState>((set, get) => {
   /**
@@ -451,7 +453,12 @@ export const useStore = create<BoardState>((set, get) => {
    * the anonymous scope. The one-time flag prevents a second account from
    * inheriting them.
    */
-  const activateCloudUser = async (user: { id: string; email: string | null; name: string }) => {
+  const activateCloudUser = async (user: {
+    id: string;
+    email: string | null;
+    name: string;
+    organization?: string | null;
+  }) => {
     const previousBoards = await listBoards();
     const previousSettings = await loadSettings();
     let adoptLegacy = false;
@@ -474,7 +481,22 @@ export const useStore = create<BoardState>((set, get) => {
       }
     }
 
-    const settings = await loadSettings();
+    let settings = await loadSettings();
+    let organization = user.organization?.trim() || settings.organization;
+    let userName = settings.userName;
+    const remoteProfile = await cloudGetProfile(user.id);
+    if (!remoteProfile.error && remoteProfile.profile) {
+      organization = remoteProfile.profile.organization_name?.trim() || organization;
+      const profileName = remoteProfile.profile.display_name?.trim();
+      if (profileName) userName = profileName.slice(0, 40);
+    } else if (user.name) {
+      userName = user.name.slice(0, 40);
+    }
+    if (organization !== settings.organization || userName !== settings.userName) {
+      settings = { ...settings, organization, userName };
+      await saveSettings(settings);
+    }
+
     const hash = parseHash();
     const current =
       (hash.boardId ? boards.find((b) => b.id === hash.boardId) : null) ??
@@ -571,6 +593,7 @@ export const useStore = create<BoardState>((set, get) => {
       snap: true,
       language: "pt",
       userName: "Alessandro",
+      organization: "Minha organização",
       lastBoardId: null,
       relayUrl: "",
       folders: [],
@@ -622,6 +645,7 @@ export const useStore = create<BoardState>((set, get) => {
       if (get().ready) return Promise.resolve();
       if (initPromise) return initPromise;
       initPromise = (async () => {
+        await ensureStorageMigrated();
         const settings = await loadSettings();
         const migrated = await migrateLegacyBoard();
         let boards = await listBoards();
@@ -772,7 +796,12 @@ export const useStore = create<BoardState>((set, get) => {
             cloudAuthUnsub = onCloudAuthChange((user) => {
               if (user) {
                 const name = user.user_metadata?.display_name || user.email?.split("@")[0] || "Usuário";
-                const signed = { id: user.id, email: user.email ?? null, name: String(name) };
+                const signed = {
+  id: user.id,
+  email: user.email ?? null,
+  name: String(name),
+  organization: (user.user_metadata?.organization_name as string | undefined) ?? null,
+};
                 const already = get().cloud.user?.id === user.id;
                 set({
                   cloud: {
@@ -804,7 +833,12 @@ export const useStore = create<BoardState>((set, get) => {
             return;
           }
           const name = user.user_metadata?.display_name || user.email?.split("@")[0] || "Usuário";
-          const signed = { id: user.id, email: user.email ?? null, name: String(name) };
+          const signed = {
+  id: user.id,
+  email: user.email ?? null,
+  name: String(name),
+  organization: (user.user_metadata?.organization_name as string | undefined) ?? null,
+};
           set({
             cloud: {
               ...get().cloud,
@@ -831,7 +865,12 @@ export const useStore = create<BoardState>((set, get) => {
         return message;
       }
       const name = user.user_metadata?.display_name || user.email?.split("@")[0] || "Usuário";
-      const signed = { id: user.id, email: user.email ?? null, name: String(name) };
+      const signed = {
+  id: user.id,
+  email: user.email ?? null,
+  name: String(name),
+  organization: (user.user_metadata?.organization_name as string | undefined) ?? null,
+};
       set({
         cloud: {
           ...get().cloud,
@@ -843,14 +882,14 @@ export const useStore = create<BoardState>((set, get) => {
       });
       await activateCloudUser(signed);
       get().showToast("Conectado ao Supabase.");
-      void cloudUpdateProfile(user.id, String(name));
+      void cloudUpdateProfile(user.id, String(name), get().settings.organization);
       await get().syncCloud();
       return null;
     },
 
-    signUpCloud: async (email, password, name) => {
+    signUpCloud: async (email, password, name, organization) => {
       set({ cloud: { ...get().cloud, status: "connecting", error: null } });
-      const result = await cloudSignUp(email, password, name);
+      const result = await cloudSignUp(email, password, name, organization);
       if (result.error) {
         const message = cloudErrorMessage(result.error);
         set({ cloud: { ...get().cloud, status: "error", error: message } });
@@ -863,7 +902,13 @@ export const useStore = create<BoardState>((set, get) => {
       }
       if (result.user) {
         const display = name.trim() || result.user.email?.split("@")[0] || "Usuário";
-        const signed = { id: result.user.id, email: result.user.email ?? null, name: display };
+        const org = organization.trim() || display;
+        const signed = {
+          id: result.user.id,
+          email: result.user.email ?? null,
+          name: display,
+          organization: org,
+        };
         set({
           cloud: {
             ...get().cloud,
@@ -874,7 +919,7 @@ export const useStore = create<BoardState>((set, get) => {
           authOpen: false,
         });
         await activateCloudUser(signed);
-        void cloudUpdateProfile(result.user.id, display);
+        void cloudUpdateProfile(result.user.id, display, org);
         await get().syncCloud();
       }
       return null;
@@ -2263,6 +2308,11 @@ export const useStore = create<BoardState>((set, get) => {
         void cloudReplaceFolders(settings.folders, cloudUser.id).then((err) => {
           if (err) set({ cloud: { ...get().cloud, status: "error", error: cloudErrorMessage(err) } });
           else set({ cloud: { ...get().cloud, status: "online", error: null, lastSync: Date.now() } });
+        });
+      }
+      if (patch.organization !== undefined && cloudUser) {
+        void cloudUpdateProfile(cloudUser.id, settings.userName, settings.organization).then((err) => {
+          if (err) set({ cloud: { ...get().cloud, status: "error", error: cloudErrorMessage(err) } });
         });
       }
     },

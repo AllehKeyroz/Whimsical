@@ -9,9 +9,7 @@ import { thumbnailColor } from "../lib/export";
 import { Icon, type IconName } from "./icons";
 import { Modal } from "./Modals";
 
-const WORKSPACE = "KDS BRASIL";
-const TEAM = "Everyone at KDS BRASIL";
-const STAR_KEY = "whim.star.workspace";
+const STAR_KEY = "kdsflux.star.workspace";
 
 function when(ts: number): string {
   const d = new Date(ts);
@@ -301,6 +299,8 @@ function pickTemplate(prompt: string): TemplateId {
 export function Dashboard() {
   const boards = useStore((s) => s.boards);
   const settings = useStore((s) => s.settings);
+  const organization = settings.organization || "Minha organização";
+  const team = `Equipe ${organization}`;
   const openBoard = useStore((s) => s.openBoard);
   const createNewBoard = useStore((s) => s.createNewBoard);
   const duplicateBoard = useStore((s) => s.duplicateBoard);
@@ -394,7 +394,7 @@ export function Dashboard() {
 
   const folderNameActive = folders.find((f) => f.id === filter)?.name;
   const currentLabel =
-    filter === "recent" ? "Recentes" : filter === "private" ? "Meus boards" : folderNameActive ?? TEAM;
+    filter === "recent" ? "Recentes" : filter === "private" ? "Meus boards" : folderNameActive ?? team;
   const targetFolder = filter !== "all" && filter !== "recent" && filter !== "private" ? filter : null;
   const newBoard = (template: TemplateId = "blank") => void createNewBoard(template, undefined, targetFolder);
 
@@ -449,7 +449,7 @@ export function Dashboard() {
             <span>Teams</span>
           </button>
           <span className="ws-crumb-sep">/</span>
-          <button className="ws-crumb-current" onClick={() => updateSettings({ workspaceFilter: "all" })} title={WORKSPACE}>
+          <button className="ws-crumb-current" onClick={() => updateSettings({ workspaceFilter: "all" })} title={organization}>
             <Icon name="folder" size={16} />
             <span>{currentLabel}</span>
             <Icon name="chevronDown" size={13} />
@@ -497,7 +497,7 @@ export function Dashboard() {
                   <span className="ws-avatar big">{(settings.userName || "A").trim().charAt(0).toUpperCase()}</span>
                   <div>
                     <b>{settings.userName}</b>
-                    <small>{WORKSPACE}</small>
+                    <small>{organization}</small>
                   </div>
                 </div>
                 <button onClick={() => { setAvatarOpen(false); setAuthOpen(true); }}>

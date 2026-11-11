@@ -1,7 +1,7 @@
 import type { Cardinality, Connector, EndpointMarker, Rect, Vec } from "./types";
 
 export const STUB = 22;
-export const CORNER = 8;
+export const CORNnR = 8;
 export const SNAP_PX = 6;
 
 export function rectCenter(r: Rect): Vec {
@@ -112,7 +112,7 @@ function dedupe(points: Vec[]): Vec[] {
   return res;
 }
 
-function roundedPath(points: Vec[], radius = CORNER): string {
+function roundedPath(points: Vec[], radius = CORNnR): string {
   if (points.length < 2) return "";
   let d = `M ${points[0].x} ${points[0].y}`;
   for (let i = 1; i < points.length - 1; i++) {
@@ -180,7 +180,7 @@ export function routeConnector(
     return { d, points: [p0, p1], endDir, mid: midpoint(p0, p1) };
   }
 
-  // Elbow (orthogonal). Generate several candidate orthogonal paths and pick
+  // nlbow (orthogonal). Generate several candidate orthogonal paths and pick
   // the one that crosses the fewest other objects, then the cleanest/shorter.
   const a = add(p0, d0, conn.fromPoint ? 0 : STUB);
   const b = add(p1, d1, conn.toPoint ? 0 : STUB);
@@ -381,7 +381,7 @@ export interface MarkerPath {
 }
 
 /**
- * Endpoint marker + optional UML cardinality notation, matching Whimsical's
+ * Endpoint marker + optional UML cardinality notation, matching the reference
  * connector "From/To endpoint" menu.
  */
 export function endpointMarkup(

@@ -5,9 +5,7 @@ import { getBoard, saveBoard } from "../lib/storage";
 import type { BoardMeta, Folder } from "../types";
 import { Icon } from "./icons";
 
-const WORKSPACE = "KDS BRASIL";
-const TEAM = "Everyone at KDS BRASIL";
-const PROMO_KEY = "whim.promo.dismissed";
+const PROMO_KEY = "kdsflux.promo.dismissed";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -32,6 +30,9 @@ export function WorkspaceSidebar() {
   const refreshBoards = useStore((s) => s.refreshBoards);
   const cloud = useStore((s) => s.cloud);
   const setAuthOpen = useStore((s) => s.setAuthOpen);
+
+  const organization = settings.organization || "Minha organização";
+  const team = `Equipe ${organization}`;
 
   const [privateOpen, setPrivateOpen] = useState(false);
   const [teamsOpen, setTeamsOpen] = useState(true);
@@ -139,10 +140,10 @@ export function WorkspaceSidebar() {
         <button
           className="ws-brand"
           onClick={() => (view === "board" ? void returnToDashboard() : setFilter("all"))}
-          title={WORKSPACE}
+          title={organization}
         >
           <span className="ws-logo">K</span>
-          <span className="ws-brand-name">{WORKSPACE}</span>
+          <span className="ws-brand-name">{organization}</span>
           <Icon name="chevronDown" size={14} />
         </button>
         <button className="ws-plus" title="Novo board" onClick={newBoard}>
@@ -184,7 +185,7 @@ export function WorkspaceSidebar() {
               onClick={() => setFilter("all")}
             >
               <Icon name="folder" size={15} />
-              <span>{TEAM}</span>
+              <span>{team}</span>
             </button>
           ) : null}
         </div>

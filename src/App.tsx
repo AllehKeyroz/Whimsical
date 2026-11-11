@@ -46,7 +46,7 @@ function AppInner() {
   }, [settings.theme]);
 
   useEffect(() => {
-    document.title = view === "board" ? `${board.title} · Whimsical` : "Whimsical · Seus boards";
+    document.title = view === "board" ? `${board.title} · KDS FLUX` : "KDS FLUX · Seus boards";
   }, [board.title, view]);
 
   useEffect(() => {

@@ -545,7 +545,7 @@ export function LoadingScreen() {
   return (
     <div className="loading-screen">
       <span className="logo-mark big">◈</span>
-      <h1>Whimsical</h1>
+      <h1>KDS FLUX</h1>
       <p>Carregando seus boards…</p>
     </div>
   );

@@ -356,7 +356,7 @@ function doc(title: string): Board {
 }
 
 export function welcomeBoard(): Board {
-  const b = createBoard("Bem-vindo ao Whimsical", "flowchart");
+  const b = createBoard("Bem-vindo ao KDS FLUX", "flowchart");
   const note = label(
     "Duplo clique edita o texto · Botão direito abre as opções · ? mostra os atalhos",
     { x: 0, y: 700, w: 520, h: 48 },

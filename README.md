@@ -1,8 +1,8 @@
-# Whimsical Clone
+# KDS FLUX
 
-Um clone funcional do Whimsical para **boards, fluxogramas, mapas mentais e diagramas**, feito com React + TypeScript + SVG puro. Roda 100% no navegador, salva em IndexedDB, exporta SVG/PNG/PDF e tem colaboração em tempo real por sala.
+Plataforma de **boards, fluxogramas, mapas mentais e diagramas** da KDS, feita com React + TypeScript + SVG puro. Roda no navegador, salva em IndexedDB com sincronização no Supabase, exporta SVG/PNG/PDF e tem colaboração em tempo real por sala.
 
-> Projeto educacional independente. Não afiliado ao Whimsical.
+Cada conta tem sua própria **organização/empresa/equipe**, exibida no workspace e personalizável no painel Nuvem.
 
 ## Stack
 
@@ -19,7 +19,7 @@ Um clone funcional do Whimsical para **boards, fluxogramas, mapas mentais e diag
 ## Funcionalidades
 
 ### Workspace, sidebar e explorador de arquivos
-- Homepage no estilo Whimsical: sidebar de workspace, breadcrumb, cards de ação, estado vazio com atalhos, promo de instalação e botões flutuantes.
+- Homepage estilo workspace: sidebar, breadcrumb, cards de ação, estado vazio com atalhos, promo de instalação e botões flutuantes.
 - **Sidebar persistente** no dashboard e no board, com Recentes, Privado, Equipes, pastas e árvore de boards (explorador de arquivos).
 - Pastas com criação, remoção e movimentação de boards entre pastas.
 - Board view com **barra de ferramentas vertical flutuante** e barra inferior de undo/redo, layout, zoom e ajuda.
@@ -62,7 +62,7 @@ Um clone funcional do Whimsical para **boards, fluxogramas, mapas mentais e diag
 - Dashboard com busca, thumbnails gerados em SVG, renomear, duplicar e excluir.
 - Templates: fluxograma, organograma, mapa mental, kanban, retrospectiva, SWOT, wireframe e documento.
 - Board de exemplo “Dayan Siebra” (funil real com 174 objetos).
-- Salvamento automático em IndexedDB com migração do formato antigo (`whim.board.v1`).
+- Salvamento automático em IndexedDB com migração de formatos antigos.
 
 ### Exportação
 - JSON (board completo).
@@ -197,10 +197,11 @@ Status, erros e última sincronização aparecem no painel **Nuvem** e no botão
 ## Autenticação e isolamento
 
 - **Login obrigatório quando o Supabase está configurado:** o app abre numa tela de login e só libera o workspace depois de autenticar. Isso vale também em `localhost`.
-- **Auth:** Supabase Auth (e-mail + senha), sessão persistida no navegador (`whim.supabase.auth`).
+- **Auth:** Supabase Auth (e-mail + senha), sessão persistida no navegador (`kdsflux.supabase.auth`).
 - **Nuvem:** cada linha de `boards`/`folders` tem `owner_id`; as políticas RLS só deixam o dono ler/escrever. Dois usuários logados não veem os boards um do outro.
-- **Cache local por usuário:** IndexedDB e `localStorage` são namespaced (`whimsical-clone:<userId>`). Ao sair, o app volta ao escopo anônimo e mostra a tela de login — nada do usuário anterior fica visível.
-- **Migração única:** no primeiro login, boards criados antes desse recurso (escopo anônimo) são copiados para a conta e enviados ao Supabase. A flag `whim.storage.scoped` impede que uma segunda conta herde esses boards.
+- **Cache local por usuário:** IndexedDB e `localStorage` são namespaced (`kds-flux:<userId>`). Ao sair, o app volta ao escopo anônimo e mostra a tela de login — nada do usuário anterior fica visível.
+- **Organização por conta:** cada usuário tem `organization_name` no profile e vê esse nome no workspace/sidebar. Novos cadastros informam a organização; ela pode ser alterada depois no painel **Nuvem**.
+- **Migração única:** no primeiro login, boards criados antes desse recurso (escopo anônimo) são copiados para a conta e enviados ao Supabase. A flag `kdsflux.storage.scoped` impede que uma segunda conta herde esses boards.
 - **Sem credenciais:** se `VITE_SUPABASE_*` não estiver definido, o app continua funcionando localmente (sem login) e mostra “Supabase não configurado” no painel Nuvem.
 - **Painel de admin:** criar/gerenciar usuários em Supabase Studio → Authentication → Users.
 

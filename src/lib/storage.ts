@@ -1,14 +1,21 @@
 import type { Board, Settings } from "../types";
 import { normalizeBoard, normalizeSettings } from "./schema";
 
-const DB_NAME = "whimsical-clone";
+const DB_NAME = "kds-flux";
 const DB_VERSION = 1;
 const STORE_BOARDS = "boards";
 const STORE_SETTINGS = "settings";
 
-const LS_BOARDS = "whim.boards.v2";
-const LS_SETTINGS = "whim.settings.v2";
-const LS_LEGACY_BOARD = "whim.board.v1";
+const LS_BOARDS = "kdsflux.boards.v1";
+const LS_SETTINGS = "kdsflux.settings.v1";
+const LS_LEGACY_BOARD = "kdsflux.board.v1";
+
+// Pre-rebrand names. Only used to migrate data from earlier installs.
+const LEGACY_DB_NAME = "whimsical-clone";
+const LEGACY_LS_BOARDS = "whim.boards.v2";
+const LEGACY_LS_SETTINGS = "whim.settings.v2";
+const LEGACY_LS_BOARD = "whim.board.v1";
+const MIGRATION_FLAG = "kdsflux.storage.migrated";
 
 /**
  * Boards/settings are stored per signed-in account, so two people using the
@@ -57,6 +64,105 @@ function openDB(): Promise<IDBDatabase | null> {
     }
   });
   return dbPromise;
+}
+
+function readLegacyDatabase(): Promise<{ boards: unknown[]; settings: unknown } | null> {
+  return new Promise((resolve) => {
+    if (typeof indexedDB === "undefined") return resolve(null);
+    const factory = indexedDB as IDBFactory & { databases?: () => Promise<{ name?: string }[]> };
+    const openLegacy = () => {
+      let req: IDBOpenDBRequest;
+      try {
+        req = indexedDB.open(LEGACY_DB_NAME);
+      } catch {
+        return resolve(null);
+      }
+      req.onupgradeneeded = () => {
+        /* No stores are created here; a missing legacy DB is simply ignored. */
+      };
+      req.onsuccess = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(STORE_BOARDS)) {
+          db.close();
+          resolve(null);
+          return;
+        }
+        try {
+          const hasSettings = db.objectStoreNames.contains(STORE_SETTINGS);
+          const tx = db.transaction(hasSettings ? [STORE_BOARDS, STORE_SETTINGS] : STORE_BOARDS, "readonly");
+          const boardsReq = tx.objectStore(STORE_BOARDS).getAll();
+          const settingsReq = hasSettings ? tx.objectStore(STORE_SETTINGS).get("settings") : null;
+          tx.oncomplete = () => {
+            db.close();
+            resolve({ boards: boardsReq.result ?? [], settings: settingsReq?.result ?? null });
+          };
+          tx.onerror = () => {
+            db.close();
+            resolve(null);
+          };
+        } catch {
+          db.close();
+          resolve(null);
+        }
+      };
+      req.onerror = () => resolve(null);
+      req.onblocked = () => resolve(null);
+    };
+    if (factory.databases) {
+      factory
+        .databases()
+        .then((dbs) => (dbs.some((d) => d.name === LEGACY_DB_NAME) ? openLegacy() : resolve(null)))
+        .catch(() => openLegacy());
+    } else {
+      openLegacy();
+    }
+  });
+}
+
+/**
+ * One-time move from the pre-rebrand database/keys to the KDS FLUX ones.
+ * Runs only in the anonymous scope, before the first read/write.
+ */
+export async function ensureStorageMigrated(): Promise<void> {
+  try {
+    if (localStorage.getItem(MIGRATION_FLAG) === "1") return;
+  } catch {
+    return;
+  }
+
+  try {
+    const oldBoards = localStorage.getItem(LEGACY_LS_BOARDS);
+    if (oldBoards && !localStorage.getItem(lsKey(LS_BOARDS))) {
+      localStorage.setItem(lsKey(LS_BOARDS), oldBoards);
+    }
+    const oldSettings = localStorage.getItem(LEGACY_LS_SETTINGS);
+    if (oldSettings && !localStorage.getItem(lsKey(LS_SETTINGS))) {
+      localStorage.setItem(lsKey(LS_SETTINGS), oldSettings);
+    }
+    const oldBoard = localStorage.getItem(LEGACY_LS_BOARD);
+    if (oldBoard && !localStorage.getItem(lsKey(LS_LEGACY_BOARD))) {
+      localStorage.setItem(lsKey(LS_LEGACY_BOARD), oldBoard);
+    }
+  } catch {
+    /* ignore */
+  }
+
+  const legacy = await readLegacyDatabase();
+  if (legacy) {
+    for (const raw of legacy.boards) {
+      const board = normalizeBoard(raw);
+      if (board) await saveBoard(board);
+    }
+    if (legacy.settings) {
+      await saveSettings(normalizeSettings(legacy.settings));
+    }
+  }
+
+  try {
+    localStorage.setItem(MIGRATION_FLAG, "1");
+  } catch {
+    /* ignore */
+  }
 }
 
 function tx<T>(db: IDBDatabase, store: string, mode: IDBTransactionMode, fn: (s: IDBObjectStore) => IDBRequest<T>): Promise<T> {

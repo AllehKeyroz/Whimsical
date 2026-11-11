@@ -25,7 +25,7 @@ const server = createServer((req, res) => {
     return;
   }
   res.writeHead(200, { "content-type": "text/plain" });
-  res.end("Whimsical collaboration relay. Connect with a WebSocket client.\n");
+  res.end("KDS FLUX collaboration relay. Connect with a WebSocket client.\n");
 });
 
 const wss = new WebSocketServer({ server, maxPayload: MAX_PAYLOAD });
@@ -92,7 +92,7 @@ const interval = setInterval(() => {
 wss.on("close", () => clearInterval(interval));
 
 server.listen(PORT, () => {
-  console.log(`\n◈ Whimsical relay listening on ws://localhost:${PORT}`);
+  console.log(`\n◈ KDS FLUX relay listening on ws://localhost:${PORT}`);
   console.log(`  Health: http://localhost:${PORT}/health`);
   console.log(`  Put ws://localhost:${PORT} in the Share panel.\n`);
 });

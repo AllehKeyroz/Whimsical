@@ -344,6 +344,7 @@ export function normalizeSettings(input: unknown): Settings {
     snap: bool(input.snap, DEFAULT_SETTINGS.snap),
     language: input.language === "en" ? "en" : "pt",
     userName: str(input.userName, DEFAULT_SETTINGS.userName).slice(0, 40),
+    organization: str(input.organization, DEFAULT_SETTINGS.organization).slice(0, 60) || DEFAULT_SETTINGS.organization,
     lastBoardId: str(input.lastBoardId) || null,
     relayUrl: str(input.relayUrl),
     folders: normalizeFolders(input.folders),

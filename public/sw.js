@@ -1,4 +1,4 @@
-const CACHE = "whimsical-shell-v3";
+const CACHE = "kds-flux-shell-v1";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

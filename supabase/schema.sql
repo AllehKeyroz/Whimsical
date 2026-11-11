@@ -1,5 +1,5 @@
 -- ============================================================
--- Whimsical Clone — Supabase schema
+-- KDS FLUX — Supabase schema
 -- Run this in Supabase Studio → SQL Editor.
 -- Uses the public.boards / public.folders tables for cloud sync.
 -- ============================================================
@@ -12,9 +12,13 @@ create extension if not exists pgcrypto;
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   display_name text,
+  organization_name text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Existing installations: add the column created by the multi-organization update.
+alter table public.profiles add column if not exists organization_name text;
 
 -- ------------------------------------------------------------
 -- Folders
@@ -95,10 +99,11 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, display_name)
+  insert into public.profiles (id, display_name, organization_name)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data ->> 'display_name', split_part(coalesce(new.email, ''), '@', 1))
+    coalesce(new.raw_user_meta_data ->> 'display_name', split_part(coalesce(new.email, ''), '@', 1)),
+    nullif(trim(coalesce(new.raw_user_meta_data ->> 'organization_name', '')), '')
   )
   on conflict (id) do nothing;
   return new;

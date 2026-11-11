@@ -18,6 +18,7 @@ export function LoginGate() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [organization, setOrganization] = useState("");
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -36,7 +37,9 @@ export function LoginGate() {
   const submit = () =>
     run(async () => {
       const error =
-        mode === "signin" ? await signInCloud(email, password) : await signUpCloud(email, password, name);
+        mode === "signin"
+          ? await signInCloud(email, password)
+          : await signUpCloud(email, password, name, organization);
       if (error) setLocalError(error);
     });
 
@@ -50,7 +53,7 @@ export function LoginGate() {
             <Icon name="cloud" size={22} />
           </span>
           <div>
-            <h1>Entrar no Whimsical</h1>
+            <h1>Entrar no KDS FLUX</h1>
             <p>Seus boards ficam no Supabase e são separados por conta.</p>
           </div>
         </div>
@@ -65,15 +68,26 @@ export function LoginGate() {
         </div>
 
         {mode === "signup" ? (
-          <label className="cloud-field">
-            <span>Nome</span>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
-              autoComplete="name"
-            />
-          </label>
+          <>
+            <label className="cloud-field">
+              <span>Nome</span>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Seu nome"
+                autoComplete="name"
+              />
+            </label>
+            <label className="cloud-field">
+              <span>Organização / empresa</span>
+              <input
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                placeholder="Nome da sua empresa ou equipe"
+                maxLength={60}
+              />
+            </label>
+          </>
         ) : null}
 
         <label className="cloud-field">

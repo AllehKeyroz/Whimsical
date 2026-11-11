@@ -3,7 +3,7 @@ import { useStore } from "../store";
 import { download, exportBoardPng, exportBoardSvg, printBoard, slug } from "../lib/export";
 import { Icon } from "./icons";
 
-const STAR_KEY = "whim.star.board";
+const STAR_KEY = "kdsflux.star.board";
 
 export function Toolbar() {
   const board = useStore((s) => s.board);
@@ -49,11 +49,11 @@ export function Toolbar() {
   const filter = settings.workspaceFilter || "all";
   const folder = settings.folders.find((f) => f.id === filter);
   const workspaceLabel =
-    filter === "recent" ? "Recentes" : filter === "private" ? "Meus boards" : folder?.name ?? "Everyone at KDS BRASIL";
+    filter === "recent" ? "Recentes" : filter === "private" ? "Meus boards" : folder?.name ?? `Equipe ${settings.organization || "Minha organização"}`;
 
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(board, null, 2)], { type: "application/json" });
-    download(blob, `${slug(board.title)}.whim.json`);
+    download(blob, `${slug(board.title)}.kdsflux.json`);
     setMenu(null);
   };
 
