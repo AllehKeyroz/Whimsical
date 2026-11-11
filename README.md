@@ -235,6 +235,7 @@ Não existe mais formulário de credenciais no app: a configuração vem só do 
 - **Bolinha amarela / sem logs:** confira em **Fonte** se o build está em **Dockerfile** (não Nixpacks/Heroku) e em **Implantação** os logs de build. O container precisa subir o nginx na porta **80**.
 - **Healthcheck:** use `/healthz` (responde `ok`). O `Dockerfile` já declara esse healthcheck.
 - **“Supabase não configurado” no app:** as variáveis não chegaram ao container. Confira em **Ambiente**, salve e reinicie; o log deve mostrar `runtime-env: Supabase credentials injected from environment.`
+- **“Error sending confirmation email” ao criar conta:** o SMTP do Supabase é falso (`supabase-mail`). Habilite `ENABLE_EMAIL_AUTOCONFIRM=true` no `.env` do stack Supabase e reinicie o serviço `auth`, ou crie o usuário em **Authentication → Users** com “Auto Confirm User”. Para links reais, configure um SMTP de verdade.
 - **Domínio:** aponte o domínio para a porta 80 do serviço.
 
 ### Docker Compose (alternativa)

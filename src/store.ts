@@ -313,6 +313,11 @@ export function cloudErrorMessage(raw: string | null | undefined): string {
   const message = raw || "Falha ao sincronizar com o Supabase.";
   if (/Invalid login credentials/i.test(message)) return "E-mail ou senha inválidos.";
   if (/Email not confirmed/i.test(message)) return "Confirme seu e-mail antes de entrar.";
+  if (/Error sending confirmation email|Error sending recovery email/i.test(message)) {
+    return "O Supabase não consegue enviar e-mails. Habilite ENABLE_EMAIL_AUTOCONFIRM=true no Supabase (e reinicie o auth) ou crie o usuário em Authentication → Users.";
+  }
+  if (/User already registered/i.test(message)) return "Este e-mail já está cadastrado. Use a aba Entrar.";
+  if (/rate limit/i.test(message)) return "Muitas tentativas. Aguarde alguns minutos e tente de novo.";
   if (/Could not find the table|PGRST205/i.test(message)) {
     return "Tabelas da nuvem não encontradas. Execute supabase/schema.sql no Supabase.";
   }

@@ -203,3 +203,14 @@ describe("cloudErrorMessage", () => {
     expect(cloudErrorMessage(null)).toBe("Falha ao sincronizar com o Supabase.");
   });
 });
+
+describe("cloudErrorMessage — cadastro", () => {
+  it("explica falha de envio de e-mail de confirmação", () => {
+    expect(cloudErrorMessage("Error sending confirmation email")).toContain("ENABLE_EMAIL_AUTOCONFIRM");
+  });
+
+  it("traduz e-mail já cadastrado e rate limit", () => {
+    expect(cloudErrorMessage("User already registered")).toBe("Este e-mail já está cadastrado. Use a aba Entrar.");
+    expect(cloudErrorMessage("Email rate limit exceeded")).toContain("Aguarde alguns minutos");
+  });
+});
