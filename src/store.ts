@@ -49,6 +49,7 @@ import {
 } from "./lib/mermaid";
 import { mergeCloudState } from "./lib/cloudMerge";
 import {
+  cloudChangePassword,
   cloudDeleteBoard,
   cloudListBoards,
   cloudListFolders,
@@ -172,6 +173,7 @@ export interface BoardState {
   signInCloud: (email: string, password: string) => Promise<string | null>;
   signUpCloud: (email: string, password: string, name: string, organization: string) => Promise<string | null>;
   signOutCloud: () => Promise<void>;
+  changeCloudPassword: (password: string) => Promise<string | null>;
   syncCloud: () => Promise<void>;
   pushLocalToCloud: () => Promise<void>;
   startPresentation: () => void;
@@ -922,6 +924,13 @@ export const useStore = create<BoardState>((set, get) => {
         void cloudUpdateProfile(result.user.id, display, org);
         await get().syncCloud();
       }
+      return null;
+    },
+
+    changeCloudPassword: async (password) => {
+      const error = await cloudChangePassword(password);
+      if (error) return cloudErrorMessage(error);
+      get().showToast("Senha alterada.");
       return null;
     },
 

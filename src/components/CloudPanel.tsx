@@ -17,6 +17,7 @@ export function CloudPanel() {
   const signInCloud = useStore((s) => s.signInCloud);
   const signUpCloud = useStore((s) => s.signUpCloud);
   const signOutCloud = useStore((s) => s.signOutCloud);
+  const changeCloudPassword = useStore((s) => s.changeCloudPassword);
   const syncCloud = useStore((s) => s.syncCloud);
   const pushLocalToCloud = useStore((s) => s.pushLocalToCloud);
 
@@ -26,6 +27,7 @@ export function CloudPanel() {
   const [name, setName] = useState("");
   const [organization, setOrganization] = useState("");
   const [orgDraft, setOrgDraft] = useState(settings.organization);
+  const [newPassword, setNewPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -121,6 +123,31 @@ export function CloudPanel() {
               }}
             >
               <Icon name="check" size={15} /> Salvar
+            </button>
+          </div>
+          <div className="cloud-org">
+            <label className="cloud-field">
+              <span>Nova senha</span>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Mínimo 6 caracteres"
+                autoComplete="new-password"
+              />
+            </label>
+            <button
+              className="secondary-btn"
+              disabled={busy || newPassword.length < 6}
+              onClick={() =>
+                void run(async () => {
+                  const error = await changeCloudPassword(newPassword);
+                  if (error) setLocalError(error);
+                  else setNewPassword("");
+                })
+              }
+            >
+              Alterar
             </button>
           </div>
           <div className="inline-row cloud-actions">

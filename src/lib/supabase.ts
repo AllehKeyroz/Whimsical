@@ -150,6 +150,13 @@ export async function cloudSignOut(): Promise<string | null> {
   return error?.message ?? null;
 }
 
+export async function cloudChangePassword(password: string): Promise<string | null> {
+  const supabase = getSupabase();
+  if (!supabase) return "Supabase não configurado.";
+  const { error } = await supabase.auth.updateUser({ password });
+  return error?.message ?? null;
+}
+
 export async function cloudGetProfile(
   userId: string,
 ): Promise<{ profile: CloudProfile | null; error: string | null }> {
