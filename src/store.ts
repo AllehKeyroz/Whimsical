@@ -60,7 +60,6 @@ import {
   getCloudSession,
   isSupabaseConfigured,
   onCloudAuthChange,
-  setSupabaseRuntimeConfig,
 } from "./lib/supabase";
 
 export interface Camera {
@@ -168,7 +167,6 @@ export interface BoardState {
   toggleSidebar: () => void;
 
   initCloud: () => Promise<void>;
-  saveCloudConfig: (url: string, key: string) => Promise<void>;
   signInCloud: (email: string, password: string) => Promise<string | null>;
   signUpCloud: (email: string, password: string, name: string) => Promise<string | null>;
   signOutCloud: () => Promise<void>;
@@ -817,28 +815,6 @@ export const useStore = create<BoardState>((set, get) => {
         }
       })();
       return cloudInitPromise;
-    },
-
-    saveCloudConfig: async (url, key) => {
-      setSupabaseRuntimeConfig(url, key);
-      cloudAuthUnsub?.();
-      cloudAuthUnsub = null;
-      cloudInitPromise = null;
-      cloudSyncingPromise = null;
-      if (get().cloud.user) await deactivateCloudUser();
-      const configured = isSupabaseConfigured();
-      set({
-        cloud: {
-          configured,
-          initialized: false,
-          user: null,
-          status: configured ? "connecting" : "off",
-          error: null,
-          lastSync: null,
-          syncing: false,
-        },
-      });
-      if (configured) await get().initCloud();
     },
 
     signInCloud: async (email, password) => {

@@ -38,6 +38,8 @@ FROM nginx:1.27-alpine AS runtime
 
 COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 COPY deploy/security-headers.conf /etc/nginx/security-headers.conf
+COPY deploy/40-runtime-env.sh /docker-entrypoint.d/40-runtime-env.sh
+RUN chmod +x /docker-entrypoint.d/40-runtime-env.sh
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80

@@ -18,6 +18,8 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET" || !req.url.startsWith(self.location.origin)) return;
+  // Runtime config is generated per container; never serve it from cache.
+  if (new URL(req.url).pathname === "/env.js") return;
   if (req.mode === "navigate") {
     event.respondWith(
       fetch(req)

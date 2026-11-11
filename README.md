@@ -165,7 +165,7 @@ VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua-anon-ou-publishable-key
 ```
 
-Ou use a tela de login para colar URL + anon key em runtime (fica salvo só no navegador).
+As credenciais vêm exclusivamente do ambiente (`VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`). Não há formulário de credenciais no app.
 
 > Use **somente** a anon/publishable key no cliente. Nunca coloque a `service_role` key no frontend.
 
@@ -201,7 +201,7 @@ Status, erros e última sincronização aparecem no painel **Nuvem** e no botão
 - **Nuvem:** cada linha de `boards`/`folders` tem `owner_id`; as políticas RLS só deixam o dono ler/escrever. Dois usuários logados não veem os boards um do outro.
 - **Cache local por usuário:** IndexedDB e `localStorage` são namespaced (`whimsical-clone:<userId>`). Ao sair, o app volta ao escopo anônimo e mostra a tela de login — nada do usuário anterior fica visível.
 - **Migração única:** no primeiro login, boards criados antes desse recurso (escopo anônimo) são copiados para a conta e enviados ao Supabase. A flag `whim.storage.scoped` impede que uma segunda conta herde esses boards.
-- **Sem credenciais:** se `VITE_SUPABASE_*` não estiver configurado, o app continua funcionando localmente e permite configurar URL/anon key na tela de login.
+- **Sem credenciais:** se `VITE_SUPABASE_*` não estiver definido, o app continua funcionando localmente (sem login) e mostra “Supabase não configurado” no painel Nuvem.
 - **Painel de admin:** criar/gerenciar usuários em Supabase Studio → Authentication → Users.
 
 ## Deploy no Easypanel
@@ -212,27 +212,29 @@ O repositório traz `Dockerfile` (app estático em nginx) e `Dockerfile.relay` (
 
 1. Easypanel → **Create App** → Source: seu repositório Git.
 2. Build: **Dockerfile**, caminho `Dockerfile`, porta **80**, healthcheck `/healthz`.
-3. Em **Build Args** (opcional), informe:
+3. Em **Ambiente** (Environment), informe:
    - `VITE_SUPABASE_URL=https://seu-projeto.supabase.co`
    - `VITE_SUPABASE_ANON_KEY=sua-anon-key`
 4. Aponte o domínio e faça o deploy.
 
-Sem os build args o app sobe normal e pede as credenciais na tela de login (salvas só no navegador). Elas são embutidas no bundle no momento do build, então trocar de projeto Supabase exige **rebuild** — ou usar o formulário de credenciais da tela de login. Nunca use a `service_role` key aqui.
+Não existe mais formulário de credenciais no app: a configuração vem só do ambiente. O container gera `/env.js` no start a partir dessas variáveis, então **mudar credenciais exige apenas reiniciar/reimplantar o serviço**, sem rebuild. Também é possível passá-las como Build Args (ficam embutidas no bundle). Nunca use a `service_role` key aqui.
 
 ### Relay de colaboração (opcional)
 
 1. Crie outro App, mesmo repositório, Dockerfile `Dockerfile.relay`, porta **8787**, healthcheck `/health`.
 2. No board, abra **Compartilhar** e use `wss://relay.seudominio.com` como Relay WebSocket.
 
-### Variáveis: Build Args × Environment
+### Variáveis de ambiente
 
-O app é estático (Vite), então `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` precisam estar em **Build Args** e o serviço deve ser **reimplantado**. Variáveis em **Ambiente/Environment** são de runtime e não entram no bundle já compilado. Se preferir não reconstruir, use o formulário **Credenciais** da tela de login (fica salvo no navegador).
+- **Runtime (recomendado):** variáveis em **Ambiente/Environment** do Easypanel. O entrypoint do container escreve `env.js` com URL e anon key; o app lê isso antes de iniciar. Trocar valores = reiniciar o serviço.
+- **Build Args:** `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` embutidas no bundle pelo Vite. Exigem rebuild para mudar.
+- A credencial de runtime tem prioridade sobre a de build.
 
 ### Troubleshooting
 
 - **Bolinha amarela / sem logs:** confira em **Fonte** se o build está em **Dockerfile** (não Nixpacks/Heroku) e em **Implantação** os logs de build. O container precisa subir o nginx na porta **80**.
 - **Healthcheck:** use `/healthz` (responde `ok`). O `Dockerfile` já declara esse healthcheck.
-- **Tela de login pedindo credenciais:** os Build Args não foram aplicados no build; preencha na tela ou reimplante com os args corretos.
+- **“Supabase não configurado” no app:** as variáveis não chegaram ao container. Confira em **Ambiente**, salve e reinicie; o log deve mostrar `runtime-env: Supabase credentials injected from environment.`
 - **Domínio:** aponte o domínio para a porta 80 do serviço.
 
 ### Docker Compose (alternativa)
