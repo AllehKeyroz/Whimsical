@@ -188,7 +188,6 @@ export function Canvas() {
   const addConnector = useStore((s) => s.addConnector);
   const quickAdd = useStore((s) => s.quickAdd);
   const addMindChild = useStore((s) => s.addMindChild);
-  const addMindSibling = useStore((s) => s.addMindSibling);
   const createConnectedNode = useStore((s) => s.createConnectedNode);
   const setRects = useStore((s) => s.setRects);
   const pushHistory = useStore((s) => s.pushHistory);
@@ -1149,7 +1148,7 @@ export function Canvas() {
                 transform={`rotate(${o.rotation ?? 0} ${c.x} ${c.y})`}
                 style={{ cursor: o.locked ? "default" : tool === "connect" ? "crosshair" : "move" }}
               >
-                <FrameView frame={o} selected={selection.includes(o.id)} />
+                <FrameView frame={o} selected={selection.includes(o.id) && editingId !== o.id} />
               </g>
             );
           })}
@@ -1162,10 +1161,10 @@ export function Canvas() {
                 transform={`rotate(${o.rotation ?? 0} ${c.x} ${c.y})`}
                 style={{ cursor: o.locked ? "default" : tool === "connect" ? "crosshair" : "move" }}
               >
-                {isShape(o) ? <ShapeNode shape={o} selected={selection.includes(o.id)} /> : null}
-                {isText(o) ? <TextView text={o} selected={selection.includes(o.id)} /> : null}
-                {isImage(o) ? <ImageNode image={o} selected={selection.includes(o.id)} /> : null}
-                {isIcon(o) ? <IconNode icon={o} selected={selection.includes(o.id)} /> : null}
+                {isShape(o) ? <ShapeNode shape={o} selected={selection.includes(o.id) && editingId !== o.id} /> : null}
+                {isText(o) ? <TextView text={o} selected={selection.includes(o.id) && editingId !== o.id} /> : null}
+                {isImage(o) ? <ImageNode image={o} selected={selection.includes(o.id) && editingId !== o.id} /> : null}
+                {isIcon(o) ? <IconNode icon={o} selected={selection.includes(o.id) && editingId !== o.id} /> : null}
               </g>
             );
           })}
@@ -1177,7 +1176,7 @@ export function Canvas() {
                 key={c.id}
                 connector={c}
                 route={route}
-                selected={selection.includes(c.id)}
+                selected={selection.includes(c.id) && editingId !== c.id}
               />
             );
           })}
@@ -1240,7 +1239,7 @@ export function Canvas() {
               );
             })()
           ) : null}
-          {selBounds && selection.length > 1 ? (
+          {selBounds && selection.length > 1 && !editingId ? (
             <rect
               data-export-ignore="true"
               x={selBounds.x - 6}
@@ -1329,7 +1328,7 @@ export function Canvas() {
         </g>
       </svg>
 
-      {selBounds && !presentation ? (
+      {selBounds && !presentation && !editingId && !board.mindMap ? (
         <ResizeHandles
           bounds={selBounds}
           toScreen={toScreen}
@@ -1339,56 +1338,61 @@ export function Canvas() {
         />
       ) : null}
 
-      {singleRect && !singleRect.locked && !presentation ? (
-        <>
-          <LinkHandle
-            rect={singleRect as Shape | Frame | TextObject | ImageObject | IconObject}
-            toScreen={toScreen}
-            onStart={startLink}
-            onMove={onPointerMove}
-            onUp={onPointerUp}
-          />
+      {singleRect && !singleRect.locked && !singleRect.hidden && !presentation && !editingId ? (
+        board.mindMap ? (
           <button
-            className="quick-add"
-            title="Adicionar forma à direita"
+            className="mind-add"
+            title="Criar novo ramo"
             style={(() => {
               const r = aabbOfRect(singleRect.rect, singleRect.rotation ?? 0);
-              const p = toScreen({ x: r.x + r.w + 18, y: r.y + r.h / 2 });
-              return { left: p.x - 13, top: p.y - 13 };
+              const p = toScreen({ x: r.x + r.w / 2 + 26, y: r.y + r.h + 14 });
+              return { left: p.x - 11, top: p.y - 11 };
             })()}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => {
-              if (board.mindMap) {
-                const id = addMindChild(singleRect.id);
-                if (id) setEditing(id);
-              } else {
-                quickAdd(singleRect.id, "right");
-              }
+              const id = addMindChild(singleRect.id);
+              if (id) setEditing(id);
             }}
           >
-            <Icon name="plus" size={15} />
+            <Icon name="branch" size={14} />
           </button>
-          <button
-            className="quick-add bottom"
-            title="Adicionar forma abaixo"
-            style={(() => {
-              const r = aabbOfRect(singleRect.rect, singleRect.rotation ?? 0);
-              const p = toScreen({ x: r.x + r.w / 2, y: r.y + r.h + 2 });
-              return { left: p.x - 13, top: p.y - 13 };
-            })()}
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => {
-              if (board.mindMap) {
-                const id = addMindSibling(singleRect.id);
-                if (id) setEditing(id);
-              } else {
-                quickAdd(singleRect.id, "down");
-              }
-            }}
-          >
-            <Icon name="plus" size={15} />
-          </button>
-        </>
+        ) : (
+          <>
+            <LinkHandle
+              rect={singleRect as Shape | Frame | TextObject | ImageObject | IconObject}
+              toScreen={toScreen}
+              onStart={startLink}
+              onMove={onPointerMove}
+              onUp={onPointerUp}
+            />
+            <button
+              className="quick-add"
+              title="Adicionar forma à direita"
+              style={(() => {
+                const r = aabbOfRect(singleRect.rect, singleRect.rotation ?? 0);
+                const p = toScreen({ x: r.x + r.w + 18, y: r.y + r.h / 2 });
+                return { left: p.x - 13, top: p.y - 13 };
+              })()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => quickAdd(singleRect.id, "right")}
+            >
+              <Icon name="plus" size={15} />
+            </button>
+            <button
+              className="quick-add bottom"
+              title="Adicionar forma abaixo"
+              style={(() => {
+                const r = aabbOfRect(singleRect.rect, singleRect.rotation ?? 0);
+                const p = toScreen({ x: r.x + r.w / 2, y: r.y + r.h + 2 });
+                return { left: p.x - 13, top: p.y - 13 };
+              })()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => quickAdd(singleRect.id, "down")}
+            >
+              <Icon name="plus" size={15} />
+            </button>
+          </>
+        )
       ) : null}
 
       {!presentation && camera.zoom > 0.45
@@ -1407,6 +1411,7 @@ export function Canvas() {
 
       {editTarget && editTarget.objectType !== "connector" && "text" in editTarget ? (
         <TextEditor
+          key={editTarget.id}
           object={editTarget as Shape | Frame | TextObject}
           zoom={camera.zoom}
           toScreen={toScreen}
@@ -1428,7 +1433,7 @@ export function Canvas() {
 
       {connectFrom ? <div className="connect-hint">Clique no destino para conectar — Esc para cancelar</div> : null}
 
-      {!presentation ? <ContextBar /> : null}
+      {!presentation && !editingId && !board.mindMap ? <ContextBar /> : null}
       {!presentation ? <ContextMenu /> : null}
 
       <input

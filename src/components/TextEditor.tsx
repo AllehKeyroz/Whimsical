@@ -33,6 +33,9 @@ export function TextEditor({ object, zoom, toScreen }: Props) {
   const setText = useStore((s) => s.setText);
   const setEditing = useStore((s) => s.setEditing);
   const pushHistory = useStore((s) => s.pushHistory);
+  const board = useStore((s) => s.board);
+  const addMindChild = useStore((s) => s.addMindChild);
+  const addMindSibling = useStore((s) => s.addMindSibling);
   const [value, setValue] = useState(object.text);
   const historyPushed = useRef(false);
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -113,8 +116,28 @@ export function TextEditor({ object, zoom, toScreen }: Props) {
         setValue(e.target.value);
         setText(object.id, e.target.value);
       }}
-      onBlur={() => setEditing(null)}
+      onBlur={() => {
+        if (useStore.getState().editingId === object.id) setEditing(null);
+      }}
       onKeyDown={(e) => {
+        if (board.mindMap && object.objectType === "text") {
+          if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            setText(object.id, value);
+            const id = addMindSibling(object.id);
+            if (id) setEditing(id);
+            return;
+          }
+          if (e.key === "Tab") {
+            e.preventDefault();
+            e.stopPropagation();
+            setText(object.id, value);
+            const id = addMindChild(object.id);
+            if (id) setEditing(id);
+            return;
+          }
+        }
         if (e.key === "Escape" || (e.key === "Enter" && (e.ctrlKey || e.metaKey))) {
           e.preventDefault();
           e.stopPropagation();

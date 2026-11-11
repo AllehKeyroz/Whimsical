@@ -75,11 +75,11 @@ function TextViewInner({ text: t, selected }: Props) {
           y={y - 4}
           width={w + 8}
           height={rect.h + 8}
-          rx={4}
+          rx={t.mindNode ? 6 : 4}
           fill="none"
-          stroke="#8b3fd9"
-          strokeWidth={1.5}
-          strokeDasharray="4 3"
+          stroke={t.mindNode ? "#2f7bd4" : "#8b3fd9"}
+          strokeWidth={t.mindNode ? 1.2 : 1.5}
+          strokeDasharray={t.mindNode ? undefined : "4 3"}
           pointerEvents="none"
         />
       ) : null}

@@ -66,6 +66,19 @@ import {
   onCloudAuthChange,
 } from "./lib/supabase";
 
+const MIND_BRANCH_COLORS: Color[] = [
+  "purple",
+  "blue",
+  "orange",
+  "green",
+  "red",
+  "indigo",
+  "mint",
+  "crimson",
+  "yellow",
+  "brown",
+];
+
 export interface Camera {
   x: number;
   y: number;
@@ -1394,7 +1407,15 @@ export const useStore = create<BoardState>((set, get) => {
       const src = board.objects[shapeId];
       if (!src || src.objectType === "connector" || !("rect" in src) || !src.rect) return null;
       if (!board.mindMap) return get().quickAdd(shapeId, "right");
-      const color = src.objectType === "text" ? src.style.color : "blue";
+      const color =
+        src.objectType === "text" && src.mindRoot
+          ? MIND_BRANCH_COLORS[
+              Object.values(board.objects).filter((o) => o.objectType === "connector" && o.fromId === src.id)
+                .length % MIND_BRANCH_COLORS.length
+            ]
+          : src.objectType === "text"
+            ? src.style.color
+            : "blue";
       const rect = { x: src.rect.x + src.rect.w + 110, y: src.rect.y, w: 150, h: 30 };
       const id = nanoid();
       const child: TextObject = withOrder({
@@ -1447,7 +1468,15 @@ export const useStore = create<BoardState>((set, get) => {
       const parentId = parentLink?.fromId ?? shapeId;
       const parent = board.objects[parentId];
       if (!parent || parent.objectType === "connector" || !("rect" in parent) || !parent.rect) return null;
-      const color = src.objectType === "text" ? src.style.color : "blue";
+      const color =
+        src.objectType === "text" && src.mindRoot
+          ? MIND_BRANCH_COLORS[
+              Object.values(board.objects).filter((o) => o.objectType === "connector" && o.fromId === src.id)
+                .length % MIND_BRANCH_COLORS.length
+            ]
+          : src.objectType === "text"
+            ? src.style.color
+            : "blue";
       const y =
         Math.max(src.rect.y + src.rect.h, ...Object.values(board.objects).filter((o) => o.objectType === "text" && o.rect.y >= src.rect.y && o.rect.x === src.rect.x).map((o) => ("rect" in o ? o.rect.y + o.rect.h : 0))) + 12;
       const rect = { x: src.rect.x, y, w: 150, h: 30 };
@@ -1729,6 +1758,15 @@ export const useStore = create<BoardState>((set, get) => {
     },
 
     startMindMap: () => {
+      const existingRoot = Object.values(get().board.objects).find(
+        (o) => o.objectType === "text" && o.mindRoot && !o.hidden,
+      );
+      if (existingRoot && existingRoot.objectType === "text") {
+        set({ selection: [existingRoot.id], editingId: existingRoot.id, tool: "select" });
+        get().zoomToObject(existingRoot.id);
+        get().showToast("Editando o mapa mental existente.");
+        return existingRoot.id;
+      }
       const el = typeof document !== "undefined" ? document.querySelector(".canvas-container") : null;
       const w = el?.clientWidth || 1200;
       const h = el?.clientHeight || 800;

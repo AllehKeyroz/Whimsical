@@ -4129,3 +4129,43 @@ kbd {
 .ws-action.mindmap:hover {
   background: #116d75;
 }
+
+/* Mind map add-branch dot (appears when a node is selected) */
+.mind-add {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 6;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+.mind-add::before {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--purple);
+  opacity: 0.45;
+  transition: opacity 0.12s ease;
+}
+.mind-add svg {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.mind-add:hover {
+  background: #1f7ad4;
+  transform: scale(1.08);
+}
+.mind-add:hover::before {
+  opacity: 0;
+}
+.mind-add:hover svg {
+  opacity: 1;
+}
