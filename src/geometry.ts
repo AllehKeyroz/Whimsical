@@ -172,6 +172,19 @@ export function routeConnector(
     };
   }
 
+  if (conn.connectorType === "curved" && conn.mind) {
+    const span = p1.x - p0.x;
+    const c1 = { x: p0.x + span * 0.5, y: p0.y };
+    const c2 = { x: p1.x - span * 0.45, y: p1.y };
+    const d = `M ${p0.x} ${p0.y} C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${p1.x} ${p1.y}`;
+    return {
+      d,
+      points: [p0, p1],
+      endDir: { x: Math.sign(span) || 1, y: 0 },
+      mid: midpoint(p0, p1),
+    };
+  }
+
   if (conn.connectorType === "curved") {
     const a = add(p0, d0, conn.fromPoint ? STUB : STUB * 2);
     const b = add(p1, d1, conn.toPoint ? STUB : STUB * 2);

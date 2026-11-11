@@ -39,7 +39,7 @@ export const TEMPLATES: TemplateInfo[] = [
   { id: "blank", name: "Board em branco", description: "Comece do zero.", icon: "▢" },
   { id: "flowchart", name: "Fluxograma", description: "Início, processo, decisão e fim.", icon: "◇" },
   { id: "org", name: "Organograma", description: "Hierarquia de equipe em árvore.", icon: "⌂" },
-  { id: "mindmap", name: "Mapa mental", description: "Ideia central com ramificações.", icon: "✳" },
+  { id: "mindmap", name: "Mapa mental", description: "Mapa mental com ramificações.", icon: "✳" },
   { id: "kanban", name: "Kanban", description: "Colunas com notas adesivas.", icon: "▥" },
   { id: "retro", name: "Retrospectiva", description: "Bom, ruim e ações.", icon: "↻" },
   { id: "swot", name: "Matriz SWOT", description: "Forças, fraquezas, oportunidades e ameaças.", icon: "▦" },
@@ -238,7 +238,7 @@ function orgChart(title: string): Board {
 function mindMap(title: string): Board {
   const built = buildOutlineMindMap(
     [
-      "Ideia central",
+      "Mapa Mental",
       "- Público",
       "    - Clientes",
       "    - Parceiros",

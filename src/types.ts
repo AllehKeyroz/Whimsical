@@ -88,6 +88,10 @@ export interface BaseObject {
   mindCollapsed?: boolean;
   /** Hidden by a collapsed mind-map branch (not by the user). */
   mindHidden?: boolean;
+  /** Root node of a mind map (white plate, no border). */
+  mindRoot?: boolean;
+  /** Text belongs to a mind map (neutral label color, no shape). */
+  mindNode?: boolean;
   /** Optional external link opened from the context bar. */
   link?: string;
   comments?: Comment[];
@@ -184,6 +188,8 @@ export interface Connector extends BaseObject {
   style: Style;
   label: string;
   labelStyle?: TextStyle;
+  /** Mind-map connection: shared trunk + smooth branch curves. */
+  mind?: boolean;
 }
 
 export type BoardObject = Shape | Connector | Frame | TextObject | ImageObject | IconObject;

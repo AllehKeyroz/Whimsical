@@ -187,6 +187,8 @@ export function Canvas() {
   const addImage = useStore((s) => s.addImage);
   const addConnector = useStore((s) => s.addConnector);
   const quickAdd = useStore((s) => s.quickAdd);
+  const addMindChild = useStore((s) => s.addMindChild);
+  const addMindSibling = useStore((s) => s.addMindSibling);
   const createConnectedNode = useStore((s) => s.createConnectedNode);
   const setRects = useStore((s) => s.setRects);
   const pushHistory = useStore((s) => s.pushHistory);
@@ -1195,12 +1197,25 @@ export function Canvas() {
               <circle
                 cx={control.cx}
                 cy={control.cy}
-                r={control.collapsed ? 6 : 4.5}
+                r={control.collapsed ? 7.5 : 4.5}
                 fill={control.collapsed ? control.color : "var(--canvas-bg)"}
                 stroke={control.color}
                 strokeWidth={control.collapsed ? 0 : 1.5}
               />
-              <circle cx={control.cx} cy={control.cy} r={14} fill="transparent" />
+              {control.collapsed ? (
+                <text
+                  x={control.cx}
+                  y={control.cy + 3}
+                  textAnchor="middle"
+                  fontSize={8.5}
+                  fontWeight={700}
+                  fill="#ffffff"
+                  pointerEvents="none"
+                >
+                  {control.count > 99 ? "99+" : control.count}
+                </text>
+              ) : null}
+              <circle cx={control.cx} cy={control.cy} r={15} fill="transparent" />
             </g>
           ))}
           {dropFrameId ? (
@@ -1342,7 +1357,14 @@ export function Canvas() {
               return { left: p.x - 13, top: p.y - 13 };
             })()}
             onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => quickAdd(singleRect.id, "right")}
+            onClick={() => {
+              if (board.mindMap) {
+                const id = addMindChild(singleRect.id);
+                if (id) setEditing(id);
+              } else {
+                quickAdd(singleRect.id, "right");
+              }
+            }}
           >
             <Icon name="plus" size={15} />
           </button>
@@ -1355,7 +1377,14 @@ export function Canvas() {
               return { left: p.x - 13, top: p.y - 13 };
             })()}
             onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => quickAdd(singleRect.id, "down")}
+            onClick={() => {
+              if (board.mindMap) {
+                const id = addMindSibling(singleRect.id);
+                if (id) setEditing(id);
+              } else {
+                quickAdd(singleRect.id, "down");
+              }
+            }}
           >
             <Icon name="plus" size={15} />
           </button>

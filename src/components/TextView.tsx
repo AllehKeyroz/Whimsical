@@ -14,13 +14,15 @@ function TextViewInner({ text: t, selected }: Props) {
   const { x, y, w } = rect;
   const fs = textStyle?.fontSize ?? 18;
   const color =
-    textStyle?.color ??
-    style.hex ??
-    (style.deco === "fill"
-      ? colorToken(style.color).onStrong
-      : style.color !== "gray"
-        ? colorToken(style.color).base
-        : "var(--canvas-text)");
+    t.mindNode && !t.mindRoot
+      ? "var(--canvas-text)"
+      : (textStyle?.color ??
+        style.hex ??
+        (style.deco === "fill"
+          ? colorToken(style.color).onStrong
+          : style.color !== "gray"
+            ? colorToken(style.color).base
+            : "var(--canvas-text)"));
   const lineHeight = fs * 1.333;
   const align = textStyle?.align ?? "left";
   const anchor = align === "left" ? "start" : align === "right" ? "end" : "middle";
@@ -28,6 +30,8 @@ function TextViewInner({ text: t, selected }: Props) {
   const lines = wrapText(text, Math.max(24, w), fs, { bold: (textStyle?.fontWeight ?? 400) >= 600 });
   const comments = t.comments?.filter((c) => !c.resolved).length ?? 0;
   const paint = shapePaint(style);
+  const totalH = lines.length * lineHeight;
+  const startY = y + (rect.h - totalH) / 2 + fs;
   return (
     <g>
       {paint.fill !== "none" ? (
@@ -36,10 +40,10 @@ function TextViewInner({ text: t, selected }: Props) {
           y={y}
           width={w}
           height={rect.h}
-          rx={4}
+          rx={t.mindRoot ? 8 : 4}
           fill={paint.fill}
           stroke={paint.stroke}
-          strokeWidth={1.5}
+          strokeWidth={t.mindRoot ? 0 : 1.5}
           strokeDasharray={paint.dashed ? "7 5" : undefined}
         />
       ) : (
@@ -47,7 +51,7 @@ function TextViewInner({ text: t, selected }: Props) {
       )}
       <text
         x={textX}
-        y={y + lineHeight * 0.8}
+        y={startY}
         textAnchor={anchor}
         fontFamily="Dinsical, system-ui, sans-serif"
         fontSize={fs}
@@ -55,10 +59,11 @@ function TextViewInner({ text: t, selected }: Props) {
         fontStyle={textStyle?.italic ? "italic" : "normal"}
         textDecoration={textStyle?.underline ? "underline" : undefined}
         fill={color}
+        opacity={t.mindNode && !t.mindRoot ? 0.86 : 1}
         style={{ userSelect: "none" }}
       >
         {lines.map((ln, i) => (
-          <tspan key={i} x={textX} y={y + lineHeight * (i + 0.8)}>
+          <tspan key={i} x={textX} y={startY + i * lineHeight}>
             {ln || " "}
           </tspan>
         ))}

@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
-import type { BoardObject, Color, Connector, TextObject, Vec } from "../types";
+import type { BoardObject, Color, Connector, Rect, TextObject, Vec } from "../types";
 import { DEFAULT_TEXT_STYLE } from "../types";
-import { colorToken } from "../palette";
 import { measure, wrapText } from "./text";
 
 export interface OutlineEntry {
@@ -20,8 +19,8 @@ interface OutlineNode {
 }
 
 const BRANCH_COLORS: Color[] = ["purple", "blue", "orange", "green", "red", "indigo", "mint", "crimson", "yellow", "brown"];
-const GAP_X = 110;
-const GAP_Y = 12;
+const GAP_X = 100;
+const GAP_Y = 6;
 const MAX_TEXT_WIDTH = 260;
 
 export function looksLikeOutline(text: string): boolean {
@@ -114,12 +113,12 @@ function buildTree(entries: OutlineEntry[]): OutlineNode | null {
 }
 
 function measureNode(node: OutlineNode, isRoot: boolean): void {
-  const fs = isRoot ? 18 : 15;
+  const fs = isRoot ? 20 : 15;
   node.fs = fs;
   const textWidth = measure(node.label || " ", fs, isRoot);
-  node.w = Math.max(isRoot ? 120 : 80, Math.min(MAX_TEXT_WIDTH, textWidth + (isRoot ? 28 : 18)));
+  node.w = Math.max(isRoot ? 120 : 56, Math.min(MAX_TEXT_WIDTH, textWidth + (isRoot ? 20 : 6)));
   const lines = wrapText(node.label || " ", node.w - 8, fs, { bold: isRoot });
-  node.h = Math.max(isRoot ? 38 : 30, lines.length * fs * 1.333 + 10);
+  node.h = Math.max(isRoot ? 40 : 30, lines.length * fs * 1.333 + 8);
   for (const child of node.children) measureNode(child, false);
 }
 
@@ -169,7 +168,6 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
     };
     const id = nanoid();
     idByNode.set(node, id);
-    const branchColor = colorToken(node.color).base;
     const text: TextObject = {
       id,
       objectType: "text",
@@ -177,19 +175,21 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
       groupId: null,
       rect,
       style: isRoot
-        ? { color: "white", deco: "fill" }
+        ? { color: "white", deco: "fill", hex: "#ffffff" }
         : { color: node.color, deco: "transparent" },
       text: node.label,
       textStyle: {
         ...DEFAULT_TEXT_STYLE,
         fontSize: node.fs,
         fontWeight: isRoot ? 600 : 500,
-        align: "left",
-        color: isRoot ? "#293845" : branchColor,
+        align: "center",
+        color: isRoot ? "#293845" : undefined,
       },
       rotation: 0,
       order: 0,
       mindCollapsed: false,
+      mindRoot: isRoot,
+      mindNode: true,
     };
     objects.push(text);
     ids.push(id);
@@ -228,6 +228,7 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
         style: { color, deco: "outline" },
         label: "",
         order: 0,
+        mind: true,
       };
       objects.push(connector);
       ids.push(connector.id);
@@ -240,4 +241,109 @@ export function buildOutlineMindMap(text: string, origin: Vec): OutlineBuildResu
 function* walk(node: OutlineNode): Generator<OutlineNode> {
   yield node;
   for (const child of node.children) yield* walk(child);
+}
+
+interface LayoutNode {
+  text: TextObject;
+  depth: number;
+  children: LayoutNode[];
+  w: number;
+  h: number;
+  fs: number;
+}
+
+function sizeMindText(node: TextObject): { w: number; h: number; fs: number } {
+  const fs = node.textStyle?.fontSize ?? 15;
+  const bold = (node.textStyle?.fontWeight ?? 500) >= 600;
+  const w = Math.max(
+    node.mindRoot ? 120 : 56,
+    Math.min(MAX_TEXT_WIDTH, measure(node.text || " ", fs, bold) + (node.mindRoot ? 20 : 6)),
+  );
+  const lines = wrapText(node.text || " ", w - 8, fs, { bold });
+  const h = Math.max(node.mindRoot ? 40 : 30, lines.length * fs * 1.333 + 8);
+  return { w, h, fs };
+}
+
+/** Recomputes the tidy tree layout for an existing mind map. */
+export function layoutMindMapRects(objects: Record<string, BoardObject>): Record<string, Rect> | null {
+  const texts = Object.values(objects).filter(
+    (o): o is TextObject => o.objectType === "text" && !o.hidden,
+  );
+  if (!texts.length) return null;
+  const byId = new Map(texts.map((t) => [t.id, t]));
+  const childrenOf = new Map<string, string[]>();
+  const hasParent = new Set<string>();
+  for (const o of Object.values(objects)) {
+    if (o.objectType !== "connector" || o.hidden) continue;
+    if (!byId.has(o.fromId) || !byId.has(o.toId)) continue;
+    const list = childrenOf.get(o.fromId) ?? [];
+    list.push(o.toId);
+    childrenOf.set(o.fromId, list);
+    hasParent.add(o.toId);
+  }
+  const roots = texts.filter((t) => !hasParent.has(t.id));
+  if (!roots.length) return null;
+
+  const buildNode = (text: TextObject, depth: number): LayoutNode => {
+    const size = sizeMindText(text);
+    return {
+      text,
+      depth,
+      children: (childrenOf.get(text.id) ?? [])
+        .map((id) => byId.get(id))
+        .filter((t): t is TextObject => !!t)
+        .map((t) => buildNode(t, depth + 1)),
+      ...size,
+    };
+  };
+  const rootNodes = roots
+    .sort((a, b) => a.rect.y - b.rect.y || a.rect.x - b.rect.x)
+    .map((t) => buildNode(t, 0));
+
+  const depthWidth = new Map<number, number>();
+  const visit = (node: LayoutNode) => {
+    depthWidth.set(node.depth, Math.max(depthWidth.get(node.depth) ?? 0, node.w));
+    node.children.forEach(visit);
+  };
+  rootNodes.forEach(visit);
+
+  const anchor = rootNodes[0].text.rect;
+  const originX = anchor.x + anchor.w / 2;
+  const originY = anchor.y + anchor.h / 2;
+  const columnX = new Map<number, number>();
+  columnX.set(0, originX - rootNodes[0].w / 2);
+  const maxDepth = Math.max(...[...depthWidth.keys()]);
+  for (let d = 1; d <= maxDepth; d++) {
+    columnX.set(d, (columnX.get(d - 1) ?? originX) + (depthWidth.get(d - 1) ?? 180) + GAP_X);
+  }
+
+  const heightOf = (node: LayoutNode): number => {
+    if (!node.children.length) return node.h;
+    const total = node.children.reduce((sum, child) => sum + heightOf(child), 0);
+    return Math.max(node.h, total + GAP_Y * (node.children.length - 1));
+  };
+
+  const totalHeight =
+    rootNodes.reduce((sum, node) => sum + heightOf(node), 0) + GAP_Y * 2 * (rootNodes.length - 1);
+  const rects: Record<string, Rect> = {};
+  const place = (node: LayoutNode, top: number) => {
+    const own = heightOf(node);
+    rects[node.text.id] = {
+      x: columnX.get(node.depth) ?? node.text.rect.x,
+      y: top + own / 2 - node.h / 2,
+      w: node.w,
+      h: node.h,
+    };
+    let cursor = top;
+    for (const child of node.children) {
+      place(child, cursor);
+      cursor += heightOf(child) + GAP_Y;
+    }
+  };
+  let cursor = originY - totalHeight / 2;
+  for (const node of rootNodes) {
+    place(node, cursor);
+    cursor += heightOf(node) + GAP_Y * 2;
+  }
+  return rects;
 }

@@ -159,6 +159,9 @@ function base(raw: Rec, objectType: BoardObject["objectType"], index: number): O
     locked: bool(raw.locked, false),
     mindCollapsed: bool(raw.mindCollapsed, false),
     mindHidden: bool(raw.mindHidden, false),
+    mindRoot: bool(raw.mindRoot, false),
+    mindNode: bool(raw.mindNode, false),
+    mind: bool(raw.mind, false),
     link: str(raw.link) || undefined,
     comments: normalizeComments(raw.comments),
   } as Omit<BoardObject, never>;

@@ -23,7 +23,6 @@ import type {
   Vec,
 } from "./types";
 import { DEFAULT_TEXT_STYLE, LEFT_TEXT_STYLE } from "./types";
-import { colorToken } from "./palette";
 import { aabbOfRect, boundsOf, pointInRectRotated, rectCenter, snapAnchor, type SnapGuide } from "./geometry";
 import { normalizeBoard, normalizeSettings } from "./lib/schema";
 import {
@@ -49,7 +48,7 @@ import {
   type MermaidBuildResult,
 } from "./lib/mermaid";
 import { mergeCloudState } from "./lib/cloudMerge";
-import { buildOutlineMindMap, looksLikeOutline } from "./lib/outline";
+import { buildOutlineMindMap, layoutMindMapRects, looksLikeOutline } from "./lib/outline";
 import {
   cloudChangePassword,
   cloudDeleteBoard,
@@ -202,6 +201,7 @@ export interface BoardState {
   addMindSibling: (shapeId: string) => string | null;
   toggleMindCollapse: (id: string) => void;
   startMindMap: () => string;
+  reflowMindMap: () => void;
   createConnectedNode: (fromId: string, point: Vec) => string | null;
 
   updateObject: (id: string, patch: Partial<BoardObject>, history?: boolean) => void;
@@ -728,7 +728,10 @@ export const useStore = create<BoardState>((set, get) => {
     },
 
     setTool: (tool) => set({ tool, connectFrom: null }),
-    setEditing: (id) => set({ editingId: id }),
+    setEditing: (id) => {
+      set({ editingId: id });
+      if (!id) get().reflowMindMap();
+    },
     setConnectFrom: (id) => set({ connectFrom: id }),
 
     setCamera: (camera) => set({ camera }),
@@ -1402,10 +1405,11 @@ export const useStore = create<BoardState>((set, get) => {
         rect,
         style: { color, deco: "transparent" },
         text: "",
-        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "left", color: colorToken(color).base },
+        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "center" },
         rotation: 0,
         order: 0,
         mindCollapsed: false,
+        mindNode: true,
       });
       const conn: Connector = withOrder({
         id: nanoid(),
@@ -1424,9 +1428,11 @@ export const useStore = create<BoardState>((set, get) => {
         style: { color, deco: "outline" },
         label: "",
         order: 0,
+        mind: true,
       });
       commit({ ...board, objects: { ...board.objects, [id]: child, [conn.id]: conn } });
       set({ selection: [id], tool: "select" });
+      get().reflowMindMap();
       return id;
     },
 
@@ -1454,10 +1460,11 @@ export const useStore = create<BoardState>((set, get) => {
         rect,
         style: { color, deco: "transparent" },
         text: "",
-        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "left", color: colorToken(color).base },
+        textStyle: { ...DEFAULT_TEXT_STYLE, fontSize: 15, align: "center" },
         rotation: 0,
         order: 0,
         mindCollapsed: false,
+        mindNode: true,
       });
       const conn: Connector = withOrder({
         id: nanoid(),
@@ -1476,9 +1483,11 @@ export const useStore = create<BoardState>((set, get) => {
         style: { color, deco: "outline" },
         label: "",
         order: 0,
+        mind: true,
       });
       commit({ ...board, objects: { ...board.objects, [id]: node, [conn.id]: conn } });
       set({ selection: [id], tool: "select" });
+      get().reflowMindMap();
       return id;
     },
 
@@ -1507,6 +1516,7 @@ export const useStore = create<BoardState>((set, get) => {
         if (o.mindCollapsed) hideBranch(o.id);
       }
       commit({ ...board, objects });
+      get().reflowMindMap();
     },
 
     createConnectedNode: (fromId, point) => {
@@ -1733,12 +1743,12 @@ export const useStore = create<BoardState>((set, get) => {
         objectType: "text",
         parentId: null,
         groupId: null,
-        rect: { x: origin.x - 80, y: origin.y - 19, w: 160, h: 38 },
-        style: { color: "white", deco: "fill" },
-        text: "Ideia central",
+        rect: { x: origin.x - 85, y: origin.y - 20, w: 170, h: 40 },
+        style: { color: "white", deco: "fill", hex: "#ffffff" },
+        text: "Mapa Mental",
         textStyle: {
           ...DEFAULT_TEXT_STYLE,
-          fontSize: 18,
+          fontSize: 20,
           fontWeight: 600,
           align: "center",
           color: "#293845",
@@ -1746,6 +1756,7 @@ export const useStore = create<BoardState>((set, get) => {
         rotation: 0,
         order: 0,
         mindCollapsed: false,
+        mindRoot: true,
       });
       commit({
         ...get().board,
@@ -1755,6 +1766,20 @@ export const useStore = create<BoardState>((set, get) => {
       set({ selection: [id], editingId: id, tool: "select" });
       get().showToast("Mapa mental criado. Use Tab para criar um ramo e Enter para um irmão.");
       return id;
+    },
+
+    reflowMindMap: () => {
+      const board = get().board;
+      if (!board.mindMap) return;
+      const rects = layoutMindMapRects(board.objects);
+      if (!rects) return;
+      const objects = { ...board.objects };
+      for (const [id, rect] of Object.entries(rects)) {
+        const node = objects[id];
+        if (!node || node.objectType === "connector" || !("rect" in node)) continue;
+        objects[id] = { ...node, rect };
+      }
+      commit({ ...board, objects }, false);
     },
 
     setStyle: (id, patch) => {
@@ -1811,6 +1836,7 @@ export const useStore = create<BoardState>((set, get) => {
       const o = board.objects[id];
       if (!o || !("text" in o)) return;
       commit({ ...board, objects: { ...board.objects, [id]: { ...o, text } } }, false);
+      if (board.mindMap && o.objectType === "text") get().reflowMindMap();
     },
 
     setBoardTitle: (title) => {

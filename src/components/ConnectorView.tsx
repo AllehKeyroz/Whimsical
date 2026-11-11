@@ -15,7 +15,7 @@ function ConnectorViewInner({ connector, route, selected }: Props) {
     connector.style.hex ??
     (connector.style.color === "gray" ? "var(--connector-stroke)" : colorToken(connector.style.color).base);
   const dashed = connector.style.deco === "dash";
-  const width = connector.style.deco === "fill" ? 4.2 : 3;
+  const width = connector.mind ? 2.4 : connector.style.deco === "fill" ? 4.2 : 3;
   const points = route.points;
   const start = points[0];
   const end = points[points.length - 1];
