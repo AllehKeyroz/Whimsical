@@ -201,6 +201,7 @@ export interface BoardState {
   addMindChild: (shapeId: string) => string | null;
   addMindSibling: (shapeId: string) => string | null;
   toggleMindCollapse: (id: string) => void;
+  startMindMap: () => string;
   createConnectedNode: (fromId: string, point: Vec) => string | null;
 
   updateObject: (id: string, patch: Partial<BoardObject>, history?: boolean) => void;
@@ -1715,6 +1716,45 @@ export const useStore = create<BoardState>((set, get) => {
       get().zoomToSelection();
       get().showToast(`${built.count} tópicos importados como mapa mental.`);
       return true;
+    },
+
+    startMindMap: () => {
+      const el = typeof document !== "undefined" ? document.querySelector(".canvas-container") : null;
+      const w = el?.clientWidth || 1200;
+      const h = el?.clientHeight || 800;
+      const camera = get().camera;
+      const origin = {
+        x: (w / 2 - camera.x) / camera.zoom,
+        y: (h / 2 - camera.y) / camera.zoom,
+      };
+      const id = nanoid();
+      const root: TextObject = withOrder({
+        id,
+        objectType: "text",
+        parentId: null,
+        groupId: null,
+        rect: { x: origin.x - 80, y: origin.y - 19, w: 160, h: 38 },
+        style: { color: "white", deco: "fill" },
+        text: "Ideia central",
+        textStyle: {
+          ...DEFAULT_TEXT_STYLE,
+          fontSize: 18,
+          fontWeight: 600,
+          align: "center",
+          color: "#293845",
+        },
+        rotation: 0,
+        order: 0,
+        mindCollapsed: false,
+      });
+      commit({
+        ...get().board,
+        mindMap: true,
+        objects: { ...get().board.objects, [id]: root },
+      });
+      set({ selection: [id], editingId: id, tool: "select" });
+      get().showToast("Mapa mental criado. Use Tab para criar um ramo e Enter para um irmão.");
+      return id;
     },
 
     setStyle: (id, patch) => {

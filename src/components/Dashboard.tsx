@@ -355,7 +355,7 @@ function ActionCard({
   label,
   onClick,
 }: {
-  variant: "board" | "doc" | "template" | "folder";
+  variant: "board" | "doc" | "mindmap" | "template" | "folder";
   icon: IconName;
   label: string;
   onClick: () => void;
@@ -711,6 +711,7 @@ export function Dashboard() {
         <div className="ws-actions">
           <ActionCard variant="board" icon="board" label="Novo board" onClick={() => newBoard("blank")} />
           <ActionCard variant="doc" icon="doc" label="Novo doc" onClick={() => newBoard("doc")} />
+          <ActionCard variant="mindmap" icon="mindmap" label="Novo mapa mental" onClick={() => newBoard("mindmap")} />
           <ActionCard variant="template" icon="layout" label="Novo a partir de template" onClick={() => setTemplatesOpen(true)} />
           <ActionCard variant="folder" icon="folder" label="Nova pasta" onClick={() => setFolderOpen(true)} />
         </div>
@@ -826,6 +827,7 @@ export function Dashboard() {
         boards={boards}
         onCreate={() => newBoard("blank")}
         onCreateDoc={() => newBoard("doc")}
+        onCreateMindMap={() => newBoard("mindmap")}
         onTemplate={() => setTemplatesOpen(true)}
         onFolder={() => setFolderOpen(true)}
         onOpenBoard={(id) => void openBoard(id)}
@@ -868,6 +870,7 @@ function CommandPalette({
   boards,
   onCreate,
   onCreateDoc,
+  onCreateMindMap,
   onTemplate,
   onFolder,
   onOpenBoard,
@@ -877,6 +880,7 @@ function CommandPalette({
   boards: BoardMeta[];
   onCreate: () => void;
   onCreateDoc: () => void;
+  onCreateMindMap: () => void;
   onTemplate: () => void;
   onFolder: () => void;
   onOpenBoard: (id: string) => void;
@@ -897,10 +901,11 @@ function CommandPalette({
     () => [
       { id: "new", label: "Novo board", hint: "Alt Ctrl N", icon: "board" as IconName, run: onCreate },
       { id: "doc", label: "Novo doc", hint: "", icon: "doc" as IconName, run: onCreateDoc },
+      { id: "mindmap", label: "Novo mapa mental", hint: "", icon: "mindmap" as IconName, run: onCreateMindMap },
       { id: "template", label: "Novo a partir de template", hint: "", icon: "layout" as IconName, run: onTemplate },
       { id: "folder", label: "Nova pasta", hint: "", icon: "folder" as IconName, run: onFolder },
     ],
-    [onCreate, onCreateDoc, onTemplate, onFolder],
+    [onCreate, onCreateDoc, onCreateMindMap, onTemplate, onFolder],
   );
 
   const results = useMemo(() => {

@@ -4122,3 +4122,10 @@ kbd {
 .mind-toggle.collapsed {
   opacity: 1;
 }
+
+.ws-action.mindmap {
+  background: #0d5c63;
+}
+.ws-action.mindmap:hover {
+  background: #116d75;
+}

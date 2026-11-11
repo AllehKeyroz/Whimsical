@@ -31,6 +31,7 @@ export function ToolPalette() {
   const setTool = useStore((s) => s.setTool);
   const returnToDashboard = useStore((s) => s.returnToDashboard);
   const setTemplatesOpen = useStore((s) => s.setTemplatesOpen);
+  const startMindMap = useStore((s) => s.startMindMap);
   const toggleLayers = useStore((s) => s.toggleLayers);
   const setIconPickerOpen = useStore((s) => s.setIconPickerOpen);
   const [shapesOpen, setShapesOpen] = useState(false);
@@ -69,6 +70,16 @@ export function ToolPalette() {
       </button>
       <button className="tp-btn" title="Templates" onClick={() => { setShapesOpen(false); setTemplatesOpen(true); }}>
         <Icon name="layout" size={19} />
+      </button>
+      <button
+        className="tp-btn"
+        title="Mapa mental"
+        onClick={() => {
+          setShapesOpen(false);
+          startMindMap();
+        }}
+      >
+        <Icon name="mindmap" size={19} />
       </button>
       <button className="tp-btn" title="Camadas" onClick={() => { setShapesOpen(false); toggleLayers(); }}>
         <Icon name="layers" size={19} />

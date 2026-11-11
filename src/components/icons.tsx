@@ -26,6 +26,7 @@ export type IconName =
   | "moon"
   | "grid"
   | "list"
+  | "mindmap"
   | "magnet"
   | "layout"
   | "fit"
@@ -172,6 +173,15 @@ function paths(name: IconName): ReactNode {
       );
     case "moon":
       return <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z" />;
+    case "mindmap":
+      return (
+        <>
+          <circle cx="12" cy="12" r="2.4" />
+          <circle cx="20" cy="5.5" r="2" />
+          <circle cx="20" cy="18.5" r="2" />
+          <path d="M14.2 11.2l4-4.3M14.2 12.8l4 4.3M3 12h6.6" />
+        </>
+      );
     case "list":
       return <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />;
     case "grid":

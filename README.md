@@ -23,6 +23,7 @@ Cada conta tem sua própria **organização/empresa/equipe**, exibida no workspa
 - **Sidebar persistente** no dashboard e no board, com Recentes, Privado, Equipes, pastas e árvore de boards (explorador de arquivos).
 - Pastas com criação, remoção e movimentação de boards entre pastas.
 - **Lista de pastas e boards** com colunas Nome, Criado, Por, Modificado e Por, além de alternância **grade/lista**.
+- **Criar mapa mental:** card “+ Novo mapa mental” no dashboard, ícone de mapa mental na barra lateral do board (começa um mapa no board atual), Ctrl+K ou o template “Mapa mental”.
 - Board view com **barra de ferramentas vertical flutuante** e barra inferior de undo/redo, layout, zoom e ajuda.
 - Topbar com breadcrumb, título editável, favorito, presença, compartilhar, apresentar, comentários, busca, ícones, tema e ajuda.
 
