@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---------------------------------------------------------------------------
-# KDS FLUX — production image
+# KDS FLUX — production image (web + MCP on the same origin)
 #
 # Build:
 #   docker build -t kds-flux \
@@ -9,12 +9,16 @@
 #     --build-arg VITE_SUPABASE_ANON_KEY=sua-anon-key .
 #
 # Run:
-#   docker run -p 8080:80 kds-flux
+#   docker run -p 8080:80 \
+#     -e KDSFLUX_SUPABASE_URL=https://seu-projeto.supabase.co \
+#     -e KDSFLUX_SUPABASE_SERVICE_ROLE_KEY=... kds-flux
 #
-# The two VITE_* values are compiled into the bundle at build time. They are
-# optional: without them the app runs fully local and the "Nuvem" panel asks
-# for URL + anon key at runtime (stored in the browser only).
-# Never pass the service_role key here — it would be shipped to the browser.
+# The web app is served on :80 and the MCP server runs inside the same
+# container on :8788, published through nginx at /mcp. This keeps the URL shown
+# in the Integrações panel (current origin + /mcp) valid.
+#
+# The VITE_* values are baked at build time. The MCP service-role key is only a
+# runtime environment variable; it is never included in the static bundle.
 # ---------------------------------------------------------------------------
 
 FROM node:22-alpine AS build
@@ -33,20 +37,29 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 ENV VITE_MCP_URL=$VITE_MCP_URL
 
-RUN npm run build
+RUN npm run build && npm prune --omit=dev
 
 
-FROM nginx:1.27-alpine AS runtime
+FROM node:22-alpine AS runtime
 
-COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
-COPY deploy/security-headers.conf /etc/nginx/security-headers.conf
-COPY deploy/40-runtime-env.sh /docker-entrypoint.d/40-runtime-env.sh
-RUN chmod +x /docker-entrypoint.d/40-runtime-env.sh
+RUN apk add --no-cache nginx
+
+WORKDIR /app
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/server ./server
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY deploy/nginx.conf /etc/nginx/http.d/default.conf
+COPY deploy/security-headers.conf /etc/nginx/security-headers.conf
+COPY deploy/start-web.sh /app/start-web.sh
+RUN chmod +x /app/start-web.sh
+
+ENV MCP_TRANSPORT=http
+ENV MCP_PORT=8788
+ENV NODE_ENV=production
 
 EXPOSE 80
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD wget -qO- http://127.0.0.1/healthz >/dev/null 2>&1 || exit 1
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/app/start-web.sh"]

@@ -232,26 +232,28 @@ Não existe mais formulário de credenciais no app: a configuração vem só do 
 
 ### MCP (agentes de IA)
 
-O servidor MCP permite que agentes leiam e editem boards por nó, sem reescrever o documento inteiro.
+O servidor MCP permite que agentes leiam e editem boards por nó, sem reescrever o documento inteiro. **A imagem web já inclui o MCP em `/mcp`** (mesmo domínio do app).
 
 1. No app: menu do avatar → **Integrações / API** → **Gerar token**. Copie o token na hora; ele não é exibido de novo.
-2. Crie um App no Easypanel com o Dockerfile **`Dockerfile.mcp`**, porta **8788**, healthcheck `/health` e as variáveis:
+2. No **mesmo App** do Easypanel (Dockerfile `Dockerfile`, porta **80**), adicione:
    - `KDSFLUX_SUPABASE_URL`
    - `KDSFLUX_SUPABASE_SERVICE_ROLE_KEY` (somente no servidor, nunca no navegador)
-   - `MCP_TRANSPORT=http`
-3. Configure o cliente MCP. O app exibe automaticamente `<origem do app>/mcp`; para usar um domínio separado, defina `VITE_MCP_URL` no build do app.
+3. Reimplante. O endpoint `https://seu-dominio/mcp` passa a responder e o painel **Integrações** já mostra essa URL automaticamente.
+4. Configure o cliente MCP:
 
 ```json
 {
   "mcpServers": {
     "kds-flux": {
       "type": "http",
-      "url": "https://mcp.seudominio.com/mcp",
+      "url": "https://seu-dominio/mcp",
       "headers": { "Authorization": "Bearer kdsflux_SEU_TOKEN" }
     }
   }
 }
 ```
+
+Se preferir rodar o MCP como serviço separado, use `Dockerfile.mcp` (porta **8788**) e defina `VITE_MCP_URL` no build do app com o domínio desse serviço; ou crie no nginx do app um proxy `/mcp` para ele.
 
 Para desenvolvimento local via stdio:
 
@@ -266,7 +268,7 @@ Ferramentas disponíveis: `list_boards`, `get_board`, `get_node`, `find_nodes`, 
 
 Cada token pertence a um usuário e só acessa os boards dele. O app aberto recebe as alterações em **~2,5 s** (polling de segurança) e tenta também Supabase Realtime quando disponível, atualizando o board sem recarregar.
 
-> A `service_role` key fica apenas no processo do MCP. Nunca a coloque no cliente do agente nem no frontend.
+> A `service_role` key fica apenas no processo do servidor. Nunca a coloque no cliente do agente nem no frontend.
 
 ### Variáveis de ambiente
 

@@ -1,7 +1,9 @@
-# Optional: one-shot deployment of the web app + collaboration relay.
+# Optional: one-shot deployment of the web app (with MCP at /mcp) + relay.
 # Easypanel can also run these as two separate "App" services; see README.
 #
-#   VITE_SUPABASE_URL=... VITE_SUPABASE_ANON_KEY=... docker compose up -d --build
+#   VITE_SUPABASE_URL=... VITE_SUPABASE_ANON_KEY=... \
+#   KDSFLUX_SUPABASE_URL=... KDSFLUX_SUPABASE_SERVICE_ROLE_KEY=... \
+#   docker compose up -d --build
 #
 # The VITE_* values are baked into the static bundle, so a credential change
 # requires a rebuild (or set them at runtime in the app's "Nuvem" panel).
@@ -20,6 +22,8 @@ services:
     environment:
       VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
       VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+      KDSFLUX_SUPABASE_URL: ${KDSFLUX_SUPABASE_URL:-}
+      KDSFLUX_SUPABASE_SERVICE_ROLE_KEY: ${KDSFLUX_SUPABASE_SERVICE_ROLE_KEY:-}
     restart: unless-stopped
 
   relay:
@@ -28,15 +32,4 @@ services:
       dockerfile: Dockerfile.relay
     ports:
       - "8787:8787"
-    restart: unless-stopped
-
-  mcp:
-    build:
-      context: .
-      dockerfile: Dockerfile.mcp
-    ports:
-      - "8788:8788"
-    environment:
-      KDSFLUX_SUPABASE_URL: ${KDSFLUX_SUPABASE_URL:-}
-      KDSFLUX_SUPABASE_SERVICE_ROLE_KEY: ${KDSFLUX_SUPABASE_SERVICE_ROLE_KEY:-}
     restart: unless-stopped
