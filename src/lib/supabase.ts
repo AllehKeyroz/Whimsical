@@ -190,7 +190,81 @@ export async function cloudUpdateProfile(
   return error?.message ?? null;
 }
 
-export async function cloudListBoards(userId: string): Promise<{ rows: CloudBoardRow[]; error: string | null }> {
+export interface ApiTokenRow {
+  id: string;
+  name: string;
+  prefix: string;
+  created_at: string;
+  last_used_at: string | null;
+  revoked_at: string | null;
+}
+
+export async function cloudListApiTokens(
+  userId: string,
+): Promise<{ rows: ApiTokenRow[]; error: string | null }> {
+  const supabase = getSupabase();
+  if (!supabase) return { rows: [], error: "Supabase não configurado." };
+  const { data, error } = await supabase
+    .from("api_tokens")
+    .select("id,name,prefix,created_at,last_used_at,revoked_at")
+    .eq("owner_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) return { rows: [], error: error.message };
+  return { rows: (data ?? []) as ApiTokenRow[], error: null };
+}
+
+export async function cloudCreateApiToken(
+  userId: string,
+  name: string,
+  tokenHash: string,
+  prefix: string,
+): Promise<string | null> {
+  const supabase = getSupabase();
+  if (!supabase) return "Supabase não configurado.";
+  const { error } = await supabase.from("api_tokens").insert({
+    owner_id: userId,
+    name: name.trim().slice(0, 80) || "MCP token",
+    token_hash: tokenHash,
+    prefix,
+  });
+  return error?.message ?? null;
+}
+
+export async function cloudRevokeApiToken(id: string): Promise<string | null> {
+  const supabase = getSupabase();
+  if (!supabase) return "Supabase não configurado.";
+  const { error } = await supabase.from("api_tokens").update({ revoked_at: new Date().toISOString() }).eq("id", id);
+  return error?.message ?? null;
+}
+
+export interface BoardChangePayload {
+  eventType: "INSERT" | "UPDATE" | "DELETE";
+  new: Record<string, unknown>;
+  old: Record<string, unknown>;
+}
+
+export function subscribeToBoardChanges(
+  userId: string,
+  onChange: (payload: BoardChangePayload) => void,
+): () => void {
+  const supabase = getSupabase();
+  if (!supabase) return () => undefined;
+  const channel = supabase
+    .channel(`kdsflux-boards-${userId}`)
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "boards", filter: `owner_id=eq.${userId}` },
+      (payload) => onChange(payload as unknown as BoardChangePayload),
+    )
+    .subscribe();
+  return () => {
+    void supabase.removeChannel(channel);
+  };
+}
+
+export async function cloudListBoards(
+  userId: string,
+): Promise<{ rows: CloudBoardRow[]; error: string | null }> {
   const supabase = getSupabase();
   if (!supabase) return { rows: [], error: "Supabase não configurado." };
   const { data, error } = await supabase

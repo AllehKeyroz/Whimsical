@@ -9,6 +9,7 @@ import { Dashboard } from "./components/Dashboard";
 import { BoardBottomBar } from "./components/BoardBottomBar";
 import { IconPicker } from "./components/IconPicker";
 import { CloudPanel } from "./components/CloudPanel";
+import { IntegrationsPanel } from "./components/IntegrationsPanel";
 import { LoginGate } from "./components/LoginGate";
 import {
   CommentsPanel,
@@ -81,6 +82,7 @@ function AppInner() {
         <TemplateGallery />
         <SharePanel />
         <CloudPanel />
+        <IntegrationsPanel />
         {toast ? <div className="ws-toast">{toast}</div> : null}
       </div>
     );
@@ -117,6 +119,7 @@ function AppInner() {
       <IconPicker />
       <MermaidModal />
       <CloudPanel />
+      <IntegrationsPanel />
       {toast ? <div className="ws-toast">{toast}</div> : null}
     </div>
   );

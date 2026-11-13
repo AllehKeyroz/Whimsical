@@ -65,6 +65,22 @@ create table if not exists public.board_members (
 create index if not exists board_members_user_idx on public.board_members (user_id);
 
 -- ------------------------------------------------------------
+-- API tokens for the MCP server
+-- ------------------------------------------------------------
+create table if not exists public.api_tokens (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null references auth.users (id) on delete cascade,
+  name text not null default 'MCP token',
+  token_hash text not null unique,
+  prefix text not null default '',
+  created_at timestamptz not null default now(),
+  last_used_at timestamptz,
+  revoked_at timestamptz
+);
+
+create index if not exists api_tokens_owner_idx on public.api_tokens (owner_id, created_at desc);
+
+-- ------------------------------------------------------------
 -- updated_at triggers
 -- ------------------------------------------------------------
 create or replace function public.touch_updated_at()
@@ -122,6 +138,7 @@ alter table public.profiles enable row level security;
 alter table public.folders enable row level security;
 alter table public.boards enable row level security;
 alter table public.board_members enable row level security;
+alter table public.api_tokens enable row level security;
 
 -- Security-definer helpers: these read the tables with RLS bypassed, which
 -- avoids "infinite recursion detected in policy" between boards and
@@ -212,6 +229,10 @@ create policy "board_members owner write" on public.board_members
 for all using (public.board_is_owned_by(board_members.board_id, auth.uid()))
 with check (public.board_is_owned_by(board_members.board_id, auth.uid()));
 
+drop policy if exists "api_tokens owner all" on public.api_tokens;
+create policy "api_tokens owner all" on public.api_tokens
+for all using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
+
 -- ------------------------------------------------------------
 -- Grants (Supabase usually sets these; explicit for self-hosted)
 -- ------------------------------------------------------------
@@ -221,6 +242,7 @@ grant select, insert, update, delete on public.folders to authenticated;
 grant select, insert, update, delete on public.boards to authenticated;
 grant select on public.boards to anon;
 grant select, insert, update, delete on public.board_members to authenticated;
+grant select, insert, update, delete on public.api_tokens to authenticated;
 
 -- ------------------------------------------------------------
 -- Realtime (board row changes; enable if not already published)

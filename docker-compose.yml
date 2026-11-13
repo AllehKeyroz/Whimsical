@@ -28,3 +28,14 @@ services:
     ports:
       - "8787:8787"
     restart: unless-stopped
+
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    ports:
+      - "8788:8788"
+    environment:
+      KDSFLUX_SUPABASE_URL: ${KDSFLUX_SUPABASE_URL:-}
+      KDSFLUX_SUPABASE_SERVICE_ROLE_KEY: ${KDSFLUX_SUPABASE_SERVICE_ROLE_KEY:-}
+    restart: unless-stopped

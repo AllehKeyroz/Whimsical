@@ -230,6 +230,44 @@ Não existe mais formulário de credenciais no app: a configuração vem só do 
 1. Crie outro App, mesmo repositório, Dockerfile `Dockerfile.relay`, porta **8787**, healthcheck `/health`.
 2. No board, abra **Compartilhar** e use `wss://relay.seudominio.com` como Relay WebSocket.
 
+### MCP (agentes de IA)
+
+O servidor MCP permite que agentes leiam e editem boards por nó, sem reescrever o documento inteiro.
+
+1. No app: menu do avatar → **Integrações / API** → **Gerar token**. Copie o token na hora; ele não é exibido de novo.
+2. Crie um App no Easypanel com o Dockerfile **`Dockerfile.mcp`**, porta **8788**, healthcheck `/health` e as variáveis:
+   - `KDSFLUX_SUPABASE_URL`
+   - `KDSFLUX_SUPABASE_SERVICE_ROLE_KEY` (somente no servidor, nunca no navegador)
+   - `MCP_TRANSPORT=http`
+3. Configure o cliente MCP:
+
+```json
+{
+  "mcpServers": {
+    "kds-flux": {
+      "type": "http",
+      "url": "https://mcp.seudominio.com/mcp",
+      "headers": { "Authorization": "Bearer kdsflux_SEU_TOKEN" }
+    }
+  }
+}
+```
+
+Para desenvolvimento local via stdio:
+
+```bash
+KDSFLUX_SUPABASE_URL=... \
+KDSFLUX_SUPABASE_SERVICE_ROLE_KEY=... \
+KDSFLUX_TOKEN=kdsflux_... \
+npm run mcp
+```
+
+Ferramentas disponíveis: `list_boards`, `get_board`, `get_node`, `find_nodes`, `update_node_text`, `update_node`, `move_node`, `resize_node`, `add_node`, `add_connector`, `delete_node`, `patch_nodes`, `create_board`, `set_board_title`, `delete_board`, `list_folders`, `create_folder`.
+
+Cada token pertence a um usuário e só acessa os boards dele. O app aberto recebe as alterações em **~2,5 s** (polling de segurança) e tenta também Supabase Realtime quando disponível, atualizando o board sem recarregar.
+
+> A `service_role` key fica apenas no processo do MCP. Nunca a coloque no cliente do agente nem no frontend.
+
 ### Variáveis de ambiente
 
 - **Runtime (recomendado):** variáveis em **Ambiente/Environment** do Easypanel. O entrypoint do container escreve `env.js` com URL e anon key; o app lê isso antes de iniciar. Trocar valores = reiniciar o serviço.

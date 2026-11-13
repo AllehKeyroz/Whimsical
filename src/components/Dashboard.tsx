@@ -473,6 +473,7 @@ export function Dashboard() {
   const setTemplatesOpen = useStore((s) => s.setTemplatesOpen);
   const toggleSidebar = useStore((s) => s.toggleSidebar);
   const setAuthOpen = useStore((s) => s.setAuthOpen);
+  const setIntegrationsOpen = useStore((s) => s.setIntegrationsOpen);
   const cloud = useStore((s) => s.cloud);
 
   const [fullBoards, setFullBoards] = useState<Record<string, Board>>({});
@@ -687,6 +688,9 @@ export function Dashboard() {
                 <button onClick={() => { setAvatarOpen(false); setAuthOpen(true); }}>
                   <Icon name={cloud.user ? "cloud" : "cloudOff"} size={15} />
                   {cloud.user ? "Nuvem conectada" : "Conectar Supabase"}
+                </button>
+                <button onClick={() => { setAvatarOpen(false); setIntegrationsOpen(true); }}>
+                  <Icon name="key" size={15} /> Integrações / API
                 </button>
                 <button onClick={toggleTheme}>
                   <Icon name={settings.theme === "dark" ? "sun" : "moon"} size={15} />

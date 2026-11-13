@@ -64,6 +64,8 @@ import {
   getCloudSession,
   isSupabaseConfigured,
   onCloudAuthChange,
+  subscribeToBoardChanges,
+  type BoardChangePayload,
 } from "./lib/supabase";
 
 const MIND_BRANCH_COLORS: Color[] = [
@@ -144,6 +146,7 @@ export interface BoardState {
   sidebarOpen: boolean;
   toast: string | null;
   authOpen: boolean;
+  integrationsOpen: boolean;
   cloud: CloudState;
   presentation: boolean;
   presentationFrameId: string | null;
@@ -179,6 +182,7 @@ export interface BoardState {
   setCommentsOpen: (open: boolean) => void;
   setMermaidOpen: (open: boolean) => void;
   setAuthOpen: (open: boolean) => void;
+  setIntegrationsOpen: (open: boolean) => void;
   showToast: (text: string) => void;
   toggleLayers: () => void;
   toggleSidebar: () => void;
@@ -304,6 +308,9 @@ let cloudInitPromise: Promise<void> | null = null;
 let cloudAuthUnsub: (() => void) | null = null;
 let cloudSyncingPromise: Promise<void> | null = null;
 let cloudSaveTimer: number | undefined;
+let cloudRealtimeUnsub: (() => void) | null = null;
+let cloudPollTimer: number | undefined;
+let cloudPollBusy = false;
 
 export const INTERNAL_CLIPBOARD_PREFIX = "KDS FLUX — ";
 
@@ -540,9 +547,14 @@ export const useStore = create<BoardState>((set, get) => {
       contextMenu: null,
       dirty: get().dirty + 1,
     });
+    startRealtime(user.id);
+    startPolling();
   };
 
   const deactivateCloudUser = async () => {
+    cloudRealtimeUnsub?.();
+    cloudRealtimeUnsub = null;
+    stopPolling();
     if (saveTimer) {
       window.clearTimeout(saveTimer);
       saveTimer = undefined;
@@ -569,6 +581,108 @@ export const useStore = create<BoardState>((set, get) => {
       contextMenu: null,
       dirty: get().dirty + 1,
     });
+  };
+
+  const applyRealtimeBoard = async (payload: BoardChangePayload) => {
+    try {
+      if (payload.eventType === "DELETE") {
+        await get().refreshBoards();
+        return;
+      }
+      const row = payload.new as { document?: unknown; folder_id?: string | null };
+      const incoming = normalizeBoard(row.document);
+      if (!incoming) return;
+      if (row.folder_id !== undefined) incoming.folderId = row.folder_id;
+      const current = get().board;
+      if (incoming.id === current.id) {
+        if (incoming.updatedAt > current.updatedAt) {
+          await saveBoard(incoming);
+          set({
+            board: incoming,
+            past: [],
+            future: [],
+            selection: [],
+            editingId: null,
+            dirty: get().dirty + 1,
+          });
+          get().showToast("Board atualizado por integração.");
+        }
+        return;
+      }
+      const meta = get().boards.find((b) => b.id === incoming.id);
+      if (!meta || incoming.updatedAt > meta.updatedAt) {
+        await saveBoard(incoming);
+        get().showToast("Novo conteúdo recebido da integração.");
+      }
+      await get().refreshBoards();
+    } catch {
+      /* realtime is best-effort */
+    }
+  };
+
+  const startRealtime = (userId: string) => {
+    if (cloudRealtimeUnsub) return;
+    cloudRealtimeUnsub = subscribeToBoardChanges(userId, (payload) => {
+      void applyRealtimeBoard(payload);
+    });
+  };
+
+  const pollCloud = async () => {
+    if (cloudPollBusy) return;
+    const user = get().cloud.user;
+    if (!user) return;
+    if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+    cloudPollBusy = true;
+    try {
+      const remote = await cloudListBoards(user.id);
+      if (remote.error) return;
+      const current = get().board;
+      let metaChanged = false;
+      let appliedCurrent = false;
+      for (const row of remote.rows) {
+        const incoming = normalizeBoard(row.document);
+        if (!incoming) continue;
+        incoming.folderId = row.folder_id ?? incoming.folderId ?? null;
+        if (incoming.id === current.id) {
+          if (incoming.updatedAt > current.updatedAt) {
+            await saveBoard(incoming);
+            set({
+              board: incoming,
+              past: [],
+              future: [],
+              selection: [],
+              editingId: null,
+              dirty: get().dirty + 1,
+            });
+            appliedCurrent = true;
+          }
+          continue;
+        }
+        const meta = get().boards.find((b) => b.id === incoming.id);
+        if (!meta || incoming.updatedAt > meta.updatedAt) {
+          await saveBoard(incoming);
+          metaChanged = true;
+        }
+      }
+      if (metaChanged) await get().refreshBoards();
+      if (appliedCurrent) get().showToast("Board atualizado por integração.");
+    } catch {
+      /* polling is best-effort */
+    } finally {
+      cloudPollBusy = false;
+    }
+  };
+
+  const startPolling = () => {
+    if (cloudPollTimer) return;
+    void pollCloud();
+    cloudPollTimer = window.setInterval(() => void pollCloud(), 2500);
+  };
+
+  const stopPolling = () => {
+    if (!cloudPollTimer) return;
+    window.clearInterval(cloudPollTimer);
+    cloudPollTimer = undefined;
   };
 
   const cloudSaveBoard = (board: Board) => {
@@ -639,6 +753,7 @@ export const useStore = create<BoardState>((set, get) => {
     sidebarOpen: true,
     toast: null,
     authOpen: false,
+    integrationsOpen: false,
     cloud: {
       configured: isSupabaseConfigured(),
       initialized: false,
@@ -807,6 +922,7 @@ export const useStore = create<BoardState>((set, get) => {
     toggleLayers: () => set((s) => ({ layersOpen: !s.layersOpen })),
     toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
     setAuthOpen: (open) => set({ authOpen: open }),
+    setIntegrationsOpen: (open) => set({ integrationsOpen: open }),
 
     initCloud: () => {
       if (cloudInitPromise) return cloudInitPromise;
