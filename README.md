@@ -239,7 +239,7 @@ O servidor MCP permite que agentes leiam e editem boards por nó, sem reescrever
    - `KDSFLUX_SUPABASE_URL`
    - `KDSFLUX_SUPABASE_SERVICE_ROLE_KEY` (somente no servidor, nunca no navegador)
    - `MCP_TRANSPORT=http`
-3. Configure o cliente MCP:
+3. Configure o cliente MCP. O app exibe automaticamente `<origem do app>/mcp`; para usar um domínio separado, defina `VITE_MCP_URL` no build do app.
 
 ```json
 {

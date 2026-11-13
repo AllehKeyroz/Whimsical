@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../store";
-import { getSupabaseConfig, cloudCreateApiToken, cloudListApiTokens, cloudRevokeApiToken, type ApiTokenRow } from "../lib/supabase";
+import { cloudCreateApiToken, cloudListApiTokens, cloudRevokeApiToken, type ApiTokenRow } from "../lib/supabase";
 import { generateApiToken, hashApiToken, tokenPrefix } from "../lib/apiTokens";
 import { Modal } from "./Modals";
 import { Icon } from "./icons";
@@ -74,26 +74,15 @@ export function IntegrationsPanel() {
     }
   };
 
-  const url = getSupabaseConfig().url;
-  const httpConfig = `{
+  const origin = typeof window !== "undefined" ? window.location.origin.replace(/\/+$/, "") : "";
+  const configuredUrl = (import.meta.env.VITE_MCP_URL || "").trim().replace(/\/+$/, "");
+  const mcpUrl = configuredUrl || `${origin}/mcp`;
+  const mcpConfig = `{
   "mcpServers": {
     "kds-flux": {
       "type": "http",
-      "url": "https://SEU-MCP.easypanel.host/mcp",
+      "url": "${mcpUrl}",
       "headers": { "Authorization": "Bearer ${created ?? "SEU_TOKEN"}" }
-    }
-  }
-}`;
-  const stdioConfig = `{
-  "mcpServers": {
-    "kds-flux": {
-      "command": "node",
-      "args": ["C:/caminho/para/Whimsical/server/mcp.mjs"],
-      "env": {
-        "KDSFLUX_SUPABASE_URL": "${url || "https://seu-projeto.supabase.co"}",
-        "KDSFLUX_SUPABASE_SERVICE_ROLE_KEY": "SERVICE_ROLE_KEY_DO_SERVIDOR",
-        "KDSFLUX_TOKEN": "${created ?? "SEU_TOKEN"}"
-      }
     }
   }
 }`;
@@ -179,27 +168,18 @@ export function IntegrationsPanel() {
           </div>
 
           <div className="integration-setup">
-            <h3>Conectar um agente (MCP)</h3>
+            <h3>Configuração do MCP</h3>
             <p>
-              Servidor HTTP (recomendado): rode <code>server/mcp.mjs</code> no Easypanel com{" "}
-              <code>MCP_TRANSPORT=http</code> e a service role nas variáveis do servidor. O cliente recebe só o token.
+              Use o endpoint abaixo e o token no seu cliente de agentes (Claude, Cursor, etc.):
             </p>
             <div className="token-value">
-              <pre>{httpConfig}</pre>
-              <button className="secondary-btn" onClick={() => void copy(httpConfig)}>
-                Copiar
-              </button>
-            </div>
-            <p>Execução local via stdio (para desenvolvimento):</p>
-            <div className="token-value">
-              <pre>{stdioConfig}</pre>
-              <button className="secondary-btn" onClick={() => void copy(stdioConfig)}>
+              <pre>{mcpConfig}</pre>
+              <button className="secondary-btn" onClick={() => void copy(mcpConfig)}>
                 Copiar
               </button>
             </div>
             <p className="cloud-note">
-              A service role fica somente no processo do MCP. Nunca coloque essa chave no navegador nem no cliente do
-              agente.
+              O token é pessoal e dá acesso aos seus boards. Trate como senha e revogue se necessário.
             </p>
           </div>
 

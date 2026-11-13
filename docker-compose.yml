@@ -14,6 +14,7 @@ services:
       args:
         VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
         VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+        VITE_MCP_URL: ${VITE_MCP_URL:-}
     ports:
       - "8080:80"
     environment:
